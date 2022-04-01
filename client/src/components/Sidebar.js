@@ -2,15 +2,15 @@ import React,{useRef}from 'react'
 import {
     Drawer,
     DrawerBody,
-    DrawerFooter,
     DrawerHeader,
     DrawerOverlay,
     DrawerContent,
     DrawerCloseButton,
     useDisclosure,
-    Button,
-    Input,
-    Box
+    Box,
+    Avatar,
+    Flex,
+    Button
   } from '@chakra-ui/react'
   
   import { ArrowRightIcon } from '@chakra-ui/icons'
@@ -20,7 +20,7 @@ const Sidebar = () => {
     const btnRef = useRef()
   return (
     <>
-        <Box position="absolute" top={"50vh"} left={"5"}>
+        <Box position="absolute" top={"45vh"} left={"5"}>
       <ArrowRightIcon background={"gray.300"} borderRadius="5px" height={"50px"} width={"50px"} padding={"10px"} ref={btnRef} onClick={onOpen} />
         </Box>
       <Drawer
@@ -32,18 +32,24 @@ const Sidebar = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
+          <DrawerHeader textAlign={"center"}>Your Profile</DrawerHeader>
 
           <DrawerBody>
-            <Input placeholder='Type here...' />
+              <Flex direction={"column"} alignItems={"center"}>
+                  <Box marginBottom={"2rem"}>
+                    <Avatar size='2xl' name='Segun Adebayo' src='https://bit.ly/tioluwani-kolawole' />
+                  </Box>
+                  <Box>
+                      <Flex direction={"column"}>
+                      <Button marginY={"0.5rem"}>Dashboard</Button>
+                      <Button marginY={"0.5rem"}>Create Class</Button>
+                      <Button marginY={"0.5rem"}>Logout</Button>
+                      </Flex>
+
+                  </Box>
+              </Flex>
           </DrawerBody>
 
-          <DrawerFooter>
-            <Button variant='outline' mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme='blue'>Save</Button>
-          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>
