@@ -1,10 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
-
+import {Route, Routes} from 'react-router-dom'
+import Landing from './pages/Landing';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Sidebar from './components/Sidebar';
 function App() {
   return (
     <>
-    Hello</>
+    <Sidebar/>
+    <Routes>
+      <Route path='/' element={<Landing/>} /> 
+      <Route path='/teacher/Signup' element={<Signup/>} /> 
+      <Route path='/teacher/Login' element={<Login/>} /> 
+      <Route path='/student/Signup' element={<Signup/>} /> 
+      <Route path='/student/Login' element={<Login/>} /> 
+    </Routes>
+    </>
   );
 }
 
