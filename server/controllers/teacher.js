@@ -32,16 +32,16 @@ const login = async (req, res) => {
         .status(200)
         .send({ ok: false, message: "Email or password cannot be blank" });
     }
-    const teacherLogin = await Teacher.findOne({ email: email });
-    if (teacherLogin) {
-      const isValid = await bcrypt.compare(password, teacherLogin.password);
+    const userLogin = await Teacher.findOne({ email: email });
+    if (userLogin) {
+      const isValid = await bcrypt.compare(password, userLogin.password);
       if (!isValid) {
         res.status(200).json({ ok: false, message: "Incorrect Credentials" });
       } else {
         const token = jwt.sign(
           {
-            _id: teacherLogin._id,
-            name: teacherLogin.name,
+            _id: userLogin._id,
+            name: userLogin.name,
           },
           process.env.JWT_PRIVATE_KEY,
           {
@@ -50,7 +50,7 @@ const login = async (req, res) => {
         );
         return res
           .status(200)
-          .json({ ok: true, message: "Login Successfull!", token, teacherLogin });
+          .json({ ok: true, message: "Login Successfull!", token, userLogin });
       }
     } else {
       res.status(200).send({ ok: false, message: "User does not exist" });

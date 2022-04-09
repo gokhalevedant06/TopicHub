@@ -17,15 +17,22 @@ import {
   import { MoonIcon, SunIcon} from "@chakra-ui/icons"
   
   import { ArrowRightIcon } from '@chakra-ui/icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectUser } from '../Redux/userSlice'
 
 const Sidebar = () => {
 const { colorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
-  return (
+    const user = useSelector(selectUser)
+    const dispatch = useDispatch();
+    const handleLogout = ()=>{
+      // dispatch(logout());
+    } 
+     return (
     <>
         <Box position="absolute" top={"45vh"} left={"5"}>
-      <ArrowRightIcon background={"gray.300"} borderRadius="5px" height={"50px"} width={"50px"} padding={"10px"} ref={btnRef} onClick={onOpen} />
+      <ArrowRightIcon background={"gray.300"} borderRadius="5px" height={"35px"} width={"50px"} padding={"10px"} ref={btnRef} onClick={onOpen} />
         </Box>
       <Drawer
         isOpen={isOpen}
@@ -52,7 +59,7 @@ const { colorMode, toggleColorMode } = useColorMode();
                      
                       <Button marginY={"0.5rem"}>Dashboard</Button>
                       <Button marginY={"0.5rem"}>Create Class</Button>
-                      <Button marginY={"0.5rem"}>Logout</Button>
+                      <Button marginY={"0.5rem"} onClick={handleLogout}>Logout</Button>
                       </Flex>
 
                   </Box>

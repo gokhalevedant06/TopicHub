@@ -12,17 +12,58 @@ import {
   Text,
   InputRightElement,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EmailIcon, UnlockIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../Redux/userSlice";
+
 
 const Login = () => {
-  const [show, setShow] = React.useState(false);
+  const [isTeacher,setTeacher] = useState(false);
+  if(window.location.href[22]=='t' && isTeacher==false) setTeacher(true)
+  const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const { colorMode, toggleColorMode } = useColorMode();
   const [showPassword, setShowPassword] = useState(false);
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const pageBackground = useColorModeValue("blue.100", "gray.600");
+
+  const navigate = useNavigate();
+
+  const [login, setLogin] = useState();
+  const handleChange = (e) => {
+    setLogin({
+      ...login,
+      [e.target.name]: e.target.value,
+    });
+    console.log(login)
+  };
+
+  const dispatch = useDispatch();
+  
+
+  const userLogin = async () => {
+    const user = isTeacher?'teacher':'student'
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/${user}/login`,
+        data:login
+      });
+      console.log("response",response);
+      dispatch(loginUser({
+        user:response.data.userLogin,
+      }))
+      window.alert(response.data)
+      navigate('/studentDashboard')
+    } catch (error) {
+      window.alert("Try Again!")
+      console.log(error);
+    }
+  };
+
   return (
     <Flex
       background={pageBackground}
@@ -49,6 +90,8 @@ const Login = () => {
             varient="filled"
             mb={3}
             type="email"
+            name='email'
+            onChange={(e)=>handleChange(e)}
           />
         </Flex>
 
@@ -62,6 +105,8 @@ const Login = () => {
               pr="4.5rem"
               type={show ? "text" : "password"}
               placeholder="Enter password"
+              name='password' 
+              onChange={(e)=>handleChange(e)}
             />
             <InputRightElement width="4.5rem">
               <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -75,7 +120,7 @@ const Login = () => {
           Remember my credentials.
         </Checkbox>
 
-        <Button mb={6} colorScheme="teal">
+        <Button onClick={userLogin} mb={6} colorScheme="teal">
           Sign in
         </Button>
 
