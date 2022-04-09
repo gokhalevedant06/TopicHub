@@ -9,7 +9,8 @@ const port =  process.env.PORT || 5000;
 app.use(express.json());
 
 require("./db/conn");
-// app.use("/", require("./routes/UserRoutes"));
+app.use("/teacher", require("./routes/teacherRoutes"));
+app.use("/student", require("./routes/studentRoutes"));
 
 app.listen(port, () => {
   console.log(`App listening on port http://localhost:${port}`);
