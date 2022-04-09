@@ -3,7 +3,7 @@ import {
   Box, Flex, Heading, Input, Button, useColorMode, useColorModeValue, Checkbox,
    Link, InputGroup,  InputRightElement, 
 } from '@chakra-ui/react'
-import { EmailIcon, UnlockIcon, MoonIcon, SunIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { EmailIcon, UnlockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useState } from "react";
 
 const Login = () => {
@@ -48,8 +48,7 @@ const Login = () => {
 
         <Button mb={6} colorScheme='teal'>Sign in</Button>
 
-        <Button w={10} colorScheme='red' onClick={toggleColorMode}>
-          {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}</Button>
+        
       </Flex>
 
       <Box>
