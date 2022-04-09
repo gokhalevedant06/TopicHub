@@ -46,7 +46,7 @@ const Signup = () => {
           </InputGroup>
         </Flex>
 
-        <Button mb={6} colorScheme='teal'>Sign in</Button>    
+        <Button mb={6} colorScheme='teal'>Sign up</Button>    
 
         <Box textAlign={"center"}>
             <Link to="/student/Login" colorScheme={"teal"}>
