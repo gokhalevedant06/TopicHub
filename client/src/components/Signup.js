@@ -1,13 +1,13 @@
 import React from 'react'
 import {
-  Box, Flex, Heading, Input, Button, useColorMode, useColorModeValue,
-   Link, InputGroup,  InputRightElement} from '@chakra-ui/react'
-import { EmailIcon, UnlockIcon, InfoIcon, PhoneIcon,SunIcon,MoonIcon,ViewIcon,ViewOffIcon} from '@chakra-ui/icons'
+  Box, Flex, Heading, Input, Button, useColorModeValue,
+   InputGroup,  InputRightElement} from '@chakra-ui/react'
+import { EmailIcon, UnlockIcon, InfoIcon, PhoneIcon,ViewIcon,ViewOffIcon} from '@chakra-ui/icons'
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [show, setShow] = React.useState(false)
   const handleClick = () => setShow(!show)
-  const { colorMode, toggleColorMode } = useColorMode();
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const pageBackground = useColorModeValue("blue.100", "gray.600");
   return (
@@ -46,19 +46,14 @@ const Signup = () => {
           </InputGroup>
         </Flex>
 
-        <Button mb={6} colorScheme='teal'>Sign in</Button>
+        <Button mb={6} colorScheme='teal'>Sign in</Button>    
 
-        <Button w={10} colorScheme='red' onClick={toggleColorMode}>
-        {colorMode === 'light' ? <MoonIcon/> : <SunIcon />}</Button>
-        
+        <Box textAlign={"center"}>
+            <Link to="/student/Login" colorScheme={"teal"}>
+            Already a User ? Login
+            </Link>
+        </Box>
       </Flex>
-
-      <Box>
-        Already Signed Up?{" "}
-        <Link color="teal.500" href="http://localhost:3000/teacher/Login">
-          Login
-        </Link>
-      </Box>
 
     </Flex>
   )
