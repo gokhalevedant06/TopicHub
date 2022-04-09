@@ -7,15 +7,19 @@ import {
     DrawerContent,
     DrawerCloseButton,
     useDisclosure,
+    useColorMode,
     Box,
     Avatar,
     Flex,
-    Button
+    Button,
+    Text
   } from '@chakra-ui/react'
+  import { MoonIcon, SunIcon} from "@chakra-ui/icons"
   
   import { ArrowRightIcon } from '@chakra-ui/icons'
 
 const Sidebar = () => {
+const { colorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
   return (
@@ -32,7 +36,11 @@ const Sidebar = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader textAlign={"center"}>Your Profile</DrawerHeader>
+          <DrawerHeader textAlign={"center"} fontSize={"1.5rem"} fontWeight={"bold"} >
+          <Button position={"absolute"} left={4} w={10} colorScheme='teal' onClick={toggleColorMode}>
+          {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}</Button>
+            Your Profile
+          </DrawerHeader>
 
           <DrawerBody>
               <Flex direction={"column"} alignItems={"center"}>
@@ -41,6 +49,7 @@ const Sidebar = () => {
                   </Box>
                   <Box>
                       <Flex direction={"column"}>
+                     
                       <Button marginY={"0.5rem"}>Dashboard</Button>
                       <Button marginY={"0.5rem"}>Create Class</Button>
                       <Button marginY={"0.5rem"}>Logout</Button>
