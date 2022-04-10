@@ -1,9 +1,10 @@
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const Teacher = require("../models/teacherSchema");
+const Class = require("../models/classSchema");
 
 const signup = async (req, res) => {
-  var { name, email,phone, password, cpassword } = req.body;
+  var { name, email, phone, password, cpassword } = req.body;
   if (!name || !email || !password || !cpassword || !phone)
     res.status(422).send("Enter all fields");
   try {
@@ -77,8 +78,32 @@ const login = async (req, res) => {
 //   res.send(null);
 // };
 
+const createClass = async (req, res) => {
+  const { title, description } = req.body;
+  try {
+    const classExists = await Class.findOne({ title });
+    if (!classExists) {
+      const newClass = new Class({
+        title,
+        description,
+        createdBy: req.user._id,
+      });
+      const saveClass = await newClass.save();
+      if (saveClass){
+        const updateTeacher = await Teacher.findByIdAndUpdate(req.user._id,{MyClass:saveClass._id})
+        if(updateTeacher) res.status(200).send({ ok: true, message: "Class created" });
+      }
+    } else {
+      res.status(200).send({ ok: false, message: "Class Already Exists" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
-    signup,
-    login,
-    // jwtVerify,
-  };
+  signup,
+  login,
+  // jwtVerify,
+  createClass,
+};
