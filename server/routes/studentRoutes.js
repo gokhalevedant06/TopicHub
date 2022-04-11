@@ -5,7 +5,8 @@ const {
   login,
   joinClass,
   getAllStudentsInClass,
-  createGroup
+  createGroup,
+  joinGroup
 } = require("../controllers/student");
 
 const { isStudent } = require("../middlewares/isStudent");
@@ -18,4 +19,5 @@ router.post("/login", login);
 router.post("/joinClass",isStudent, joinClass);
 router.get('/getAllStudentsInClass',isStudent,getAllStudentsInClass)
 router.post('/createGroup',isStudent,createGroup)
+router.post('/joinGroup',isStudent,joinGroup)
 module.exports = router;

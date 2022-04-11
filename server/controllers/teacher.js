@@ -130,7 +130,6 @@ const getAllStudentsInClass = async (req,res)=>{
 
 const getClass = async(req,res)=>{
   const {MyClass} = req.user;
-  console.log(MyClass)
   try {
     //add populations here
     const classDetails = await Class.findById(MyClass).populate('studentsJoined')

@@ -149,7 +149,14 @@ const createGroup = async (req, res) => {
           groups,
         });
 
-        if (leader && updateClass)
+        var members = [];
+        if (savedGroup.members) {
+          members = savedGroup.members;
+        }
+        members.push({ _id });
+        const updateGroupDetails = await Group.findByIdAndUpdate(savedGroup._id,{members})
+
+        if (leader && updateClass && updateGroupDetails)
           res.status(200).send({ ok: true, message: "Group Created" });
         else {
           res
@@ -163,6 +170,27 @@ const createGroup = async (req, res) => {
   }
 };
 
+const joinGroup = async (req,res)=>{
+  const {groupID} = req.body;
+  const {_id} = req.user;
+  console.log(groupID)
+  try {
+    const getGroup = await Group.findById(groupID)
+    var members = [];
+        if (getGroup.members) {
+          members = getGroup.members;
+        }
+        members.push({ _id});
+    const updateGroupDetails = await Group.findByIdAndUpdate(groupID,{members})
+    const getStudent = await Student.findByIdAndUpdate(_id,{groupID})
+
+  if(updateGroupDetails && getStudent) res.status(200).send({ ok: true, message: "Group Joined" });
+  else res.status(200).send({ ok: false, message: "Failed to join Group" });
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   signup,
   login,
@@ -170,4 +198,5 @@ module.exports = {
   joinClass,
   getAllStudentsInClass,
   createGroup,
+  joinGroup
 };
