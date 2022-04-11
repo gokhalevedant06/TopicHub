@@ -17,7 +17,7 @@ const subjectSchema = new mongoose.Schema({
   ],
   subjectTeacher: {
     type: Schema.Types.ObjectId,
-    ref: "REACHER",
+    ref: "TEACHER",
   },
 });
 

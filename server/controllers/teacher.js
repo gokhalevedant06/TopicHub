@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const Teacher = require("../models/teacherSchema");
 const Class = require("../models/classSchema");
+const Subject = require("../models/subjectSchema")
 
 const signup = async (req, res) => {
   var { name, email, phone, password, cpassword } = req.body;
@@ -89,9 +90,12 @@ const createClass = async (req, res) => {
         createdBy: req.user._id,
       });
       const saveClass = await newClass.save();
-      if (saveClass){
-        const updateTeacher = await Teacher.findByIdAndUpdate(req.user._id,{MyClass:saveClass._id})
-        if(updateTeacher) res.status(200).send({ ok: true, message: "Class created" });
+      if (saveClass) {
+        const updateTeacher = await Teacher.findByIdAndUpdate(req.user._id, {
+          MyClass: saveClass._id,
+        });
+        if (updateTeacher)
+          res.status(200).send({ ok: true, message: "Class created" });
       }
     } else {
       res.status(200).send({ ok: false, message: "Class Already Exists" });
@@ -101,48 +105,91 @@ const createClass = async (req, res) => {
   }
 };
 
-const createSubject = async (req,res)=>{
-  const {title, description} = req.body;
-  console.log(req.user)
-  console.log(req.body)
-  // add to class
-  // add teacher to subject 
-  // get all teachers and assign teacher to subject
-  
+const createSubject = async (req, res) => {
+  const { title, description, subjectTeacher } = req.body;
+  const { MyClass } = req.user;
   try {
-    
-  } catch (error) {
-    
-  }
-}
+    const newSubject = new Subject({ title, description, subjectTeacher });
+    if (newSubject) {
+      const saveSubject = await newSubject.save();
+      if (saveSubject) {
+        const getClass = await Class.findById(MyClass);
+        var subjects = [];
+        if (getClass.subjects) {
+          subjects = getClass.subjects;
+        }
+        subjects.push({ _id: saveSubject._id });
+        const addToClass = await Class.findByIdAndUpdate(MyClass, { subjects });
 
-const getAllStudentsInClass = async (req,res)=>{
-  const {MyClass} = req.user;
+        const getTeacher = await Teacher.findById(subjectTeacher);
+        var myTeachings = [];
+        if (getTeacher.myTeachings) {
+          myTeachings = getTeacher.myTeachings;
+        }
+        myTeachings.push({ _id: saveSubject._id });
+
+        const updateTeacherDetails = await Teacher.findByIdAndUpdate(
+          subjectTeacher,
+          { myTeachings }
+        );
+
+        if (updateTeacherDetails && addToClass)
+          res.status(200).send({ ok: true, message: "Subject created" });
+        else {
+          res
+            .status(200)
+            .send({ ok: false, message: "Failed To create subject" });
+        }
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAllStudentsInClass = async (req, res) => {
+  const { MyClass } = req.user;
   try {
-    console.log(MyClass)
-    const getClass = await Class.findById(MyClass)
-    if(getClass.studentsJoined) res.status(200).send({ ok: true, message: "Student List", studentsJoined:getClass.studentsJoined });
-    else res.status(200).send({ ok: false, message: "Please Create Class First" });
+    console.log(MyClass);
+    const getClass = await Class.findById(MyClass);
+    if (getClass.studentsJoined)
+      res
+        .status(200)
+        .send({
+          ok: true,
+          message: "Student List",
+          studentsJoined: getClass.studentsJoined,
+        });
+    else
+      res.status(200).send({ ok: false, message: "Please Create Class First" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-const getClass = async(req,res)=>{
-  const {MyClass} = req.user;
+const getClass = async (req, res) => {
+  const { MyClass } = req.user;
   try {
     //add populations here
-    const classDetails = await Class.findById(MyClass).populate('studentsJoined')
-    if(classDetails) res.status(200).send({ ok: true, message: "Class Information",classDetails });
-    else{
+    const classDetails = await Class.findById(MyClass).populate(
+      "studentsJoined"
+    );
+    if (classDetails)
+      res
+        .status(200)
+        .send({ ok: true, message: "Class Information", classDetails });
+    else {
       res.status(200).send({ ok: false, message: "Class NOT Found" });
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
+};
+
+
+const createAssesment = ()=>{
+  
 }
-
-
 
 module.exports = {
   signup,
@@ -150,5 +197,6 @@ module.exports = {
   // jwtVerify,
   createClass,
   getAllStudentsInClass,
-  getClass
+  getClass,
+  createSubject
 };

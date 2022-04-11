@@ -5,7 +5,8 @@ const {
   login,
   createClass,
   getAllStudentsInClass,
-  getClass
+  getClass,
+  createSubject
 } = require("../controllers/teacher");
 const { isTeacher } = require("../middlewares/isTeacher");
 
@@ -16,6 +17,7 @@ router.post("/login", login);
 router.post("/createClass",isTeacher, createClass);
 router.get("/getAllStudentsInClass",isTeacher, getAllStudentsInClass);
 router.get('/getClass',isTeacher,getClass)
+router.post('/createSubject',isTeacher,createSubject)
 // router.get("/jwtVerify", jwtVerify);
 
 
