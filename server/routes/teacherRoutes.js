@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   signup,
   login
-} = require("../controllers/student");
+} = require("../controllers/teacher");
 
 // const { isHost } = require("../middlewares/isHost");
 
