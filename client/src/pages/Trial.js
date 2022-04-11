@@ -2,7 +2,7 @@ import { Box, Stack ,Grid,GridItem,Flex,Spacer,Heading,Text,Image,Button} from "
 import React from "react";
 
 
-const Studentdashboard = () => {
+const Trial = () => {
     return(
 
         <Flex>
@@ -75,4 +75,4 @@ const Studentdashboard = () => {
 
 }
 
-export default Studentdashboard
+export default Trial
