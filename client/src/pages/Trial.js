@@ -1,9 +1,8 @@
 import { Box, Stack ,Grid,GridItem,Flex,Spacer,Heading,Text,Image,Button} from "@chakra-ui/react";
 import React from "react";
-import { useSelector } from 'react-redux'
-import { selectUser } from '../Redux/userSlice'
 
-const Studentdashboard = () => {
+
+const Trial = () => {
     return(
 
         <Flex>
@@ -74,6 +73,6 @@ const Studentdashboard = () => {
 
     )
 
-    }
+}
 
-export default Studentdashboard
+export default Trial
