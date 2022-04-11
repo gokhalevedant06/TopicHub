@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
-const Student = require("../models/studentModel");
+const Student = require("../models/studentSchema");
+const Class = require("../models/classSchema");
+
 
 const signup = async (req, res) => {
   var { name, email,phone, password, cpassword } = req.body;
@@ -77,8 +79,31 @@ const login = async (req, res) => {
 //   res.send(null);
 // };
 
+const joinClass = async (req,res)=>{
+  const {classID} = req.body;
+  try {
+    // add student to class 
+    // add class to student schema
+    const getClass = await Class.findById(classID);
+    var studentsJoined = [];
+    if (getClass.studentsJoined) {
+      studentsJoined = getClass.studentsJoined;
+    }
+    studentsJoined.push({ _id: req.user._id });
+    const getStudent = await Student.findByIdAndUpdate(req.user._id,{joinedClassID:classID});
+    const updateClass = await Class.findByIdAndUpdate(classID,{studentsJoined})
+    if(getStudent && updateClass)  res.status(200).send({ ok: true, message: "Student Added to Class" });
+    else{
+      res.status(200).send({ ok: false, message: "Failed to add to class" });
+    }
+  } catch (error) {
+    
+  }
+}
+
 module.exports = {
     signup,
     login,
     // jwtVerify,
+    joinClass
   };

@@ -101,9 +101,53 @@ const createClass = async (req, res) => {
   }
 };
 
+const createSubject = async (req,res)=>{
+  const {title, description} = req.body;
+  console.log(req.user)
+  console.log(req.body)
+  // add to class
+  // add teacher to subject 
+  // get all teachers and assign teacher to subject
+  
+  try {
+    
+  } catch (error) {
+    
+  }
+}
+
+const getAllStudentsInClass = async (req,res)=>{
+  const {MyClass} = req.user;
+  try {
+    console.log(MyClass)
+    const getClass = await Class.findById(MyClass)
+    if(getClass.studentsJoined) res.status(200).send({ ok: true, message: "Student List", studentsJoined:getClass.studentsJoined });
+    else res.status(200).send({ ok: false, message: "Please Create Class First" });
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getClass = async(req,res)=>{
+  const {MyClass} = req.user;
+  console.log(MyClass)
+  try {
+    //add populations here
+    const classDetails = await Class.findById(MyClass).populate('studentsJoined')
+    if(classDetails) res.status(200).send({ ok: true, message: "Class Information",classDetails });
+    else{
+      res.status(200).send({ ok: false, message: "Class NOT Found" });
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   signup,
   login,
   // jwtVerify,
   createClass,
+  getAllStudentsInClass,
+  getClass
 };

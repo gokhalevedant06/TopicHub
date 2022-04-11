@@ -3,7 +3,9 @@ const router = express.Router();
 const {
   signup,
   login,
-  createClass
+  createClass,
+  getAllStudentsInClass,
+  getClass
 } = require("../controllers/teacher");
 const { isTeacher } = require("../middlewares/isTeacher");
 
@@ -12,6 +14,8 @@ const { isTeacher } = require("../middlewares/isTeacher");
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/createClass",isTeacher, createClass);
+router.get("/getAllStudentsInClass",isTeacher, getAllStudentsInClass);
+router.get('/getClass',isTeacher,getClass)
 // router.get("/jwtVerify", jwtVerify);
 
 
