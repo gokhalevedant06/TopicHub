@@ -6,11 +6,11 @@ const {
   createClass,
   getAllStudentsInClass,
   getClass,
-  createSubject
+  createSubject,
+  createAssesment
 } = require("../controllers/teacher");
 const { isTeacher } = require("../middlewares/isTeacher");
 
-// const { isHost } = require("../middlewares/isHost");
 
 router.post("/signup", signup);
 router.post("/login", login);
@@ -18,6 +18,7 @@ router.post("/createClass",isTeacher, createClass);
 router.get("/getAllStudentsInClass",isTeacher, getAllStudentsInClass);
 router.get('/getClass',isTeacher,getClass)
 router.post('/createSubject',isTeacher,createSubject)
+router.post('/createAssesment',createAssesment)
 // router.get("/jwtVerify", jwtVerify);
 
 
