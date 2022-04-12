@@ -188,7 +188,13 @@ const getClass = async (req, res) => {
 
 
 const createAssesment = ()=>{
-  
+    const {title,description,forSubject,totalMarks,classID} = req.body;
+    try {
+      
+    } catch (error) {
+      
+    }
+
 }
 
 module.exports = {
