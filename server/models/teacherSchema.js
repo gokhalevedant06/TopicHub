@@ -21,6 +21,12 @@ const teacherSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "CLASS",
     },
+    myTeachings:[
+        {
+            type: Schema.Types.ObjectId,
+            ref: "SUBJECT",
+        }
+    ],
     profilePhoto:{
         type:String
     }

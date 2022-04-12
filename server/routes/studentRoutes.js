@@ -2,14 +2,22 @@ const express = require("express");
 const router = express.Router();
 const {
   signup,
-  login
+  login,
+  joinClass,
+  getAllStudentsInClass,
+  createGroup,
+  joinGroup
 } = require("../controllers/student");
 
-// const { isHost } = require("../middlewares/isHost");
+const { isStudent } = require("../middlewares/isStudent");
+
+
 
 router.post("/signup", signup);
 router.post("/login", login);
 // router.get("/jwtVerify", jwtVerify);
-
-
+router.post("/joinClass",isStudent, joinClass);
+router.get('/getAllStudentsInClass',isStudent,getAllStudentsInClass)
+router.post('/createGroup',isStudent,createGroup)
+router.post('/joinGroup',isStudent,joinGroup)
 module.exports = router;

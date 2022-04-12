@@ -9,6 +9,45 @@ const assesmentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    forSubject:{
+        type: Schema.Types.ObjectId,
+        ref: "SUBJECT",
+        required:true
+    },
+    appearingGroupDetails:[
+        {
+            groupID:{
+                type: Schema.Types.ObjectId,
+                ref: "GROUP",
+            },
+            topic:{
+                name:{
+                    type:String
+                },
+                isApproved:{
+                    type:Boolean,
+                    default:false
+                },
+                isRejected:{
+                    type:Boolean,
+                    default:false
+                }
+            },
+            marking:[
+                {
+                    groupMember:{
+                        type: Schema.Types.ObjectId,
+                        ref: "STUDENT",
+                    },
+                    marksReceived:{
+                        type:Number,
+                        default:0
+                    }
+                }
+            ]
+
+        }
+    ],
     totalMarks:{
         type:Number,
         default:100
