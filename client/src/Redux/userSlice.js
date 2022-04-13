@@ -7,13 +7,18 @@ export const userSlice = createSlice({
         loggedIn:false
     },
     reducers:{
+        // user:(state)=>{
+        // return state  
+        // },
         loginUser:(state,action)=>{
-            state.user = action.payload
+            state.user = action.payload.user
             state.loggedIn = true
+
         },
         logout:(state)=>{
             state.user = null;
-        }
+        },
+        
     }
 })
 

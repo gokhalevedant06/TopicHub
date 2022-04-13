@@ -194,7 +194,6 @@ const createAssesment = async (req, res) => {
       for(var grpID of allGroups.groups){
         appearingGroupDetails.push({groupID:grpID})
       }
-      console.log(appearingGroupDetails)
       const newAssesment = new Assesment({
         title,
         description,

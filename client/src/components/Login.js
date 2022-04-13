@@ -16,7 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { EmailIcon, UnlockIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../Redux/userSlice";
 
 
@@ -56,7 +56,13 @@ const Login = () => {
       dispatch(loginUser({
         user:response.data.userLogin,
       }))
-      window.alert(response.data)
+      // if(user==='student'){
+      //   localStorage.setItem("studentToken", response.data.token)
+      // }else{
+      //   localStorage.setItem("teacherToken", response.data.token)
+      // }
+        localStorage.setItem("token", response.data.token)
+      window.alert(response.data.message)
       navigate('/studentDashboard')
     } catch (error) {
       window.alert("Try Again!")
