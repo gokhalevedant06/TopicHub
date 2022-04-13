@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 const StudentDashboard = () => {
   const { user } = useSelector((state) => state?.user)
   const { email, groupDetails, joinedClassID, name, phone, _id } = user;
+  console.log("USER",user)
   return (
       <>
        <Flex >
