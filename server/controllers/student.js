@@ -34,7 +34,7 @@ const login = async (req, res) => {
         .status(200)
         .send({ ok: false, message: "Email or password cannot be blank" });
     }
-    const userLogin = await Student.findOne({ email: email });
+    const userLogin = await Student.findOne({ email: email }).populate('joinedClassID');
     if (userLogin) {
       const isValid = await bcrypt.compare(password, userLogin.password);
       if (!isValid) {
@@ -62,22 +62,20 @@ const login = async (req, res) => {
   }
 };
 
-// const jwtVerify = async (req, res) => {
-//   const token = req.headers.authorization;
-//   console.log(`token: ${token}`);
-//   if (!token) {
-//     return res.send(null);
-//   }
+const jwtVerify = async (req, res) => {
+  const token = req.headers.authorization;
+  console.log(token);
+  if (!token) {
+    return res.send(null);
+  }
 
-//   const decodeToken = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
-//   if (decodeToken) {
-//     const user = await User.findById(decodeToken._id)
-//       .populate("userRequest")
-//       .populate({ path: "userRequest", populate: "hostId" });
-//     return res.send({ user });
-//   }
-//   res.send(null);
-// };
+  const decodeToken = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+  if (decodeToken) {
+    const user = await Student.findById(decodeToken._id).populate('joinedClassID')
+    return res.send({ user });
+  }
+  res.send(null);
+};
 
 const joinClass = async (req, res) => {
   const { classID } = req.body;
@@ -194,7 +192,7 @@ const joinGroup = async (req,res)=>{
 module.exports = {
   signup,
   login,
-  // jwtVerify,
+  jwtVerify,
   joinClass,
   getAllStudentsInClass,
   createGroup,

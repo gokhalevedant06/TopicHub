@@ -2,7 +2,8 @@ const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const Teacher = require("../models/teacherSchema");
 const Class = require("../models/classSchema");
-const Subject = require("../models/subjectSchema")
+const Subject = require("../models/subjectSchema");
+const Assesment = require("../models/assesmentSchema");
 
 const signup = async (req, res) => {
   var { name, email, phone, password, cpassword } = req.body;
@@ -153,13 +154,11 @@ const getAllStudentsInClass = async (req, res) => {
     console.log(MyClass);
     const getClass = await Class.findById(MyClass);
     if (getClass.studentsJoined)
-      res
-        .status(200)
-        .send({
-          ok: true,
-          message: "Student List",
-          studentsJoined: getClass.studentsJoined,
-        });
+      res.status(200).send({
+        ok: true,
+        message: "Student List",
+        studentsJoined: getClass.studentsJoined,
+      });
     else
       res.status(200).send({ ok: false, message: "Please Create Class First" });
   } catch (error) {
@@ -186,16 +185,42 @@ const getClass = async (req, res) => {
   }
 };
 
+const createAssesment = async (req, res) => {
+  const { title, description, forSubject, totalMarks, classID } = req.body;
+  try {
+    const allGroups = await Class.findById(classID);
+    if (allGroups) {
+      const appearingGroupDetails = []
+      for(var grpID of allGroups.groups){
+        appearingGroupDetails.push({groupID:grpID})
+      }
+      const newAssesment = new Assesment({
+        title,
+        description,
+        forSubject,
+        totalMarks,
+        appearingGroupDetails
+      });
+      const saveAssesment = await newAssesment.save();
+      const thisSubject = await Subject.findById(forSubject);
+      var assesments = [];
+      if (thisSubject.assesments) {
+        assesments = thisSubject.assesments;
+      }
+      assesments.push({ _id: saveAssesment._id });
 
-const createAssesment = ()=>{
-    const {title,description,forSubject,totalMarks,classID} = req.body;
-    try {
-      
-    } catch (error) {
-      
-    }
+      const updateSubject = await Subject.findByIdAndUpdate(forSubject, {
+        assesments,
+      });
 
-}
+      if (saveAssesment && updateSubject)
+        res.status(200).send({ ok: true, message: "Assesment Created" });
+    } else
+      res.status(200).send({ ok: false, message: "Error creating Assesment" });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   signup,
@@ -204,5 +229,6 @@ module.exports = {
   createClass,
   getAllStudentsInClass,
   getClass,
-  createSubject
+  createSubject,
+  createAssesment,
 };
