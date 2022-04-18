@@ -17,6 +17,10 @@ const teacherSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
+    isTeacher:{
+        type:Boolean,
+        default:true
+    },
     MyClass:{
         type: Schema.Types.ObjectId,
         ref: "CLASS",

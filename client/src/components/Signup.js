@@ -5,6 +5,9 @@ import {
 import { EmailIcon, UnlockIcon, InfoIcon, PhoneIcon,ViewIcon,ViewOffIcon} from '@chakra-ui/icons'
 import axios from "axios";
 import { Link,useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { isLoggedIn } from "../Redux/userSlice";
+
 
 const Signup = () => {
   const [isTeacher,setTeacher] = useState(false);
@@ -13,6 +16,12 @@ const Signup = () => {
   const handleClick = () => setShow(!show)
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const pageBackground = useColorModeValue("blue.100", "gray.600");
+  const user = useSelector(isLoggedIn);
+
+  // if(user.loggedIn){
+  //   if(user.isTeacher) navigate('/teacher/profile')
+  //   else navigate('/student/profile')
+  // }
   
   const navigate = useNavigate();
 
