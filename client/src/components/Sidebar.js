@@ -95,10 +95,10 @@ const Sidebar = () => {
                         </>
                       ) : (
                         <>
-                          <Button marginY={"0.5rem"}>Dashboard</Button>
-                          <Button marginY={"0.5rem"}>Class Section</Button>
-                          <Button marginY={"0.5rem"}>Group Section</Button>
-                          <Button marginY={"0.5rem"}>Subjects Section</Button>
+                          <Button onClick={()=>navigate('/student/dashboard')} marginY={"0.5rem"}>Dashboard</Button>
+                          <Button onClick={()=>navigate('/student/classSection')} marginY={"0.5rem"}>Class Section</Button>
+                          <Button onClick={()=>navigate('/student/groupSection')} marginY={"0.5rem"}>Group Section</Button>
+                          <Button onClick={()=>navigate('/student/subjectSection')} marginY={"0.5rem"}>Subjects Section</Button>
                           <Button marginY={"0.5rem"} onClick={handleLogout}>
                             Logout
                           </Button>

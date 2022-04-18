@@ -65,7 +65,7 @@ const Login = () => {
       // }
         localStorage.setItem("token", response.data.token)
       window.alert(response.data.message)
-      navigate(`/${user}/Profile`)
+      navigate(`/${user}/dashboard`)
     } catch (error) {
       window.alert("Try Again!")
       console.log(error);
@@ -133,9 +133,12 @@ const Login = () => {
         </Button>
 
         <Box textAlign={"center"}>
-            <Link to="/teacher/Signup" colorScheme={"teal"}>
-            Dont have an Account ? Signup
-            </Link>
+          {isTeacher?<> <Link to="/teacher/Signup" colorScheme={"teal"}> Dont have an Account ? Signup
+            </Link></>:<> <Link to="/student/Signup" colorScheme={"teal"}> Dont have an Account ? Signup
+            </Link></>}
+
+           
+           
         </Box>
       </Flex>
     </Flex>

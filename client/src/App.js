@@ -9,6 +9,9 @@ import StudentDashboard from "./pages/StudentDashboard";
 import { isLoggedIn } from "./Redux/userSlice";
 import { useSelector } from "react-redux";
 import StudentProfile from "./pages/StudentProfile";
+import StudentClassSection from './pages/StudentClassSection'
+import StudentGroupSection from './pages/StudentGroupSection'
+import StudentSubjectSection from './pages/StudentSubjectSection'
 
 function App() {
   const user = useSelector(isLoggedIn);
@@ -18,8 +21,12 @@ function App() {
       <Routes>
         {user.loggedIn ? (
           <>
-            <Route path="/studentdashboard" element={<StudentDashboard />} />
-            <Route path="/student/profile" element={<StudentProfile />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/studentDashboard" element={<StudentDashboard />} />
+            <Route path="/student/dashboard" element={<StudentProfile />} />
+            <Route path="/student/classSection" element={<StudentClassSection />} />
+            <Route path="/student/groupSection" element={<StudentGroupSection />} />
+            <Route path="/student/subjectSection" element={<StudentSubjectSection />} />
           </>
         ) : (
           <>
