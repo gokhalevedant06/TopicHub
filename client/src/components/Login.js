@@ -17,7 +17,8 @@ import { EmailIcon, UnlockIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../Redux/userSlice";
+import { loginUser,isLoggedIn } from "../Redux/userSlice";
+
 
 
 const Login = () => {
@@ -29,6 +30,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const pageBackground = useColorModeValue("blue.100", "gray.600");
+  const user = useSelector(isLoggedIn);
 
   const navigate = useNavigate();
 
@@ -63,7 +65,7 @@ const Login = () => {
       // }
         localStorage.setItem("token", response.data.token)
       window.alert(response.data.message)
-      navigate('/studentDashboard')
+      navigate(`/${user}/Profile`)
     } catch (error) {
       window.alert("Try Again!")
       console.log(error);

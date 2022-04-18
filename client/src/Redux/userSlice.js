@@ -13,6 +13,12 @@ export const userSlice = createSlice({
         loginUser:(state,action)=>{
             state.user = action.payload.user
             state.loggedIn = true
+            if(action.payload.user.isTeacher){
+                state.isTeacher=true;
+            }else{
+                state.isTeacher=false;
+            }
+            
 
         },
         logout:(state)=>{
@@ -25,5 +31,7 @@ export const userSlice = createSlice({
 export const {loginUser, logout} = userSlice.actions;
 
 export const selectUser = (state)=>state.user.user;
+
+export const isLoggedIn = (state)=>state.user;
 
 export default userSlice.reducer;
