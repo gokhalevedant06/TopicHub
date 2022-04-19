@@ -88,10 +88,11 @@ const Sidebar = () => {
                     <Flex direction={"column"}>
                       {user.isTeacher ? (
                         <>
-                        <Button marginY={"0.5rem"}>Dashboard</Button>
-                          <Button marginY={"0.5rem"} onClick={handleLogout}>
-                            Logout
-                          </Button>
+                        <Button onClick={()=>navigate('/teacher/dashboard')} marginY={"0.5rem"}>Dashboard</Button>
+                        <Button onClick={()=>navigate('/teacher/manageClasses')} marginY={"0.5rem"}>Manage Classes</Button>
+                        <Button marginY={"0.5rem"} onClick={handleLogout}>
+                          Logout
+                        </Button>
                         </>
                       ) : (
                         <>

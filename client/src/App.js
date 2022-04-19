@@ -12,6 +12,8 @@ import StudentProfile from "./pages/StudentProfile";
 import StudentClassSection from './pages/StudentClassSection'
 import StudentGroupSection from './pages/StudentGroupSection'
 import StudentSubjectSection from './pages/StudentSubjectSection'
+import TeacherProfile from "./pages/TeacherProfile";
+import TeacherManageClasses from "./pages/TeacherManageStudents";
 
 function App() {
   const user = useSelector(isLoggedIn);
@@ -27,6 +29,8 @@ function App() {
             <Route path="/student/classSection" element={<StudentClassSection />} />
             <Route path="/student/groupSection" element={<StudentGroupSection />} />
             <Route path="/student/subjectSection" element={<StudentSubjectSection />} />
+            <Route path="/teacher/dashboard" element = {<TeacherProfile />} />
+            <Route path="/teacher/manageClasses" element = {<TeacherManageClasses/>} />
           </>
         ) : (
           <>

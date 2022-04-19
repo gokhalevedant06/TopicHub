@@ -27,7 +27,7 @@ const StudentDashboard = () => {
                   {name}
                 </Text>
     
-                <Text color={"gray.500"}>{joinedClassID.title}</Text>
+                <Text color={"gray.500"}>{joinedClassID?.title}</Text>
                 <Text color={"gray.500"}>{email}</Text>
               </Stack>
               <Button size="lg" colorScheme="orange" ml="50" rounded={"full"}>
