@@ -5,14 +5,15 @@ import Landing from "./pages/Landing";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Sidebar from "./components/Sidebar";
-import StudentDashboard from "./pages/StudentDashboard";
 import { isLoggedIn } from "./Redux/userSlice";
 import { useSelector } from "react-redux";
 import StudentProfile from "./pages/StudentProfile";
 import StudentClassSection from './pages/StudentClassSection'
 import StudentGroupSection from './pages/StudentGroupSection'
 import StudentSubjectSection from './pages/StudentSubjectSection'
-
+import TeacherProfile from "./pages/TeacherProfile";
+import TeacherClassSection from "./pages/TeacherClassSection";
+import CreateClass from "./pages/CreateClass";
 function App() {
   const user = useSelector(isLoggedIn);
   return (
@@ -22,11 +23,13 @@ function App() {
         {user.loggedIn ? (
           <>
             <Route path="/" element={<Landing />} />
-            <Route path="/studentDashboard" element={<StudentDashboard />} />
-            <Route path="/student/dashboard" element={<StudentProfile />} />
+            <Route path="/student/profile" element={<StudentProfile />} />
             <Route path="/student/classSection" element={<StudentClassSection />} />
             <Route path="/student/groupSection" element={<StudentGroupSection />} />
             <Route path="/student/subjectSection" element={<StudentSubjectSection />} />
+            <Route path="/teacher/profile" element={<TeacherProfile />} />
+            <Route path="/teacher/classSection" element={<TeacherClassSection />} />
+            <Route path="/teacher/createClass" element={<CreateClass />} />
           </>
         ) : (
           <>

@@ -65,7 +65,7 @@ const Login = () => {
       // }
         localStorage.setItem("token", response.data.token)
       window.alert(response.data.message)
-      navigate(`/${user}/dashboard`)
+      navigate(`/${user}/profile`)
     } catch (error) {
       window.alert("Try Again!")
       console.log(error);
