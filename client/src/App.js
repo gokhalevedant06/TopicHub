@@ -14,6 +14,7 @@ import StudentSubjectSection from './pages/StudentSubjectSection'
 import TeacherProfile from "./pages/TeacherProfile";
 import TeacherClassSection from "./pages/TeacherClassSection";
 import CreateClass from "./pages/CreateClass";
+import {Box} from '@chakra-ui/react'
 function App() {
   const user = useSelector(isLoggedIn);
   return (
@@ -42,7 +43,7 @@ function App() {
           </>
         )}
       </Routes>
-    </>
+      </>
   );
 }
 
