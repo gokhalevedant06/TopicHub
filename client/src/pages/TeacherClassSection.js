@@ -1,10 +1,33 @@
-import React from 'react'
+import React, {useEffect,useState} from 'react'
 import { useSelector } from "react-redux";
 import { Image, Flex, Text, Button} from '@chakra-ui/react'
 import NoData from '../Assets/Images/NoData.svg'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 const TeacherClassSection = () => {
   const { user } = useSelector((state) => state?.user);
+  const [classData,setClassData] = useState();
+  const token = localStorage.getItem("token");
+  const getClassData = async()=>{
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/teacher/getClasss`,
+        headers: {
+          'Authorization': token
+        }
+      });
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getClassData();
+    console.log("USER",user)
+  }, [])
+  
   return (
     <>
     {
@@ -20,7 +43,7 @@ const TeacherClassSection = () => {
                 fontWeight={"bold"}
                 colorScheme={"teal"}
               >
-                Login as Teacher
+                Create A Class
               </Button>
             </Link>
         </Flex>
