@@ -14,6 +14,7 @@ import StudentSubjectSection from './pages/StudentSubjectSection'
 import TeacherProfile from "./pages/TeacherProfile";
 import TeacherClassSection from "./pages/TeacherClassSection";
 import CreateClass from "./pages/CreateClass";
+import TeacherSubjectSection from './pages/TeacherSubjectSection'
 import {Box} from '@chakra-ui/react'
 function App() {
   const user = useSelector(isLoggedIn);
@@ -31,6 +32,7 @@ function App() {
             <Route path="/teacher/profile" element={<TeacherProfile />} />
             <Route path="/teacher/classSection" element={<TeacherClassSection />} />
             <Route path="/teacher/createClass" element={<CreateClass />} />
+            <Route path="/teacher/subjectSection" element={<TeacherSubjectSection />} />
           </>
         ) : (
           <>
