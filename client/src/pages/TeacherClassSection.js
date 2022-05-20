@@ -17,14 +17,15 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
+  Input,
+  Stack,
+  InputGroup,
 } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+import {PhoneIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons'
 import NoData from "../Assets/Images/NoData.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -47,6 +48,11 @@ const TeacherClassSection = () => {
     onOpen: onOpenMembers,
     onClose: onCloseMembers,
   } = useDisclosure();
+  const {
+    isOpen: isOpenAddTeacher,
+    onOpen: onOpenAddTeacher,
+    onClose: onCloseAddTeacher,
+    } = useDisclosure();
   const token = localStorage.getItem("token");
   const getClassData = async () => {
     try {
@@ -362,9 +368,39 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button m={"1rem"} w={"200px"}>
-                Add Teachers
+              <Button m={"1rem"} w={"200px"} onClick={onOpenAddTeacher}>
+                Add Teacher
               </Button>
+              <Modal isOpen={isOpenAddTeacher} onClose={onCloseAddTeacher}>
+              <ModalOverlay />
+              <ModalContent>
+                  <ModalHeader>Enter New Teacher</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+        
+                  <Stack spacing={4}>
+                  <InputGroup>
+                    <Input type='text' placeholder='Enter Name' />
+                  </InputGroup>
+                  <InputGroup>
+                    <Input placeholder='Enter Phone Number' />
+  
+                  </InputGroup>
+                  <InputGroup>
+                    <Input placeholder='Enter Subject' />
+                  </InputGroup>
+        </Stack>
+    
+              </ModalBody>
+    
+              <ModalFooter>
+                <Button >Create Teacher</Button>
+                <Button colorScheme='blue' mr={3} onClick={onCloseAddTeacher}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+      </Modal>
             </Box>
           </Flex>
         </>
