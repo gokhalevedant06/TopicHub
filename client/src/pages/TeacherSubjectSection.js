@@ -27,11 +27,9 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
 
 } from '@chakra-ui/react'
@@ -41,6 +39,7 @@ const TeacherSubjectSection = () => {
     const { isOpen:createSubject, onOpen:createSubjectOnOpen, onClose:createSubjectOnClose } = useDisclosure()
     const { isOpen:isOpenAllSubjects, onOpen:onOpenAllSubjects, onClose:onCloseAllSubjects } = useDisclosure()
     const { isOpen:isOpenAssessment, onOpen:onOpenAssessment, onClose:onCloseAssessment } = useDisclosure()
+
     const { isOpen:mark, onOpen:onOpenMark, onClose:onCloseMark } = useDisclosure()
     const OverlayOne = () => (
         <ModalOverlay
