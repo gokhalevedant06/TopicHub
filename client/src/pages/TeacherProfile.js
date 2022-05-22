@@ -1,6 +1,8 @@
 import React from 'react'
 import {Flex, Box, Text, Button} from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 const TeacherProfile = () => {
+  const navigate = useNavigate();
   return (
     <>
     <Flex>
@@ -30,7 +32,12 @@ const TeacherProfile = () => {
               <Box>
                 Image
               </Box>
-              <Flex flexDirection={"column"} align="center" width={"80%"}>
+              <Flex direction={'column'} align = 'center' width = {"80%"}>
+                <Box>
+                  <Button m={"1rem"} w ={'200px'} onClick={()=>navigate('/teacher/classSection')}>My Class </Button> 
+                </Box>
+              </Flex>
+              {/* <Flex flexDirection={"column"} align="center" width={"80%"}>
                 <Box>
               <Button m={"1rem"} w={"200px"} >View Joined Students</Button>
               <Button m={"1rem"} w={"200px"} >View Subjects </Button>
@@ -41,7 +48,7 @@ const TeacherProfile = () => {
               <Button m={"1rem"} w={"200px"} >View Groups</Button>
               <Button m={"1rem"} w={"200px"} >View Teachers </Button>
                 </Box>
-              </Flex>
+              </Flex> */}
             </Flex>
     </Box>
     </>
