@@ -42,18 +42,16 @@ const StudentClassSection = () => {
             <ModalBody>
               <FormControl>
                 {/* <FormLabel fontSize='md' mb={3}>ENTER CLASS CODE</FormLabel> */}
-                <Text mb={1}>Enter code provided by your class teacher</Text>
+                <Text mb={1}>Enter the class code provided by your teacher</Text>
                 <Flex alignItems='center'>
-                  <HamburgerIcon mr={3} />
-                  <Input placeholder='ENTER CLASS CODE' />
+                  {/* <HamburgerIcon mr={3} /> */}
+                  <Input placeholder='Class Code' />
                 </Flex>
               </FormControl>
             </ModalBody>
             <ModalFooter>
               <Button variant='ghost' mr={3} colorScheme='blue'>JOIN CLASS</Button>
-              {/* <Button colorScheme='blue' onClick={onClose}>
-              Close
-            </Button> */}
+
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -90,22 +88,31 @@ const StudentClassSection = () => {
 </Menu>
 
       </Flex>
-      {/* <Image
-    z-index={4}
-    opacity={0.3}
-        src={landing}
-        w={"100%"}
-        h={"60vh"}
-        mt={200}
-        // position={"relative"}
-      ></Image> */}
-      <Box borderRadius={80} zIndex={1} m={20} bg='rgba(0,0,0, 0.4)'>
-        <Text ml={500} align={'center'} as='i' fontSize='3xl' >Description of class</Text >
-        <Text color='white' fontSize='xl' m={8}  >Description Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum veniam eos nostrum,
+
+      {/* // <Image>
+      // z-index={3}
+      // opacity={0.3}
+      //     src={landing}
+      //     w={"100%"}
+      //     h={"60vh"}
+      //     mt={200}
+      //     position={"relative"}
+      //   </Image> */}
+    
+      <Box borderRadius={60} zIndex={1} m={20} bg='rgba(0,0,0,0)'>
+        <Text ml={500} align={'center'} as='i' fontSize='3xl' >Class Description</Text >
+        <Text color='black' fontSize='xl' m={8}  >Description Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum veniam eos nostrum,
           illo cupiditate repellat reprehenderit culpa rem consequuntur pariatur eius reiciendis at nisi quod ratione consectetur. Commodi, officia molestias!
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam facilis quam voluptate, culpa minus pariatur, ex omnis id consequuntur,
           libero nostrum! Deleniti, sunt quas reiciendis beatae, atque aut, labore sapiente error nisi reprehenderit aliquam magnam.</Text></Box>
-    </Flex>
+      <Flex direction={"row"} justify="center" width={"100%"} wrap = {'wrap'}>
+      <Box>
+      <Button m={"1rem"} w={"200px"} width = {'80%'} ><Text fontSize='xl' align='center' >My Teachers</Text></Button>
+
+      </Box>
+      </Flex>
+      </Flex>
+   
   )
 }
 

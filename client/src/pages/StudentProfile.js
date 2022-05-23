@@ -1,31 +1,52 @@
-import React from "react";
-import { Box, Stack, Flex, Spacer, Text, Button } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import React from 'react'
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { useNavigate } from 'react-router-dom';
+import {Flex, Box, Text, Button} from '@chakra-ui/react'
 const StudentProfile = () => {
-  const { user } = useSelector((state) => state?.user);
-  const { email, groupDetails, joinedClassID, name, phone, _id } = user;
-  console.log("USER", user);
+  const navigate = useNavigate();
   return (
-    <Flex justifyContent={"center"}>
-      <Box w="70%" h="90vh" bg="gray.100" mt="10" rounded={"3xl"}>
-        <Box p={6} mt="50">
-          <Stack spacing={2} align={"center"} mb={5}>
-            <Text fontSize={"4xl"} fontWeight={500} fontFamily={"body"}>
-              Welcome!
-            </Text>
-            <Spacer />
-            <Text fontSize={"2xl"} fontWeight={500} fontFamily={"body"}>
-              {name}
-            </Text>
-
-            <Text color={"gray.500"}>{joinedClassID.title}</Text>
-            <Text color={"gray.500"}>{email}</Text>
-          </Stack>
-    
-        </Box>
-      </Box>
+    <>
+    <Flex>
+<Flex  wrap={"wrap"} justify={"center"} mt="7rem" height={"250px"} w={"80%"}>
+    <Box width={"300px"}>Image</Box>
+    <Box>
+        <Text>Name:</Text>
+        <Text>Email: </Text>
+        <Text>Phone: </Text>
+    </Box>
+</Flex>
     </Flex>
-  );
-};
+    <Box width={"70%"} marginLeft="auto" marginRight={"auto"}>
 
-export default StudentProfile;
+            <Text textAlign={"center"}>
+              Class Details
+            </Text>
+            <Box marginLeft={"5rem"}>
+              <Text>
+                Title: 
+              </Text>
+              <Text>
+                Description: 
+              </Text>
+            </Box>
+            <Flex>
+              <Box>
+                Image
+              </Box>
+              <Flex flexDirection={"column"} align="center" width={"80%"}>
+                <Box>
+              <Button onClick={()=>navigate('/student/classSection')} m={"1rem"} w={"200px"} >My Class</Button>
+              {/* <Button m={"1rem"} w={"200px"} >My Teachers </Button> */}
+
+                </Box>
+                <Box>
+
+                </Box>
+              </Flex>
+            </Flex>
+    </Box>
+    </>
+  )
+}
+
+export default StudentProfile
