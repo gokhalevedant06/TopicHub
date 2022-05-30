@@ -89,15 +89,16 @@ const StudentClassSection = () => {
 
       </Flex>
 
-      {/* // <Image>
-      // z-index={3}
-      // opacity={0.3}
-      //     src={landing}
-      //     w={"100%"}
-      //     h={"60vh"}
-      //     mt={200}
-      //     position={"relative"}
-      //   </Image> */}
+      {/* <Flex direction={'row'}> 
+        <Image>
+       z-index={3}
+       opacity={0.3}
+           src={landing}
+           w={"100%"}
+           h={"60vh"}
+           mt={200}
+           position={"relative"}
+         </Image> */}
     
       <Box borderRadius={60} zIndex={1} m={20} bg='rgba(0,0,0,0)'>
         <Text ml={500} align={'center'} as='i' fontSize='3xl' >Class Description</Text >

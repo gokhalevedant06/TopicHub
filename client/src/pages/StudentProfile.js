@@ -6,16 +6,21 @@ const StudentProfile = () => {
   const navigate = useNavigate();
   return (
     <>
-    <Flex>
-<Flex  wrap={"wrap"} justify={"center"} mt="7rem" height={"250px"} w={"80%"}>
-    <Box width={"300px"}>Image</Box>
-    <Box>
-        <Text>Name:</Text>
-        <Text>Email: </Text>
-        <Text>Phone: </Text>
+      <Flex wrap={'wrap'} justifyContent={'center'} >
+<Flex  wrap={"wrap"} alignItems={'center'} justifyContent={"center"} mt="7rem"  backgroundColor={"#9999ff"} height={"250px"} w={"80%"} >
+    <Box width={"300px"} margin="10px" >Image</Box>
+    <Box width={"300px"} margin="10px" >
+        <Text padding={"2px"}>Name:</Text>
+        <Text padding={"2px"}>Email: </Text>  
+        <Text padding={"2px"}>Phone: </Text>
+    </Box>
+    <Box  >
+    <Text padding={"2px"}>PRN No.:</Text>
+        <Text padding={"2px"}>Roll No. </Text>  
+        <Text padding={"2px"}>Division </Text>
     </Box>
 </Flex>
-    </Flex>
+</Flex>
     <Box width={"70%"} marginLeft="auto" marginRight={"auto"}>
 
             <Text textAlign={"center"}>
@@ -28,11 +33,12 @@ const StudentProfile = () => {
               <Text>
                 Description: 
               </Text>
+              
             </Box>
             <Flex>
-              <Box>
+              {/* <Box>
                 Image
-              </Box>
+              </Box> */}
               <Flex flexDirection={"column"} align="center" width={"80%"}>
                 <Box>
               <Button onClick={()=>navigate('/student/classSection')} m={"1rem"} w={"200px"} >My Class</Button>
