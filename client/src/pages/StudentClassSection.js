@@ -1,4 +1,5 @@
 import React from 'react'
+import NoData from "../Assets/Images/NoData.svg";
 import {
   Flex,
   useDisclosure,
@@ -23,7 +24,10 @@ const StudentClassSection = () => {
   const { isOpen , onOpen, onClose } = useDisclosure();
   const { isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
   const { isOpen: isDeleteOpen , onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+
   return (
+    <>
+    {user.joinedClassID ?(
     <Flex direction="column">
       <Flex direction="row" width="100%" height="130px"  >
         <Text m={10} fontSize='2xl'>Hello, {name} <br/>
@@ -88,18 +92,6 @@ const StudentClassSection = () => {
 </Menu>
 
       </Flex>
-
-      {/* <Flex direction={'row'}> 
-        <Image>
-       z-index={3}
-       opacity={0.3}
-           src={landing}
-           w={"100%"}
-           h={"60vh"}
-           mt={200}
-           position={"relative"}
-         </Image> */}
-    
       <Box borderRadius={60} zIndex={1} m={20} bg='rgba(0,0,0,0)'>
         <Text ml={500} align={'center'} as='i' fontSize='3xl' >Class Description</Text >
         <Text color='black' fontSize='xl' m={8}  >Description Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum veniam eos nostrum,
@@ -109,12 +101,49 @@ const StudentClassSection = () => {
       <Flex direction={"row"} justify="center" width={"100%"} wrap = {'wrap'}>
       <Box>
       <Button m={"1rem"} w={"200px"} width = {'80%'} ><Text fontSize='xl' align='center' >My Teachers</Text></Button>
-
       </Box>
       </Flex>
       </Flex>
    
-  )
-}
+    ):(
+      <>
+          <Flex direction={"column"} justify={"center"} align={"center"}>
+            <Image my={"3rem"} src={NoData} w={"25%"}></Image>
+            <Text my={"2rem"} fontSize="1.5rem">
+              You haven't joined any classes yet. Join a class and start Learning!
+            </Text>
+            <Link to="/student/joinClass">
+              <Button
+                m={"2rem"}
+                height={"3rem"}
+                fontSize={"1.2rem"}
+                fontWeight={"bold"}
+                colorScheme={"teal"}
+              >
+                Join A Class
+              </Button>
+            </Link>
+          </Flex>
+
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Modal Title</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>dfhhf</ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                  Close
+                </Button>
+                <Button variant="ghost">Secondary Action</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </>
+    )}
+    </>
+  );
+};
 
 export default StudentClassSection

@@ -2,7 +2,7 @@ import React from 'react'
 import '../App.css'
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useNavigate } from 'react-router-dom';
-import {Flex, Box, Text, Button, Image} from '@chakra-ui/react'
+import {Flex, Box, Text, Button, Image, Input} from '@chakra-ui/react'
 import dp from '../Assets/Images/profilePic.jpg';
 const StudentProfile = () => {
   const navigate = useNavigate();
@@ -22,9 +22,12 @@ const StudentProfile = () => {
         src={dp} 
         // width={"300px"}  
         alt={"dp"}
-        borderRadius={"full"}>
-      
+        borderRadius={"full"}
+        onClick={()=>alert("Update Image")}
+        >
+          
         </Image>
+        {/* <Button m={"1rem"} w={"200px"} fontSize='xs'>My Class</Button> */}
       </Box>
       <Box width={"300px"} margin="10px" >
         <Text padding={"2px"}> <b>Name:</b> Adwait Gharpure</Text>
@@ -44,11 +47,12 @@ const StudentProfile = () => {
     
         <Flex flexDirection={"column"} align="center" width={"80%"}>
           <Box>
-        <Button onClick={()=>navigate('/student/classSection')} m={"1rem"} w={"200px"} ><b>My Class</b></Button>
+        <Button onClick={()=>navigate('/student/classSection')} m={"1rem"} w={"200px"} fontSize='xl'>My Class</Button>
           </Box>
         </Flex>
       </Flex>
   </Flex>
+  <Input type={"file"} hidden/>
     
     </>
   )
