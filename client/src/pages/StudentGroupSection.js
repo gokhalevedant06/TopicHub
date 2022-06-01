@@ -1,5 +1,6 @@
 import React from 'react'
 // import { useState } from 'react'
+import { useSelector } from 'react-redux';
 import { useClipboard } from '@chakra-ui/react'
 import {
   Flex,
@@ -17,9 +18,12 @@ import {
   Input,
   FormControl,
   FormLabel,
-
+  Image,
 } from '@chakra-ui/react'
+import { Link } from "react-router-dom";
+import groupJoin from '../Assets/Images/joinGroup.svg'
 const StudentGroupSection = () => {
+  const { isOpen , onOpen, onClose } = useDisclosure();
   const{ 
     isOpen: isOpenJoinGroup,
     onOpen: onOpenJoinGroup,
@@ -32,9 +36,11 @@ const StudentGroupSection = () => {
   } = useDisclosure()
   const [value, setValue] = React.useState('(Group id here)')
   const { hasCopied, onCopy } = useClipboard(value)
+  const { user } = useSelector((state) => state?.user);
   
   return (
     <>
+    {user.groupID ?(
    <Flex flexDirection={"column"} align="center"  justifyContent={'center'} height = {'100vh'}>
                 <Box>
               <Button m={"1rem"} w={"200px"} onClick={onOpenCreateGroup}> Create a Group</Button>
@@ -85,8 +91,47 @@ const StudentGroupSection = () => {
       </Modal>
                 </Box>
   </Flex>
+  
+  ): (
+    <>
+          <Flex direction={"column"} justify={"center"} align={"center"}>
+            <Image my={"3rem"} src={groupJoin} w={"37%"}></Image>
+            <Text my={"2rem"} fontSize="1.5rem">
+              You haven't joined any groups yet. Join a group and start collaborating!
+            </Text>
+            <Link to="/student/joinGroup">
+              <Button
+                m={"2rem"}
+                height={"3rem"}
+                fontSize={"1.2rem"}
+                fontWeight={"bold"}
+                colorScheme={"teal"}
+              >
+                Join A Group
+              </Button>
+            </Link>
+          </Flex>
+
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Modal Title</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>dfhhf</ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                  Close
+                </Button>
+                <Button variant="ghost">Secondary Action</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </>
+
+  )}
   </>
-  )
-}
+  );
+};
 
 export default StudentGroupSection
