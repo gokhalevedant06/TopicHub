@@ -43,7 +43,7 @@ const StudentGroupSection = () => {
     {user.groupID ?(
    <Flex flexDirection={"column"} align="center"  justifyContent={'center'} height = {'100vh'}>
                 <Box>
-              <Button m={"1rem"} w={"200px"} onClick={onOpenCreateGroup}> Create a Group</Button>
+              <Button m={"1rem"} w={"200px"} colorScheme=  'green' onClick={onOpenCreateGroup} > Create a Group</Button>
               <Modal isOpen={isOpenCreateGroup} onClose={onCloseCreateGroup}>
               <ModalOverlay />
               <ModalContent>
@@ -56,7 +56,7 @@ const StudentGroupSection = () => {
                 <Input value={value} align={'center'}/>
                 </Flex>
                 <ModalFooter>
-                  <Button colorScheme='green' mr={3} onClick={onCopy}> 
+                  <Button colorScheme='red' mr={3} onClick={onCopy}> 
                   {hasCopied ? 'Copied' : "Copy Group ID"}</Button>
 
                   <Button colorScheme='blue' mr={3} onClick={onCloseCreateGroup}>
@@ -65,7 +65,7 @@ const StudentGroupSection = () => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
-              <Button m={"1rem"} w={"200px"} onClick = {onOpenJoinGroup}>Join a Group </Button>
+              <Button m={"1rem"} w={"200px"} colorScheme = {'green'} onClick = {onOpenJoinGroup}>Join a Group </Button>
               <Modal
         isOpen={isOpenJoinGroup}
         onClose={onCloseJoinGroup}
@@ -97,9 +97,9 @@ const StudentGroupSection = () => {
           <Flex direction={"column"} justify={"center"} align={"center"}>
             <Image my={"3rem"} src={groupJoin} w={"37%"}></Image>
             <Text my={"2rem"} fontSize="1.5rem">
-              You haven't joined any groups yet. Join a group and start collaborating!
+              You haven't joined any groups yet. Join or Create a group and start collaborating!
             </Text>
-            <Link to="/student/joinGroup">
+            {/* <Link to="/student/joinGroup">
               <Button
                 m={"2rem"}
                 height={"3rem"}
@@ -109,7 +109,58 @@ const StudentGroupSection = () => {
               >
                 Join A Group
               </Button>
-            </Link>
+              
+            </Link> */}
+          <Flex flexDirection={"column"} align="center"  justifyContent={'center'} height = {'10vh'}>
+                <Box>
+              <Button m={"1rem"} w={"200px"} onClick={onOpenCreateGroup} colorScheme = 'green'> Create a Group</Button>
+              <Modal isOpen={isOpenCreateGroup} onClose={onCloseCreateGroup}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader align={'center'}>Create a New Group!</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody align={'center'}>
+                <Text>Copy this Group ID and send to your fellow members!</Text>
+                </ModalBody>
+                <Flex flexWrap={'wrap'} ml = {'50px'} mr = {"50px"}>
+                <Input value={value} align={'center'}/>
+                </Flex>
+                <ModalFooter>
+                  <Button colorScheme='green' mr={3} onClick={onCopy}> 
+                  {hasCopied ? 'Copied' : "Copy Group ID"}</Button>
+
+                  <Button colorScheme='red' mr={3} onClick={onCloseCreateGroup}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+              <Button m={"1rem"} w={"200px"} onClick = {onOpenJoinGroup} colorScheme = 'green'>Join a Group </Button>
+              <Modal
+        isOpen={isOpenJoinGroup}
+        onClose={onCloseJoinGroup}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Join a Group</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Enter Group ID as given to you by the leader</FormLabel>
+              <Input placeholder='Code' />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='green' mr={3}>
+              Join
+            </Button>
+            <Button onClick={onCloseJoinGroup} colorScheme = 'red'>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+                </Box>
+  </Flex>
           </Flex>
 
           <Modal isOpen={isOpen} onClose={onClose}>
