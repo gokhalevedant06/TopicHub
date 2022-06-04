@@ -15,6 +15,8 @@ import TeacherProfile from "./pages/TeacherProfile";
 import TeacherClassSection from "./pages/TeacherClassSection";
 import CreateClass from "./pages/CreateClass";
 import TeacherSubjectSection from './pages/TeacherSubjectSection'
+import JoinClass from "./pages/JoinClass";
+import JoinGroup from "./pages/JoinGroup";
 import {Box} from '@chakra-ui/react'
 function App() {
   const user = useSelector(isLoggedIn);
@@ -28,6 +30,8 @@ function App() {
             <Route path="/student/profile" element={<StudentProfile />} />
             <Route path="/student/classSection" element={<StudentClassSection />} />
             <Route path="/student/groupSection" element={<StudentGroupSection />} />
+            <Route path="/student/joinClass" element={<JoinClass />} />
+            <Route path="/student/joinGroup" element={<JoinGroup />} />
             <Route path="/student/subjectSection" element={<StudentSubjectSection />} />
             <Route path="/teacher/profile" element={<TeacherProfile />} />
             <Route path="/teacher/classSection" element={<TeacherClassSection />} />
