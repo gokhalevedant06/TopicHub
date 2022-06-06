@@ -33,12 +33,15 @@ import {
   TableContainer,
 
 } from '@chakra-ui/react'
+import axios from 'axios';
 
 import {PhoneIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons'
 const TeacherSubjectSection = () => {
-    const { isOpen:createSubject, onOpen:createSubjectOnOpen, onClose:createSubjectOnClose } = useDisclosure()
+  const [data, setData] = useState();
+  const token = localStorage.getItem("token");  
+  const { isOpen:createSubject, onOpen:createSubjectOnOpen, onClose:createSubjectOnClose } = useDisclosure()
     const { isOpen:isOpenAllSubjects, onOpen:onOpenAllSubjects, onClose:onCloseAllSubjects } = useDisclosure()
-    const { isOpen:isOpenAssessment, onOpen:onOpenAssessment, onClose:onCloseAssessment } = useDisclosure()
+    const { isOpen:isOpenAssesment, onOpen:onOpenAssesment, onClose:onCloseAssesment } = useDisclosure()
 
     const { isOpen:mark, onOpen:onOpenMark, onClose:onCloseMark } = useDisclosure()
     const OverlayOne = () => (
@@ -48,6 +51,21 @@ const TeacherSubjectSection = () => {
         />
       )
       const [overlay, setOverlay] = useState(<OverlayOne />)
+      const onSubmit = async()=>{
+        try {
+          const response = await axios({
+            method: "POST",
+            url: `/teacher/createAssesment`,
+            data:data,
+            headers: {
+              'Authorization': token
+            }
+          });
+          console.log(response)
+        } catch (error) {
+          console.log(error)
+        }
+      }
   return (
     <>
     <Flex justify={"center"}>
@@ -137,7 +155,7 @@ const TeacherSubjectSection = () => {
         <Text>Description</Text>
         <Text>Teacher Name</Text>
         <Flex>
-          <Button onClick={onOpenAssessment} my={"1rem"} mr={"1rem"} colorScheme={"green"}>Create Assesment</Button>
+          <Button onClick={onOpenAssesment} my={"1rem"} mr={"1rem"} colorScheme={"green"}>Create Assesment</Button>
         </Flex>
       </Flex>
 
@@ -317,7 +335,7 @@ const TeacherSubjectSection = () => {
 
 
 
-      <Modal isOpen={isOpenAssessment} onClose={onCloseAssessment}>
+      <Modal isOpen={isOpenAssesment} onClose={onCloseAssesment}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Enter New Assessment Data</ModalHeader>
@@ -358,8 +376,8 @@ const TeacherSubjectSection = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button >Create Assessment</Button>
-            <Button colorScheme='blue' mr={3} onClick={onCloseAssessment}>
+            <Button onClick={()=>onSubmit()} >Create Assesment</Button>
+            <Button colorScheme='blue' mr={3} onClick={onCloseAssesment}>
               Close
             </Button>
           </ModalFooter>
