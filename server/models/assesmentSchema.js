@@ -14,6 +14,10 @@ const assesmentSchema = new mongoose.Schema({
         ref: "SUBJECT",
         required:true
     },
+    createdBy:{
+        type: Schema.Types.ObjectId,
+        ref: "TEACHER",
+    },
     appearingGroupDetails:[
         {
             groupID:{
