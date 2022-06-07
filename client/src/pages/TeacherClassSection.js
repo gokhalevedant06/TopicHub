@@ -24,14 +24,20 @@ import {
   Input,
   Stack,
   InputGroup,
+  Select
 } from "@chakra-ui/react";
 import {PhoneIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons'
 import NoData from "../Assets/Images/NoData.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import TeacherProfileImage from "../Assets/Images/TeacherProfile.svg";
+
 const TeacherClassSection = () => {
   const { user } = useSelector((state) => state?.user);
   const [classData, setClassData] = useState();
+  const [studentData, setClassStudentData] = useState();
+  const [teacherID,setTeacherID] = useState();
+  const [allTeachersData,setAllTeachers] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: allTeachers,
@@ -54,16 +60,67 @@ const TeacherClassSection = () => {
     onClose: onCloseAddTeacher,
     } = useDisclosure();
   const token = localStorage.getItem("token");
+
   const getClassData = async () => {
     try {
       const response = await axios({
         method: "GET",
-        url: `/teacher/getClasss`,
+        url: `/teacher/getClass`,
         headers: {
           Authorization: token,
         },
       });
-      console.log(response);
+      setClassData(response.data.classDetails)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addTeacher = async()=>{
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/teacher/addTeacherToClass`,
+        headers: {
+          Authorization: token,
+        },
+        data:{
+          teacherID,
+          classID:classData?._id
+        }
+      });
+      setAllTeachers(response?.data?.getTeachers)
+      alert(response.data.message)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getAllTeachers = async()=>{
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/teacher/getAllTeachers`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      setAllTeachers(response.data.getTeachers)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getClassStudentData = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/teacher/getAllStudentsInClass`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      setClassStudentData(response.data.studentsJoined);
     } catch (error) {
       console.log(error);
     }
@@ -71,8 +128,11 @@ const TeacherClassSection = () => {
 
   useEffect(() => {
     getClassData();
-    console.log("USER", user);
+    getClassStudentData();
+    getAllTeachers();
   }, []);
+
+ 
 
   return (
     <>
@@ -80,22 +140,24 @@ const TeacherClassSection = () => {
         <>
           <Flex justify={"center"}>
             <Box>
-              <Text mt={"5rem"}>Class Details</Text>
+              <Text mt={"4rem"} fontSize={"2.1rem"} fontWeight={'bold'} >Class Details</Text>
             </Box>
           </Flex>
-          <Box>
-            <Flex wrap={"wrap"} justify={"center"} height={"250px"} w={"80%"}>
-              <Box width={"300px"}>Image</Box>
+          <Box mt={'2rem'}>
+            <Flex ml={"auto"} mr={'auto'}  wrap={"wrap"} justify={"start"} height={"250px"} w={"80%"}>
+              <Box width={"500px"}>
+                <Image src={TeacherProfileImage} width={'350px'}></Image>
+              </Box>
               <Box>
-                <Text>Class ID: </Text>
-                <Text>Title:</Text>
-                <Text>Description: </Text>
+                <Text fontSize={"1.3rem"} fontWeight={'medium'} >Class ID: {classData?._id} </Text>
+                <Text fontSize={"1.3rem"} fontWeight={'medium'} >Title: {classData?.title}</Text>
+                <Text fontSize={"1.3rem"} fontWeight={'medium'} >Description: {classData?.description} </Text>
               </Box>
             </Flex>
           </Box>
           <Flex justify={"center"} wrap={"wrap"}>
-            <Box>
-              <Button m={"1rem"} w={"200px"} onClick={onOpen}>
+            <Box mt={"5rem"}>
+              <Button m={"1rem"} w={"200px"} colorScheme={'purple'} onClick={onOpen}>
                 View Joined Students
               </Button>
               <Modal size={"4xl"} isOpen={isOpen} onClose={onClose}>
@@ -116,51 +178,41 @@ const TeacherClassSection = () => {
                           </Tr>
                         </Thead>
                         <Tbody>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Vedant Gokhale</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Adwait Gharpure</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Harsh Yadav</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
+                        {studentData?.map((student) => {
+                                return (
+                                  <>
+                                    <Tr key={student._id}>
+                                      <Td>{student._id}</Td>
+                                      <Td>{student.name}</Td>
+                                      <Td>{student.phone}</Td>
+                                      {student?.groupDetails?.groupID?.name ? (
+                                        <>
+                                          <Td>
+                                            {
+                                              student?.groupDetails?.groupID
+                                                ?.name
+                                            }
+                                          </Td>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Td textColor={"red"}>Not Joined</Td>
+                                        </>
+                                      )}
+                                      <Td>
+                                        <CloseIcon
+                                          color={"red"}
+                                          backgroundColor={"red.200"}
+                                          p={1}
+                                          borderRadius={2}
+                                          boxSize={6}
+                                        />
+                                      </Td>
+                                    </Tr>
+                                  </>
+                                );
+                              })}
+            
                         </Tbody>
                       </Table>
                     </TableContainer>
@@ -172,7 +224,7 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button onClick={onOpenAllTeachers} m={"1rem"} w={"200px"}>
+              <Button onClick={onOpenAllTeachers} colorScheme={'yellow'} m={"1rem"} w={"200px"}>
                 Show All Teachers
               </Button>
               <Modal
@@ -182,7 +234,7 @@ const TeacherClassSection = () => {
               >
                 <ModalOverlay />
                 <ModalContent>
-                  <ModalHeader>List of Students In Class </ModalHeader>
+                  <ModalHeader>List of Teachers In Class </ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
                     <TableContainer>
@@ -197,51 +249,27 @@ const TeacherClassSection = () => {
                           </Tr>
                         </Thead>
                         <Tbody>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Vedant Gokhale</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Adwait Gharpure</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Harsh Yadav</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
+                        {classData?.teachers.map((teacher) => {
+                                return (
+                                  <Tr>
+                                    <Td>{teacher._id}</Td>
+                                    <Td>{teacher.name}</Td>
+                                    <Td>{teacher.phone}</Td>
+                                    <Td>{teacher.email}</Td>
+                                    <Td>
+                                      <CloseIcon
+                                        color={"red"}
+                                        backgroundColor={"red.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        boxSize={6}
+                                      />
+                                    </Td>
+                                  </Tr>
+                                );
+                              })}
+                        
+                
                         </Tbody>
                       </Table>
                     </TableContainer>
@@ -253,13 +281,13 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button m={"1rem"} w={"200px"} onClick={onOpenGroup}>
+              <Button m={"1rem"} colorScheme={'red'} w={"200px"} onClick={onOpenGroup}>
                 View All Groups
               </Button>
               <Modal size={"4xl"} isOpen={group} onClose={onCloseGroup}>
                 <ModalOverlay />
                 <ModalContent>
-                  <ModalHeader>List of Students In Class </ModalHeader>
+                  <ModalHeader>List of Groups In Class </ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
                     <TableContainer>
@@ -274,75 +302,34 @@ const TeacherClassSection = () => {
                           </Tr>
                         </Thead>
                         <Tbody>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Group Name</Td>
-                            <Td>Leader Name</Td>
-                            <Td>
-                              <Button
-                                size={"sm"}
-                                onClick={onOpenMembers}
-                                colorScheme={"teal"}
-                              >
-                                Show Members
-                              </Button>
-                            </Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Group Name</Td>
-                            <Td>Leader Name</Td>
-                            <Td>
-                              <Button
-                                size={"sm"}
-                                onClick={onOpenMembers}
-                                colorScheme={"teal"}
-                              >
-                                Show Members
-                              </Button>
-                            </Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Group Name</Td>
-                            <Td>Leader Name</Td>
-                            <Td>
-                              <Button
-                                size={"sm"}
-                                onClick={onOpenMembers}
-                                colorScheme={"teal"}
-                              >
-                                Show Members
-                              </Button>
-                            </Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
+                        {classData?.groups.map((group) => {
+                                return (
+                                  <Tr>
+                                    <Td>{group._id}</Td>
+                                    <Td>{group.name}</Td>
+                                    <Td>{group?.groupLeader?.name}</Td>
+                                    <Td>
+                                      <Button
+                                        size={"sm"}
+                                        onClick={onOpenMembers}
+                                        colorScheme={"teal"}
+                                      >
+                                        Show Members
+                                      </Button>
+                                    </Td>
+                                    <Td>
+                                      <CloseIcon
+                                        color={"red"}
+                                        backgroundColor={"red.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        boxSize={6}
+                                      />
+                                    </Td>
+                                  </Tr>
+                                );
+                              })}
+                         
                         </Tbody>
                       </Table>
                     </TableContainer>
@@ -367,56 +354,34 @@ const TeacherClassSection = () => {
                             <Th>ID</Th>
                             <Th>Name</Th>
                             <Th>Phone</Th>
-                            <Th> Group Number</Th>
                             <Th> Remove</Th>
                           </Tr>
                         </Thead>
                         <Tbody>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Vedant Gokhale</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Adwait Gharpure</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>12010665</Td>
-                            <Td>Harsh Yadav</Td>
-                            <Td>9552037743</Td>
-                            <Td>Group1</Td>
-                            <Td>
-                              <CloseIcon
-                                color={"red"}
-                                backgroundColor={"red.200"}
-                                p={1}
-                                borderRadius={2}
-                                boxSize={6}
-                              />
-                            </Td>
-                          </Tr>
+                        {classData?.groups.map((grp) => {
+                                return (
+                                  <>
+                                    {grp?.members?.map((member) => {
+                                      return (
+                                        <Tr>
+                                          <Td>{member?._id}</Td>
+                                          <Td>{member?.name}</Td>
+                                          <Td>{member?.phone}</Td>
+                                          <Td>
+                                            <CloseIcon
+                                              color={"red"}
+                                              backgroundColor={"red.200"}
+                                              p={1}
+                                              borderRadius={2}
+                                              boxSize={6}
+                                            />
+                                          </Td>
+                                        </Tr>
+                                      );
+                                    })}
+                                  </>
+                                );
+                              })}
                         </Tbody>
                       </Table>
                     </TableContainer>
@@ -429,34 +394,37 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button m={"1rem"} w={"200px"} onClick={onOpenAddTeacher}>
+              <Button m={"1rem"} colorScheme={'green'} w={"200px"} onClick={onOpenAddTeacher}>
                 Add Teacher
               </Button>
               <Modal isOpen={isOpenAddTeacher} onClose={onCloseAddTeacher}>
               <ModalOverlay />
               <ModalContent>
-                  <ModalHeader>Enter New Teacher</ModalHeader>
+                  <ModalHeader>Select Teacher</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
         
                   <Stack spacing={4}>
-                  <InputGroup>
-                    <Input type='text' placeholder='Enter Name' />
-                  </InputGroup>
-                  <InputGroup>
-                    <Input placeholder='Enter Phone Number' />
-  
-                  </InputGroup>
-                  <InputGroup>
-                    <Input placeholder='Enter Subject' />
-                  </InputGroup>
-        </Stack>
+                  <Select onChange={(e)=>setTeacherID(e.target.value)} placeholder='Select Subject Teacher'>
+
+                    {
+                      allTeachersData?.map((teacher)=>{
+                        return(
+                          <option value={`${teacher._id}`} >
+                            ID: {teacher._id}
+                          </option>
+                          
+                        )
+                      })
+                    }
+                    </Select>
+              </Stack>
     
               </ModalBody>
     
               <ModalFooter>
-                <Button >Create Teacher</Button>
-                <Button colorScheme='blue' mr={3} onClick={onCloseAddTeacher}>
+                <Button colorScheme={'green'} onClick={()=>addTeacher()} >Add Teacher To Class</Button>
+                <Button colorScheme='blue' ml={3} onClick={onCloseAddTeacher}>
                   Close
                 </Button>
               </ModalFooter>

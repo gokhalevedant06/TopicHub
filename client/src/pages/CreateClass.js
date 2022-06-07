@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Box, Flex, Input,Textarea, Image, Button  } from '@chakra-ui/react'
 import Class from '../Assets/Images/Class.svg'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 const CreateClass = () => {
   const [data, setData] = useState();  // to get data from input tags
   const token = localStorage.getItem("token");
@@ -12,6 +13,8 @@ const CreateClass = () => {
     });
     console.log(data)
   }; 
+  const navigate = useNavigate();
+
 
   const onSubmit = async()=>{
     try {
@@ -24,6 +27,7 @@ const CreateClass = () => {
         }
       });
       console.log(response)
+      navigate(`/teacher/profile`)
     } catch (error) {
       console.log(error)
     }

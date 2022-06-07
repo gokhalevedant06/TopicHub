@@ -243,6 +243,36 @@ const createAssesment = async (req, res) => {
   }
 };
 
+const addTeacherToClass = async(req,res)=>{
+  const {teacherID,classID} = req.body;
+  try {
+    var teacherArr = []
+    const getClass = await Class.findById(classID);
+    teacherArr = getClass.teachers
+    teacherArr.push(teacherID);
+    // const getAllTeachers = await Teacher.find();
+    // for(var i=0;i<getAllTeachers.length;i++){
+    //   console.log(getAllTeachers[i]._id);
+    // }
+    const response = await Class.findByIdAndUpdate(classID,{teachers:teacherArr})
+    if(response) res.send({message:"Teacher Added"})
+    else res.send({message:"Failed To Add"})
+  } catch (error) {
+    console.log(error)
+  }
+
+}
+
+  const getAllTeacher = async(req,res)=>{
+    try {
+      const getTeachers = await Teacher.find();
+      res.status(200).send({ getTeachers });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 module.exports = {
   signup,
   login,
@@ -252,4 +282,6 @@ module.exports = {
   getClass,
   createSubject,
   createAssesment,
+  getAllTeacher,
+  addTeacherToClass
 };
