@@ -354,12 +354,73 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Modal isOpen={member} onClose={onCloseMembers}>
+              <Modal isOpen={member} size={"3xl"} onClose={onCloseMembers}>
                 <ModalOverlay />
                 <ModalContent>
                   <ModalHeader>Modal Title</ModalHeader>
                   <ModalCloseButton />
-                  <ModalBody>dfhf</ModalBody>
+                  <ModalBody>
+                  <TableContainer>
+                      <Table variant="simple">
+                        <Thead>
+                          <Tr>
+                            <Th>ID</Th>
+                            <Th>Name</Th>
+                            <Th>Phone</Th>
+                            <Th> Group Number</Th>
+                            <Th> Remove</Th>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          <Tr>
+                            <Td>12010665</Td>
+                            <Td>Vedant Gokhale</Td>
+                            <Td>9552037743</Td>
+                            <Td>Group1</Td>
+                            <Td>
+                              <CloseIcon
+                                color={"red"}
+                                backgroundColor={"red.200"}
+                                p={1}
+                                borderRadius={2}
+                                boxSize={6}
+                              />
+                            </Td>
+                          </Tr>
+                          <Tr>
+                            <Td>12010665</Td>
+                            <Td>Adwait Gharpure</Td>
+                            <Td>9552037743</Td>
+                            <Td>Group1</Td>
+                            <Td>
+                              <CloseIcon
+                                color={"red"}
+                                backgroundColor={"red.200"}
+                                p={1}
+                                borderRadius={2}
+                                boxSize={6}
+                              />
+                            </Td>
+                          </Tr>
+                          <Tr>
+                            <Td>12010665</Td>
+                            <Td>Harsh Yadav</Td>
+                            <Td>9552037743</Td>
+                            <Td>Group1</Td>
+                            <Td>
+                              <CloseIcon
+                                color={"red"}
+                                backgroundColor={"red.200"}
+                                p={1}
+                                borderRadius={2}
+                                boxSize={6}
+                              />
+                            </Td>
+                          </Tr>
+                        </Tbody>
+                      </Table>
+                    </TableContainer>
+                  </ModalBody>
 
                   <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onCloseMembers}>

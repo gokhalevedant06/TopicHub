@@ -35,7 +35,7 @@ const login = async (req, res) => {
         .status(200)
         .send({ ok: false, message: "Email or password cannot be blank" });
     }
-    const userLogin = await Teacher.findOne({ email: email });
+    const userLogin = await Teacher.findOne({ email: email }).populate('MyClass');
     if (userLogin) {
       const isValid = await bcrypt.compare(password, userLogin.password);
       if (!isValid) {
@@ -151,8 +151,12 @@ const createSubject = async (req, res) => {
 const getAllStudentsInClass = async (req, res) => {
   const { MyClass } = req.user;
   try {
-    console.log(MyClass);
-    const getClass = await Class.findById(MyClass);
+    const getClass = await Class.findById(MyClass).populate({
+      path : 'studentsJoined',
+      populate : {
+        path : 'groupDetails.groupID'
+      }
+    })
     if (getClass.studentsJoined)
       res.status(200).send({
         ok: true,
@@ -172,7 +176,24 @@ const getClass = async (req, res) => {
     //add populations here
     const classDetails = await Class.findById(MyClass).populate(
       "studentsJoined"
-    );
+    ).populate("teachers").populate({
+      path : 'subjects',
+      populate : {
+        path : 'subjectTeacher'
+      }
+    }).populate({
+      path : 'groups',
+      populate : {
+        path : 'groupLeader'
+      },
+    }).populate({
+      path : 'groups',
+      populate:{
+        path:'members'
+      }
+      
+    })
+   
     if (classDetails)
       res
         .status(200)

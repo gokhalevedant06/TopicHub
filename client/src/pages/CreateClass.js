@@ -3,9 +3,9 @@ import { Box, Flex, Input,Textarea, Image, Button  } from '@chakra-ui/react'
 import Class from '../Assets/Images/Class.svg'
 import axios from 'axios'
 const CreateClass = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState();  // to get data from input tags
   const token = localStorage.getItem("token");
-  const handleChange = (e) => {
+  const handleChange = (e) => {  // this function will create an object to send to server using Axios
     setData({
       ...data,
       [e.target.name]: e.target.value,
@@ -28,6 +28,7 @@ const CreateClass = () => {
       console.log(error)
     }
   }
+  
   return (
     <>
     <Box>
