@@ -22,7 +22,7 @@ const StudentProfile = () => {
         <Text padding={"2px"}><b>Phone:</b> 9545831983</Text>
       </Box>
       <Box>
-      <Button m={"1rem"} w={"200px"} width = {'80%'} colorScheme={'purple'}>My Class</Button>
+      <Button m={"1rem"} w={"200px"} width = {'80%'} colorScheme={'purple'} onClick={()=>navigate('/student/classSection')}>My Class</Button>
       </Box>
        
     </Flex>
