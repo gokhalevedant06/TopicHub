@@ -444,8 +444,8 @@ const TeacherProfile = () => {
                   m={"2rem"}
                   height={"3rem"}
                   fontSize={"1.2rem"}
-                  fontWeight={"bold"}
                   colorScheme={"teal"}
+                  
                 >
                   Go To Class Section
                 </Button>
