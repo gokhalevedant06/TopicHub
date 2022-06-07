@@ -116,7 +116,7 @@ const TeacherProfile = () => {
           <>
             <Text textAlign={"center"} fontWeight={"bold"} fontSize={"2.1rem"}>Class Details</Text>
    
-            <Flex mt={"2rem"}>
+            <Flex mt={"2rem"} >
               <Box width={"500px"}>
                 <Image src={TeacherProfileImage} height={"200px"}></Image>
               </Box>

@@ -3,57 +3,33 @@ import '../App.css'
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useNavigate } from 'react-router-dom';
 import {Flex, Box, Text, Button, Image, Input} from '@chakra-ui/react'
-import dp from '../Assets/Images/profilePic.jpg';
+import dp from '../Assets/Images/dp.svg';
 const StudentProfile = () => {
   const navigate = useNavigate();
   return (
     <>
-      <Flex wrap={'wrap'} justifyContent={'center'} flexDirection={'row'}>
-      <Flex  wrap={"wrap"} alignItems={'center'} justifyContent={"start"} mt="7rem"  backgroundColor={"#9999ff"} 
-      height={"50px"} w={"90%"} >
-      <Text fontSize={"30px"} textColor={'#FFFFFF'} ml = {"5rem"} fontFamily={'Roboto'}>My Profile</Text>
-        </Flex>
-      <Flex  wrap={"wrap"} alignItems={'center'} justifyContent={"start"} mt="3rem"  backgroundColor={"#9999ff"} 
-      height={"300px"} w={"90%"} >
-      <Box width={"300px"} ml="10%" >
-        <Image 
-        boxSize='200px'
-        objectFit={'cover'}
-        src={dp} 
-        // width={"300px"}  
-        alt={"dp"}
-        borderRadius={"full"}
-        onClick={()=>alert("Update Image")}
-        >
-          
-        </Image>
-        {/* <Button m={"1rem"} w={"200px"} fontSize='xs'>My Class</Button> */}
-      </Box>
-      <Box width={"300px"} margin="10px" >
+    <Flex direction={'column'}>
+    <Box borderRadius={60} zIndex={1} m={20} bg='rgba(0,0,0,0)'>
+        <Text ml={500} text={'center'}  fontWeight={"bold"} fontSize={"2.1rem"} >My Profile</Text >
+        <Flex mt={"2rem"} ml = {"10rem"} mr = {'2rem'} mb = {'2rem'}>
+              <Box width={"500px"} mr = {'2rem'}>
+                <Image src={dp} height={"200px"}></Image>
+              </Box>
+          <Flex flexDirection={"column"}  width={"80%"}>
+      <Box width={"300px"} margin="10px" ml = {'2rem'}>
         <Text padding={"2px"}> <b>Name:</b> Adwait Gharpure</Text>
         <Text padding={"2px"}><b>Email:</b> adwait.gharpure20@vit.edu</Text>  
         <Text padding={"2px"}><b>Phone:</b> 9545831983</Text>
-        <Text padding={"2px"}><b>Branch: </b> Artificial Intelligence and Data Science</Text>
-        
       </Box>
-        <Box width={"300px"} margin="10px" >
-        <Text padding={"2px"}><b>PRN No:</b>12010440</Text>
-        <Text padding={"2px"}><b>Roll No:</b> 36</Text>  
-        <Text padding={"2px"}><b>Division: </b>AI-A</Text>
-      
+      <Box>
+      <Button m={"1rem"} w={"200px"} width = {'80%'} colorScheme={'purple'}>My Class</Button>
       </Box>
-  </Flex>
-      <Flex>
-    
-        <Flex flexDirection={"column"} align="center" width={"80%"}>
-          <Box>
-        <Button onClick={()=>navigate('/student/classSection')} m={"1rem"} w={"200px"} fontSize='xl'>My Class</Button>
-          </Box>
+       
+    </Flex>
         </Flex>
-      </Flex>
-  </Flex>
-  <Input type={"file"} hidden/>
-    
+    </Box>
+    </Flex>
+  
     </>
   )
 }
