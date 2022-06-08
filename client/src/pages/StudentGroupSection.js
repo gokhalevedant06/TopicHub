@@ -95,6 +95,8 @@ const StudentGroupSection = () => {
   ): (
     <>
           <Flex direction={"column"} justify={"center"} align={"center"}>
+        <Text text={'center'}  fontWeight={"bold"} fontSize={"2.1rem"} mt={'1rem'} >Group Section</Text >
+
             <Image my={"3rem"} src={groupJoin} w={"37%"}></Image>
             <Text my={"2rem"} fontSize="1.5rem">
               You haven't joined any groups yet. Join or Create a group and start collaborating!
