@@ -438,7 +438,7 @@ const TeacherClassSection = () => {
           <Flex direction={"column"} justify={"center"} align={"center"}>
             <Image my={"3rem"} src={NoData} w={"25%"}></Image>
             <Text my={"2rem"} fontSize="1.5rem">
-              You havent made any classes yet. Make a class and start teaching !
+              You haven't made any classes yet. Make a class and start teaching !
             </Text>
             <Link to="/teacher/createClass">
               <Button
