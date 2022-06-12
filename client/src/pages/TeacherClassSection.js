@@ -344,7 +344,7 @@ const TeacherClassSection = () => {
               <Modal isOpen={member} size={"3xl"} onClose={onCloseMembers}>
                 <ModalOverlay />
                 <ModalContent>
-                  <ModalHeader>Modal Title</ModalHeader>
+                  <ModalHeader>List of Group Members</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
                   <TableContainer>
@@ -411,7 +411,7 @@ const TeacherClassSection = () => {
                       allTeachersData?.map((teacher)=>{
                         return(
                           <option value={`${teacher._id}`} >
-                            ID: {teacher._id}
+                            ID: {teacher._id} <Text fontWeight={'bold'}>( {teacher.name})</Text>
                           </option>
                           
                         )
