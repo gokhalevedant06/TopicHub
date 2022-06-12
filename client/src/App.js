@@ -37,7 +37,6 @@ function App() {
             <Route path="/teacher/profile" element={<TeacherProfile />} />
             <Route path="/teacher/classSection" element={<TeacherClassSection />} />
             <Route path="/teacher/createClass" element={<CreateClass />} />
-            <Route path="/teacher/subjectSection" element={<TeacherSubjectSection />} />
             {/* <Route path = "/teacher/createAssessment" element={<createAssessment/>} /> */}
           </>
         ) : (
