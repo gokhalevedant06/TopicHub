@@ -189,6 +189,16 @@ const joinGroup = async (req,res)=>{
   }
 }
 
+const getGroupDetails = async(req,res)=>{
+  const {groupDetails} = req.user
+    try {
+        const groupData = await Group.findById(groupDetails.groupID).populate('groupLeader').populate('members')
+        res.status(200).send({ ok: true, groupData});
+    } catch (error) {
+      console.log(error)
+    }
+}
+
 module.exports = {
   signup,
   login,
@@ -196,5 +206,6 @@ module.exports = {
   joinClass,
   getAllStudentsInClass,
   createGroup,
-  joinGroup
+  joinGroup,
+  getGroupDetails
 };
