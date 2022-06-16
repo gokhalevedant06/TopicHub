@@ -199,6 +199,28 @@ const getGroupDetails = async(req,res)=>{
     }
 }
 
+const getSubjectsInClass = async(req,res)=>{
+  const {joinedClassID} = req.user
+  console.log(joinedClassID)
+  try {
+    const subjectData = await Class.findById(joinedClassID).populate({
+      path:'subjects',
+      populate:{
+        path:'assesments'
+      }
+    }).populate({
+      path:'subjects',
+      populate:{
+        path:'subjectTeacher'
+      }
+    }
+    )
+    res.status(200).send({ ok: true, subjectData});
+  } catch (error) {
+    
+  }
+}
+
 module.exports = {
   signup,
   login,
@@ -207,5 +229,6 @@ module.exports = {
   getAllStudentsInClass,
   createGroup,
   joinGroup,
-  getGroupDetails
+  getGroupDetails,
+  getSubjectsInClass
 };
