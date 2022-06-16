@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Flex,
   Box,
@@ -36,7 +36,7 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-
+import axios from "axios";
 import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 const StudentSubjectSection = () => {
   const {
@@ -48,6 +48,32 @@ const StudentSubjectSection = () => {
     <ModalOverlay bg="rgba(92,103, 119, 0.8)" backdropFilter="blur(10px)" />
   );
   const [overlay, setOverlay] = useState(<OverlayOne />);
+  const token = localStorage.getItem("token");
+
+  const [subjectData,setSubjectData] = useState()
+
+  const getSubjectDetails = async()=>{
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/student/getSubjects`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response?.data?.subjectData.subjects)
+      setSubjectData(response?.data?.subjectData.subjects)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getSubjectDetails()
+    console.log("here",subjectData)
+  }, []);
+
+
   return (
     <>
     <Flex justify={"center"}>
@@ -55,21 +81,27 @@ const StudentSubjectSection = () => {
       <Box width={"80%"} mt={'5rem'} >
         <Tabs isFitted variant="enclosed">
           <TabList mb="1em">
-            <Tab>One</Tab>
-            <Tab>One</Tab>
-            <Tab>One</Tab>
-            <Tab>One</Tab>
+            <Tab>Subject 1</Tab>
+            <Tab>Subject 2</Tab>
+            <Tab>Subject 3</Tab>
+            <Tab>Subject 4</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel>
+
+            {
+              subjectData?.map((subject)=>{
+                console.log(subject)
+                return(
+                  
+                  <TabPanel>
               <Flex justify={"center"}>
                 <Flex justify={"center"} width={"40%"}>
                   <Text>Image</Text>
                 </Flex>
                 <Flex flexDirection={"column"} width={"60%"}>
-                  <Text>Title</Text>
-                  <Text>Description</Text>
-                  <Text>Teacher Name</Text>
+                  <Text>Title : {subject.title}</Text>
+                  <Text>Descriptio : {subject.description}n</Text>
+                  <Text>Teacher Name : {subject.subjectTeacher.name}</Text>
                   <Flex>
                   </Flex>
                 </Flex>
@@ -77,240 +109,80 @@ const StudentSubjectSection = () => {
               <Text>Previous/On Going Assessments</Text>
               <Box>
                 <Accordion>
-                  <AccordionItem>
-                    <h2>
-                      <AccordionButton>
-                        <Box flex="1" textAlign="left">
-                          Assessment 1 Title
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel pb={4}>
-                      <Box>
-                        <Text>Title</Text>
-                        <Text>Description</Text>
-                      </Box>
 
-                      <TableContainer>
-                        <Table variant="simple">
-                          <Thead>
-                            <Tr>
-                              <Th>Group Number</Th>
-                              <Th>Topic Name</Th>
-                              <Th>Status</Th>
-                            </Tr>
-                          </Thead>
-                          <Tbody>
-                            <Tr>
-                              <Td>1</Td>
-                              <Td>
-                                Sign Language Detection using Deep Learning
-                              </Td>
-                              <Td>
-                                <Flex align={"center"}>
-                                  <CheckIcon
-                                    mr={"1rem"}
-                                    backgroundColor={"green.200"}
-                                    p={1}
-                                    borderRadius={2}
-                                    color={"green"}
-                                    boxSize={6}
-                                  />
-                                  <CloseIcon
-                                    color={"red"}
-                                    backgroundColor={"red.200"}
-                                    p={1}
-                                    borderRadius={2}
-                                    boxSize={6}
-                                  />
-                                </Flex>
-                              </Td>
-                              <Td>
-                                <Button onClick={onOpenMark}>
-                                  Allot Marks
-                                </Button>
-                              </Td>
-                            </Tr>
-                            <Tr>
-                              <Td>1</Td>
-                              <Td>
-                                Sign Language Detection using Deep Learning
-                              </Td>
-                              <Td>
-                                <Flex align={"center"}>
-                                  <CheckIcon
-                                    mr={"1rem"}
-                                    backgroundColor={"green.200"}
-                                    p={1}
-                                    borderRadius={2}
-                                    color={"green"}
-                                    boxSize={6}
-                                  />
-                                  <CloseIcon
-                                    color={"red"}
-                                    backgroundColor={"red.200"}
-                                    p={1}
-                                    borderRadius={2}
-                                    boxSize={6}
-                                  />
-                                </Flex>
-                              </Td>
-                              <Td>
-                                <Button onClick={onOpenMark}>
-                                  Allot Marks
-                                </Button>
-                              </Td>
-                            </Tr>
-                          </Tbody>
-                        </Table>
-                      </TableContainer>
-                    </AccordionPanel>
-                  </AccordionItem>
-                  <AccordionItem>
-                    <h2>
-                      <AccordionButton>
-                        <Box flex="1" textAlign="left">
-                          Assessment 1 Title
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel pb={4}>
-                      <Box>
-                        <Text>Title</Text>
-                        <Text>Description</Text>
-                      </Box>
+                  {
+                    subject?.assesments?.map((assessment)=>{
+                      return(
+                        <AccordionItem>
+                        <h2>
+                          <AccordionButton>
+                            <Box flex="1" textAlign="left">
+                             {assessment.title}
+                            </Box>
+                            <AccordionIcon />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                          <Box>
+                            <Text>Title : {assessment.title}</Text>
+                            <Text>Description : {assessment.description}</Text>
+                          </Box>
+    
+                          <TableContainer>
+                            <Table variant="simple">
+                              <Thead>
+                                <Tr>
+                                  <Th>Group Name</Th>
+                                  <Th>Topic</Th>
+                                  <Th>Set/Reset</Th>
+                                  <Th>Status</Th>
+                                  <Th>Submission Link</Th>
+                                </Tr>
+                              </Thead>
+                              <Tbody>
+                                <Tr>
+                                  <Td>Group Name</Td>
+                                  <Td>
+                                   <Input></Input>
+                                  </Td>
+                                  <Td>
+                                    <Flex align={"center"}>
+                                      <CheckIcon
+                                        mr={"1rem"}
+                                        backgroundColor={"green.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        color={"green"}
+                                        boxSize={6}
+                                      />
 
-                      <TableContainer>
-                        <Table variant="simple">
-                          <Thead>
-                            <Tr>
-                              <Th>Group Number</Th>
-                              <Th>Topic Name</Th>
-                              <Th>Status</Th>
-                            </Tr>
-                          </Thead>
-                          <Tbody>
-                            <Tr>
-                              <Td>1</Td>
-                              <Td>
-                                Sign Language Detection using Deep Learning
-                              </Td>
-                              <Td>
-                                <Flex align={"center"}>
-                                  <CheckIcon
-                                    mr={"1rem"}
-                                    backgroundColor={"green.200"}
-                                    p={1}
-                                    borderRadius={2}
-                                    color={"green"}
-                                    boxSize={6}
-                                  />
-                                  <CloseIcon
-                                    color={"red"}
-                                    backgroundColor={"red.200"}
-                                    p={1}
-                                    borderRadius={2}
-                                    boxSize={6}
-                                  />
-                                </Flex>
-                              </Td>
-                              <Td>
-                                <Button onClick={onOpenMark}>
-                                  Allot Marks
-                                </Button>
-                              </Td>
-                            </Tr>
-                            <Tr>
-                              <Td>1</Td>
-                              <Td>
-                                Sign Language Detection using Deep Learning
-                              </Td>
-                              <Td>
-                                <Flex align={"center"}>
-                                  <CheckIcon
-                                    mr={"1rem"}
-                                    backgroundColor={"green.200"}
-                                    p={1}
-                                    borderRadius={2}
-                                    color={"green"}
-                                    boxSize={6}
-                                  />
-                                  <CloseIcon
-                                    color={"red"}
-                                    backgroundColor={"red.200"}
-                                    p={1}
-                                    borderRadius={2}
-                                    boxSize={6}
-                                  />
-                                </Flex>
-                              </Td>
-                              <Td>
-                                <Button onClick={onOpenMark}>
-                                  Allot Marks
-                                </Button>
-                              </Td>
-                            </Tr>
-                          </Tbody>
-                        </Table>
-                      </TableContainer>
-                    </AccordionPanel>
-                  </AccordionItem>
-
-                  <Modal isOpen={mark} size={"2xl"} onClose={onCloseMark}>
-                    {overlay}
-                    <ModalContent>
-                      <ModalHeader>Modal Title</ModalHeader>
-                      <ModalCloseButton />
-                      <ModalBody>
-                        <TableContainer>
-                          <Table size="sm">
-                            <Thead>
-                              <Tr>
-                                <Th>Name</Th>
-                                <Th>Obtained Marks</Th>
-                                <Th>Total Marks</Th>
-                              </Tr>
-                            </Thead>
-                            <Tbody>
-                              <Tr>
-                                <Td>Vedant Gokhale</Td>
-                                <Td>
-                                  <Input />
-                                </Td>
-                                <Td>100</Td>
-                              </Tr>
-                              <Tr>
-                                <Td>Vedant Gokhale</Td>
-                                <Td>
-                                  <Input />
-                                </Td>
-                                <Td>100</Td>
-                              </Tr>
-                              <Tr>
-                                <Td>Vedant Gokhale</Td>
-                                <Td>
-                                  <Input />
-                                </Td>
-                                <Td>100</Td>
-                              </Tr>
-                            </Tbody>
-                          </Table>
-                        </TableContainer>
-                      </ModalBody>
-
-                      <ModalFooter>
-                        <Button>Save</Button>
-                        <Button colorScheme="blue" mr={3} onClick={onCloseMark}>
-                          Close
-                        </Button>
-                      </ModalFooter>
-                    </ModalContent>
-                  </Modal>
+                                    </Flex>
+                                  </Td>
+                                  <Td>
+                                    Accepted
+                                  </Td>
+                                  <Td>
+                                    <Input></Input>
+                                  </Td>
+                                </Tr>
+                    
+                              </Tbody>
+                            </Table>
+                          </TableContainer>
+                        </AccordionPanel>
+                      </AccordionItem>           
+                      )
+                    })
+                  }
+        
                 </Accordion>
               </Box>
             </TabPanel>
+                  
+                )
+              })
+            }
+            
           </TabPanels>
         </Tabs>
       </Box>

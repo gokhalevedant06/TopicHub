@@ -119,9 +119,8 @@ const StudentGroupSection = () => {
 
   return (
     <>
-
     {
-      user.groupDetails.groupID
+      groupData?._id
       ?<>
       
       <Flex align={"center"} flexDirection={"column"}>
