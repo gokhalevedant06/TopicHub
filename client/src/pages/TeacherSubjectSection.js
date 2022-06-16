@@ -48,6 +48,7 @@ const TeacherSubjectSection = () => {
   const [createSubjectData,setCreateSubjectData] = useState();
   const [teachersInClass,setTeachersInClass] = useState();
   const [subjectData, setSubjectData] = useState();
+  const [createAssessmentFor,setCreateAssessmentFor] = useState();
   const token = localStorage.getItem("token");
   const {
     isOpen: createSubject,
@@ -113,8 +114,9 @@ const TeacherSubjectSection = () => {
     console.log(createAssesment)
   }
 
-  const createAssessmentCall = async(subjectID)=>{
-    let newData = {...createAssesment,forSubject:subjectID}
+  const createAssessmentCall = async()=>{
+    console.log(createAssessmentFor.title)
+    let newData = {...createAssesment,forSubject:createAssessmentFor._id}
     try {
       const response = await axios({
         method: "POST",
@@ -309,7 +311,11 @@ const TeacherSubjectSection = () => {
                           </Text>
                           <Flex>
                             <Button
-                              onClick={onOpenAssesment}
+                              onClick={()=>{
+                                onOpenAssesment()
+                                setCreateAssessmentFor(subject)
+                              }
+                            }
                               my={"1rem"}
                               mr={"1rem"}
                               colorScheme={"green"}
@@ -363,7 +369,7 @@ const TeacherSubjectSection = () => {
           </ModalBody>
                         
           <ModalFooter>
-            <Button onClick={() => createAssessmentCall(subject._id)}>Create Assessment</Button>
+            <Button onClick={() => createAssessmentCall()}>Create Assessment</Button>
             <Button colorScheme="blue" ml={3} onClick={onCloseAssesment}>
               Close
             </Button>

@@ -180,7 +180,7 @@ const joinGroup = async (req,res)=>{
         }
         members.push({ _id});
     const updateGroupDetails = await Group.findByIdAndUpdate(groupID,{members})
-    const getStudent = await Student.findByIdAndUpdate(_id,{groupID})
+    const getStudent = await Student.findByIdAndUpdate(_id,{groupDetails:{groupID,isLeader:false}})
 
   if(updateGroupDetails && getStudent) res.status(200).send({ ok: true, message: "Group Joined" });
   else res.status(200).send({ ok: false, message: "Failed to join Group" });
