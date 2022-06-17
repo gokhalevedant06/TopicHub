@@ -109,6 +109,7 @@ const createClass = async (req, res) => {
 const createSubject = async (req, res) => {
   const { title, description, subjectTeacher } = req.body;
   const { MyClass } = req.user;
+  console.log(req.body)
   try {
     const newSubject = new Subject({ title, description, subjectTeacher });
     if (newSubject) {
@@ -207,9 +208,10 @@ const getClass = async (req, res) => {
 };
 
 const createAssesment = async (req, res) => {
-  const { title, description, forSubject, totalMarks, classID } = req.body;
+  const { title, description, forSubject, totalMarks } = req.body;
+  const {MyClass} = req.user;
   try {
-    const allGroups = await Class.findById(classID);
+    const allGroups = await Class.findById(MyClass);
     if (allGroups) {
       const appearingGroupDetails = []
       for(var grpID of allGroups.groups){
@@ -265,8 +267,105 @@ const addTeacherToClass = async(req,res)=>{
 
   const getAllTeacher = async(req,res)=>{
     try {
+      
       const getTeachers = await Teacher.find();
       res.status(200).send({ getTeachers });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getSubjectsInClass = async(req,res)=>{
+    const { MyClass } = req.user;
+    try {
+      const getSubjects = await Class.findById(MyClass).populate({
+        path : 'subjects',
+        populate:{
+          path:'assesments',
+        }}).populate({
+          path : 'subjects',
+          populate:{
+            path:'subjectTeacher',
+          }}).populate({
+            path:'subjects',
+            populate:{
+              path:'assesments',
+              populate:{
+                path:'appearingGroupDetails',
+                populate:{
+                  path:'groupID',
+                  populate:{
+                    path:'groupLeader members'
+                  }
+                }
+              }
+            }
+          })
+          // .populate({
+          //   path:'subjects',
+          //   populate:{
+          //     path:'assesments',
+          //     populate:{
+          //       path:'appearingGroupDetails',
+          //       populate:{
+          //         path:'groupID',
+          //         populate:{
+          //           path:'members',
+          //         }
+          //       }
+          //     }
+          //   }
+          // })
+        const subjects = getSubjects.subjects 
+      res.status(200).send({ subjects });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getTeachersInClass = async(req,res)=>{
+    const {MyClass} = req.user;
+    try {
+      const getData = await Class.findById(MyClass).populate('teachers');
+      res.status(200).send({ teachers:getData.teachers });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const acceptTopic = async(req,res)=>{
+    const {groupID,assesmentID} = req.body
+    // console.log(req.body)
+    try {
+      const assessmentData = await Assesment.findById(assesmentID);
+      assessmentData.appearingGroupDetails.map((group)=>{
+        if(group.groupID.valueOf()===groupID){
+          group.topic.isApproved = true
+        } 
+      })
+
+      const updateTopic = await Assesment.findByIdAndUpdate(assesmentID,{appearingGroupDetails:assessmentData.appearingGroupDetails})
+      if(updateTopic) res.status(200).send({ ok: true, message:"Topic Accepted"});
+      else res.status(200).send({ ok: false, message:"Failed To Accepted Topic"});
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const rejectTopic = async(req,res)=>{
+    const {groupID,assesmentID} = req.body
+    try {
+      const assessmentData = await Assesment.findById(assesmentID);
+      assessmentData.appearingGroupDetails.map((group)=>{
+        if(group.groupID.valueOf()===groupID){
+          group.topic.isRejected = true
+        } 
+      })
+
+      const updateTopic = await Assesment.findByIdAndUpdate(assesmentID,{appearingGroupDetails:assessmentData.appearingGroupDetails})
+      if(updateTopic) res.status(200).send({ ok: true, message:"Topic Rejected"});
+      else res.status(200).send({ ok: false, message:"Failed To Rekect Topic"});
+      
     } catch (error) {
       console.log(error)
     }
@@ -283,5 +382,9 @@ module.exports = {
   createSubject,
   createAssesment,
   getAllTeacher,
-  addTeacherToClass
+  addTeacherToClass,
+  getSubjectsInClass,
+  getTeachersInClass,
+  acceptTopic,
+  rejectTopic
 };

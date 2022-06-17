@@ -31,6 +31,7 @@ import NoData from "../Assets/Images/NoData.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import TeacherProfileImage from "../Assets/Images/TeacherProfile.svg";
+import TeacherSubjectSection from "./TeacherSubjectSection";
 
 const TeacherClassSection = () => {
   const { user } = useSelector((state) => state?.user);
@@ -157,7 +158,7 @@ const TeacherClassSection = () => {
           </Box>
           <Flex justify={"center"} wrap={"wrap"}>
             <Box mt={"5rem"}>
-              <Button m={"1rem"} w={"200px"} colorScheme={'purple'} onClick={onOpen}>
+              <Button m={"1rem"} w={"200px"} height={'3.5rem'} colorScheme={'purple'} onClick={onOpen}>
                 View Joined Students
               </Button>
               <Modal size={"4xl"} isOpen={isOpen} onClose={onClose}>
@@ -224,7 +225,7 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button onClick={onOpenAllTeachers} colorScheme={'yellow'} m={"1rem"} w={"200px"}>
+              <Button onClick={onOpenAllTeachers} height={'3.5rem'} colorScheme={'yellow'} m={"1rem"} w={"200px"}>
                 Show All Teachers
               </Button>
               <Modal
@@ -281,7 +282,7 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button m={"1rem"} colorScheme={'red'} w={"200px"} onClick={onOpenGroup}>
+              <Button m={"1rem"} colorScheme={'red'} height={'3.5rem'} w={"200px"} onClick={onOpenGroup}>
                 View All Groups
               </Button>
               <Modal size={"4xl"} isOpen={group} onClose={onCloseGroup}>
@@ -344,7 +345,7 @@ const TeacherClassSection = () => {
               <Modal isOpen={member} size={"3xl"} onClose={onCloseMembers}>
                 <ModalOverlay />
                 <ModalContent>
-                  <ModalHeader>Modal Title</ModalHeader>
+                  <ModalHeader>List of Group Members</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
                   <TableContainer>
@@ -394,7 +395,7 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button m={"1rem"} colorScheme={'green'} w={"200px"} onClick={onOpenAddTeacher}>
+              <Button m={"1rem"} colorScheme={'green'} height={'3.5rem'} w={"200px"} onClick={onOpenAddTeacher}>
                 Add Teacher
               </Button>
               <Modal isOpen={isOpenAddTeacher} onClose={onCloseAddTeacher}>
@@ -411,7 +412,7 @@ const TeacherClassSection = () => {
                       allTeachersData?.map((teacher)=>{
                         return(
                           <option value={`${teacher._id}`} >
-                            ID: {teacher._id}
+                            ID: {teacher._id} <Text fontWeight={'extrabold'}>( {teacher.name} )</Text>
                           </option>
                           
                         )
@@ -430,7 +431,9 @@ const TeacherClassSection = () => {
               </ModalFooter>
             </ModalContent>
       </Modal>
+
             </Box>
+                      <TeacherSubjectSection/>
           </Flex>
         </>
       ) : (

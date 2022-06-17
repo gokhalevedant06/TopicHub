@@ -3,6 +3,8 @@ var jwt = require("jsonwebtoken");
 const Student = require("../models/studentSchema");
 const Class = require("../models/classSchema");
 const Group = require("../models/groupSchema");
+const Assesment = require("../models/assesmentSchema")
+var mongoose = require('mongoose');
 
 const signup = async (req, res) => {
   var { name, email, phone, password, cpassword } = req.body;
@@ -180,10 +182,88 @@ const joinGroup = async (req,res)=>{
         }
         members.push({ _id});
     const updateGroupDetails = await Group.findByIdAndUpdate(groupID,{members})
-    const getStudent = await Student.findByIdAndUpdate(_id,{groupID})
+    const getStudent = await Student.findByIdAndUpdate(_id,{groupDetails:{groupID,isLeader:false}})
 
   if(updateGroupDetails && getStudent) res.status(200).send({ ok: true, message: "Group Joined" });
   else res.status(200).send({ ok: false, message: "Failed to join Group" });
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getGroupDetails = async(req,res)=>{
+  const {groupDetails} = req.user
+    try {
+        const groupData = await Group.findById(groupDetails.groupID).populate('groupLeader').populate('members')
+        res.status(200).send({ ok: true, groupData});
+    } catch (error) {
+      console.log(error)
+    }
+}
+
+const getSubjectsInClass = async(req,res)=>{
+  const {joinedClassID} = req.user
+  console.log(joinedClassID)
+  try {
+    const subjectData = await Class.findById(joinedClassID).populate({
+      path:'subjects',
+      populate:{
+        path:'assesments'
+      }
+    }).populate({
+      path:'subjects',
+      populate:{
+        path:'subjectTeacher'
+      }
+    }
+    )
+    res.status(200).send({ ok: true, subjectData});
+  } catch (error) {
+    
+  }
+}
+
+const setTopic = async(req,res)=>{
+  const {topic,groupID,assessmentID} = req.body;
+  console.log(req.body)
+  try {
+      const assessmentData = await Assesment.findById(assessmentID);
+      // const allGroupDetails = []
+      assessmentData.appearingGroupDetails.map((group)=>{
+        if(group.groupID.valueOf()===groupID){
+          // console.log(group)
+          const groupData = group
+          const topicData = group.topic
+          // console.log(group.topic)
+          const newTopicData = {...topicData,name:topic}
+          // group = {...groupData,newTopicData}
+          // console.log(newTopicData)
+          group.topic.name = topic
+          group.topic.isApproved = false
+          group.topic.isRejected = false
+        } 
+        // allGroupDetails.push(group)
+      })
+      // console.log(allGroupDetails)
+      const updateTopic = await Assesment.findByIdAndUpdate(assessmentID,{appearingGroupDetails:assessmentData.appearingGroupDetails})
+      if(updateTopic) res.status(200).send({ ok: true, message:"Topic Updated"});
+      else res.status(200).send({ ok: false, message:"Failed To Update Topic"});
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+const getGroupAssessment = async(req,res)=>{
+  const {id,assessment} = req.params
+  try {
+    const assessmentData = await Assesment.findById(assessment);
+
+    assessmentData.appearingGroupDetails.map((group)=>{
+      if(group.groupID.valueOf()===id){
+        res.status(200).send({ ok: true, message:"Fetch Successful",group});
+      }
+    })
   } catch (error) {
     console.log(error)
   }
@@ -196,5 +276,9 @@ module.exports = {
   joinClass,
   getAllStudentsInClass,
   createGroup,
-  joinGroup
+  joinGroup,
+  getGroupDetails,
+  getSubjectsInClass,
+  setTopic,
+  getGroupAssessment
 };

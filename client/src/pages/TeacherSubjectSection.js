@@ -1,9 +1,9 @@
-import React,{useState} from 'react'
+import React, { useState, useEffect } from "react";
 import {
-    Flex,
-    Box,
-    Button,
-    Modal,
+  Flex,
+  Box,
+  Button,
+  Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
@@ -17,7 +17,11 @@ import {
   InputLeftElement,
   InputRightElement,
   Select,
-  Tabs, TabList, TabPanels, Tab, TabPanel,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
   Text,
   Accordion,
   AccordionItem,
@@ -31,301 +35,832 @@ import {
   Th,
   Td,
   TableContainer,
+} from "@chakra-ui/react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "../Redux/userSlice";
 
-} from '@chakra-ui/react'
-import axios from 'axios';
-
-import {PhoneIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons'
+import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 const TeacherSubjectSection = () => {
-  const [data, setData] = useState();
-  const token = localStorage.getItem("token");  
-  const { isOpen:createSubject, onOpen:createSubjectOnOpen, onClose:createSubjectOnClose } = useDisclosure()
-    const { isOpen:isOpenAllSubjects, onOpen:onOpenAllSubjects, onClose:onCloseAllSubjects } = useDisclosure()
-    const { isOpen:isOpenAssesment, onOpen:onOpenAssesment, onClose:onCloseAssesment } = useDisclosure()
+  const user = useSelector(selectUser)
+ const [createAssesment,setCreateAssesment] = useState()
+ const [data, setData] = useState();
+  const [createSubjectData,setCreateSubjectData] = useState();
+  const [teachersInClass,setTeachersInClass] = useState();
+  const [subjectData, setSubjectData] = useState();
+  const [createAssessmentFor,setCreateAssessmentFor] = useState();
+  const token = localStorage.getItem("token");
+  const {
+    isOpen: createSubject,
+    onOpen: createSubjectOnOpen,
+    onClose: createSubjectOnClose,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenAllSubjects,
+    onOpen: onOpenAllSubjects,
+    onClose: onCloseAllSubjects,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenAssesment,
+    onOpen: onOpenAssesment,
+    onClose: onCloseAssesment,
+  } = useDisclosure();
 
-    const { isOpen:mark, onOpen:onOpenMark, onClose:onCloseMark } = useDisclosure()
-    const OverlayOne = () => (
-        <ModalOverlay
-          bg='rgba(92,103, 119, 0.8)'
-          backdropFilter='blur(10px)'
-        />
-      )
-      const [overlay, setOverlay] = useState(<OverlayOne />)
-      const onSubmit = async()=>{
-        try {
-          const response = await axios({
-            method: "POST",
-            url: `/teacher/createAssesment`,
-            data:data,
-            headers: {
-              'Authorization': token
-            }
-          });
-          console.log(response)
-        } catch (error) {
-          console.log(error)
-        }
-      }
+  const {
+    isOpen: mark,
+    onOpen: onOpenMark,
+    onClose: onCloseMark,
+  } = useDisclosure();
+  const OverlayOne = () => (
+    <ModalOverlay bg="rgba(92,103, 119, 0.8)" backdropFilter="blur(10px)" />
+  );
+  const [overlay, setOverlay] = useState(<OverlayOne />);
+  const onSubmit = async () => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/teacher/createAssesment`,
+        data: data,
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTeachersInClass = async()=>{
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/teacher/getTeachersInClass`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      setTeachersInClass(response.data.teachers);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleCreateAssesmentChange = (e)=>{
+    setCreateAssesment({
+      ...createAssesment,[e.target.name]:e.target.value
+    })
+
+    console.log(createAssesment)
+  }
+
+  const createAssessmentCall = async()=>{
+    console.log(createAssessmentFor.title)
+    let newData = {...createAssesment,forSubject:createAssessmentFor._id}
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/teacher/createAssesment`,
+        data: newData,
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getSubjectData = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/teacher/getSubjectsInClass`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      // console.log(response.data)
+      setSubjectData(response.data.subjects);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCreateSubjectChange = (e)=>{
+    setCreateSubjectData({...createSubjectData,[e.target.name]:e.target.value})
+    console.log(createSubjectData)
+  }
+
+  const createSubjectCall = async()=>{
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/teacher/createSubject`,
+        data: createSubjectData,
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const acceptTopic = async(groupID,assesmentID)=>{
+    console.log(groupID,assesmentID)
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/teacher/acceptTopic`,
+        data: {
+          groupID,assesmentID
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const rejectTopic = async(groupID,assesmentID)=>{
+    console.log(groupID,assesmentID)
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/teacher/rejectTopic`,
+        data: {
+          groupID,assesmentID
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getSubjectData();
+    getTeachersInClass();
+  }, []);
+
   return (
     <>
-    <Flex justify={"center"}>
-        <Flex backgroundColor={"red"} wrap={"wrap"}  width={"80%"} mt={"5rem"}>
-            <Box width={"30%"} height={"400px"} backgroundColor={"blue"}>
-                Image
+      <Flex justify={"center"}>
+        <Flex wrap={"wrap"} width={"100%"} mt={"1rem"}>
+          <Flex
+            flexDirection={"column"}
+            width={"100%"}
+            justify={"center"}
+            align={"center"}
+          >
+            <Box>
+              <Button
+                m={"1rem"}
+                w={"200px"}
+                height={"3.5rem"}
+                colorScheme={"orange"}
+                onClick={() => {
+                  setOverlay(<OverlayOne />);
+                  createSubjectOnOpen();
+                }}
+              >
+                Create Subject
+              </Button>
+              <Button
+                m={"1rem"}
+                w={"200px"}
+                height={"3.5rem"}
+                colorScheme={"blue"}
+                onClick={onOpenAllSubjects}
+              >
+                View Subject Details
+              </Button>
+
+              <Button
+                m={"1rem"}
+                w={"200px"}
+                height={"3.5rem"}
+                colorScheme={"teal"}
+              >
+                Delete Subject
+              </Button>
+              <Button
+                m={"1rem"}
+                w={"200px"}
+                height={"3.5rem"}
+                colorScheme={"pink"}
+              >
+                Update Subject Details
+              </Button>
             </Box>
-            <Flex flexDirection={"column"} width={"70%"} justify={"center"} align={"center"}>
-                <Box>
-
-              <Button m={"1rem"} w={"200px"} onClick={() => {
-          setOverlay(<OverlayOne />)
-          createSubjectOnOpen()
-        }} >Create Subject</Button>
-              <Button m={"1rem"} w={"200px"} onClick={onOpenAllSubjects}>View Subject Details</Button>
-                </Box>
-                <Box>
-
-              <Button m={"1rem"} w={"200px"}>Delete Subject</Button>
-              <Button m={"1rem"} w={"200px"}>Update Subject Details</Button>
-                </Box>
-            </Flex>
+          </Flex>
         </Flex>
-    </Flex>
+      </Flex>
 
-    <Modal onClose={createSubjectOnClose} isOpen={createSubject} isCentered>
+      <Modal onClose={createSubjectOnClose} isOpen={createSubject} isCentered>
         {overlay}
         <ModalContent>
           <ModalHeader>Enter Subject Details</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <Stack spacing={4}>
-  <InputGroup>
-    <InputLeftElement
-      pointerEvents='none'
-      children={<PhoneIcon color='gray.300' />}
-    />
-    <Input type='text' placeholder='Enter Title' />
-  </InputGroup>
+            <Stack spacing={4}>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<PhoneIcon color="gray.300" />}
+                />
+                <Input type="text" name="title"   onChange={(e)=>handleCreateSubjectChange(e)} placeholder="Enter Title" />
+              </InputGroup>
 
-  <InputGroup>
-    <InputLeftElement
-      pointerEvents='none'
-      color='gray.300'
-      fontSize='1.2em'
-      children='$'
-    />
-    <Input placeholder='Enter Description' />
-    <InputRightElement children={<CheckIcon color='green.500' />} />
-  </InputGroup>
-  <Select placeholder='Select Subject Teacher'>
-  <option value='option1'>Teacher 1</option>
-  <option value='option2'>Teacher 2</option>
-  <option value='option3'>Teacher 3</option>
-</Select>
-</Stack>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  color="gray.300"
+                  fontSize="1.2em"
+                  children="$"
+                />
+                <Input name="description"  onChange={(e)=>handleCreateSubjectChange(e)} placeholder="Enter Description" />
+                <InputRightElement children={<CheckIcon color="green.500" />} />
+              </InputGroup>
+              <Select name="subjectTeacher" onChange={(e)=>handleCreateSubjectChange(e)} placeholder="Select Subject Teacher">
+                {
+                  teachersInClass?.map((teacher)=>{
+                    return(
+                      <option value={teacher._id} > {teacher._id} ( {teacher.name} )</option>
+                    )
+
+                  }
+                )}
+              </Select>
+            </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button mx={'1rem'} colorScheme={"green"}>Create Subject</Button>
-            <Button colorScheme={"red"} onClick={createSubjectOnClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-
-      <Modal scrollBehavior={'inside'}  onClose={onCloseAllSubjects} size={"6xl"}  isOpen={isOpenAllSubjects}>
-        {overlay}
-        <ModalContent >
-          <ModalHeader>Subject Details</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-          <Tabs isFitted variant='enclosed'>
-  <TabList mb='1em'>
-    <Tab>One</Tab>
-    <Tab>One</Tab>
-    <Tab>One</Tab>
-    <Tab>One</Tab>
-  </TabList>
-  <TabPanels>
-    <TabPanel>
-      <Flex justify={"center"}>
-      <Flex justify={"center"} width={"40%"}>
-        <Text>Image</Text>
-      </Flex>
-      <Flex  flexDirection={"column"} width={"60%"}>
-        <Text >Title</Text>
-        <Text>Description</Text>
-        <Text>Teacher Name</Text>
-        <Flex>
-          <Button onClick={onOpenAssesment} my={"1rem"} mr={"1rem"} colorScheme={"green"}>Create Assesment</Button>
-        </Flex>
-      </Flex>
-
-      </Flex>
-      <Text>Previous/On Going Assessments</Text>
-      <Box >
-
-      <Accordion>
-  <AccordionItem>
-    <h2>
-      <AccordionButton>
-        <Box flex='1' textAlign='left'>
-          Assessment 1 Title
-        </Box>
-        <AccordionIcon />
-      </AccordionButton>
-    </h2>
-    <AccordionPanel pb={4}>
-      <Box>
-        <Text>Title</Text>
-        <Text>Description</Text>
-      </Box>
-
-      <TableContainer>
-  <Table variant='simple'>
-    <Thead>
-      <Tr>
-        <Th>Group Number</Th>
-        <Th>Topic Name</Th>
-        <Th >Status</Th>
-      </Tr>
-    </Thead>
-    <Tbody>
-      <Tr>
-        <Td>1</Td>
-        <Td>Sign Language Detection using Deep Learning</Td>
-        <Td>
-          <Flex align={"center"}>
-          <CheckIcon mr={"1rem"} backgroundColor={"green.200"} p={1} borderRadius={2} color={"green"} boxSize={6}/>
-          <CloseIcon color={"red"} backgroundColor={"red.200"} p={1} borderRadius={2} boxSize={6} />
-          </Flex>
-        </Td>
-        <Td><Button onClick={onOpenMark}>Allot Marks</Button></Td>
-      </Tr>
-      <Tr>
-        <Td>1</Td>
-        <Td>Sign Language Detection using Deep Learning</Td>
-        <Td>
-          <Flex align={"center"}>
-          <CheckIcon mr={"1rem"} backgroundColor={"green.200"} p={1} borderRadius={2} color={"green"} boxSize={6}/>
-          <CloseIcon color={"red"} backgroundColor={"red.200"} p={1} borderRadius={2} boxSize={6} />
-          </Flex>
-        </Td>
-        <Td><Button onClick={onOpenMark}>Allot Marks</Button></Td>
-      </Tr>
-     
-    </Tbody>
-    
-  </Table>
-</TableContainer>
-    </AccordionPanel>
-  </AccordionItem>
-  <AccordionItem>
-    <h2>
-      <AccordionButton>
-        <Box flex='1' textAlign='left'>
-          Assessment 1 Title
-        </Box>
-        <AccordionIcon />
-      </AccordionButton>
-    </h2>
-    <AccordionPanel pb={4}>
-      <Box>
-        <Text>Title</Text>
-        <Text>Description</Text>
-      </Box>
-
-      <TableContainer>
-  <Table variant='simple'>
-    <Thead>
-      <Tr>
-        <Th>Group Number</Th>
-        <Th>Topic Name</Th>
-        <Th >Status</Th>
-      </Tr>
-    </Thead>
-    <Tbody>
-      <Tr>
-        <Td>1</Td>
-        <Td>Sign Language Detection using Deep Learning</Td>
-        <Td>
-          <Flex align={"center"}>
-          <CheckIcon mr={"1rem"} backgroundColor={"green.200"} p={1} borderRadius={2} color={"green"} boxSize={6}/>
-          <CloseIcon color={"red"} backgroundColor={"red.200"} p={1} borderRadius={2} boxSize={6} />
-          </Flex>
-        </Td>
-        <Td><Button onClick={onOpenMark}>Allot Marks</Button></Td>
-      </Tr>
-      <Tr>
-        <Td>1</Td>
-        <Td>Sign Language Detection using Deep Learning</Td>
-        <Td>
-          <Flex align={"center"}>
-          <CheckIcon mr={"1rem"} backgroundColor={"green.200"} p={1} borderRadius={2} color={"green"} boxSize={6}/>
-          <CloseIcon color={"red"} backgroundColor={"red.200"} p={1} borderRadius={2} boxSize={6} />
-          </Flex>
-        </Td>
-        <Td><Button onClick={onOpenMark} >Allot Marks</Button></Td>
-      </Tr>
-     
-    </Tbody>
-    
-  </Table>
-</TableContainer>
-    </AccordionPanel>
-  </AccordionItem>
-
-  <Modal isOpen={mark} size={"2xl"} onClose={onCloseMark}>
-        <ModalOverlay />
-        <ModalContent >
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-          <TableContainer>
-  <Table size='sm'>
-    <Thead>
-      <Tr>
-        <Th>Name</Th>
-        <Th>Obtained Marks</Th>
-        <Th>Total Marks</Th>
-      </Tr>
-    </Thead>
-    <Tbody>
-      <Tr>
-        <Td>Vedant Gokhale</Td>
-        <Td><Input/></Td>
-        <Td >100</Td>
-      </Tr>
-      <Tr>
-        <Td>Vedant Gokhale</Td>
-        <Td><Input/></Td>
-        <Td >100</Td>
-      </Tr>
-      <Tr>
-        <Td>Vedant Gokhale</Td>
-        <Td><Input/></Td>
-        <Td >100</Td>
-      </Tr>
-    </Tbody>
-    
-  </Table>
-</TableContainer>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button>Save</Button>
-            <Button colorScheme='blue' mr={3} onClick={onCloseMark}>
+            <Button mx={"1rem"} onClick={()=>createSubjectCall()} colorScheme={"green"}>
+              Create Subject
+            </Button>
+            <Button colorScheme={"red"} onClick={createSubjectOnClose}>
               Close
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <Modal
+        scrollBehavior={"inside"}
+        onClose={onCloseAllSubjects}
+        size={"6xl"}
+        isOpen={isOpenAllSubjects}
+      >
+        {overlay}
+        <ModalContent>
+          <ModalHeader>Subject Details</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Tabs isFitted variant="enclosed">
+              <TabList mb="1em">
+                <Tab>Subject 1</Tab>
+                <Tab>Subject 2</Tab>
+                <Tab>Subject 3</Tab>
+                <Tab>Subject 4</Tab>
+              </TabList>
+              <TabPanels>
+                {subjectData?.map((subject) => {
+                  // console.log("HERE", subject);
+                  return (
+                    <TabPanel>
+                      <Flex justify={"center"}>
+                        <Flex justify={"center"} width={"40%"}>
+                          <Text>Image</Text>
+                        </Flex>
+                        <Flex flexDirection={"column"} width={"60%"}>
+                          <Text>Title : {subject.title}</Text>
+                          <Text>Description : {subject.description}</Text>
+                          <Text>
+                            Teacher Name : {subject.subjectTeacher?.name}
+                          </Text>
+                          <Flex>
+                            <Button
+                              onClick={()=>{
+                                onOpenAssesment()
+                                setCreateAssessmentFor(subject)
+                              }
+                            }
+                              my={"1rem"}
+                              mr={"1rem"}
+                              colorScheme={"green"}
+                            >
+                              Create Assessment
+                            </Button>
+
+
+                            <Modal isOpen={isOpenAssesment} onClose={onCloseAssesment}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Enter New Assessment Data</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Stack spacing={4}>
+              {/* <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                />
+                <Input type="text" fontWeight={"bold"} name="forSubject" disabled placeholder={`${subject.title}`} />
+              </InputGroup> */}
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<PhoneIcon color="gray.300" />}
+                />
+                <Input type="text" name="title"  onChange={(e)=>handleCreateAssesmentChange(e)} placeholder="Enter Title"  />
+              </InputGroup>
+
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  color="gray.300"
+                  fontSize="1.2em"
+                  children="$"
+                />
+                <Input placeholder="Enter Description" name="description"  onChange={(e)=>handleCreateAssesmentChange(e)}/>
+                <InputRightElement children={<CheckIcon color="green.500" />} />
+              </InputGroup>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  color="gray.300"
+                  fontSize="1.2em"
+                  children="$"
+                />
+                <Input placeholder="Enter Total Marks" name='totalMarks' onChange={(e)=>handleCreateAssesmentChange(e)} />
+                <InputRightElement children={<CheckIcon color="green.500" />} />
+              </InputGroup>
+            </Stack>
+          </ModalBody>
+                        
+          <ModalFooter>
+            <Button onClick={() => createAssessmentCall()}>Create Assessment</Button>
+            <Button colorScheme="blue" ml={3} onClick={onCloseAssesment}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       
+                          </Flex>
+                        </Flex>
+                      </Flex>
+                      <Text>Previous/On Going Assessments</Text>
 
-</Accordion>
+                          <Box>
+                            <Accordion>
+                      {subject?.assesments?.map((assesment) => {
+                        return (
+                              <AccordionItem>
+                                <h2>
+                                  <AccordionButton>
+                                    <Box flex="1" textAlign="left">
+                                      {assesment.title}
+                                    </Box>
+                                    <AccordionIcon />
+                                  </AccordionButton>
+                                </h2>
+                                <AccordionPanel pb={4}>
+                                  <Box>
+                                    <Text>Title : {assesment.title}</Text>
+                                    <Text>
+                                      Description: {assesment.description}
+                                    </Text>
+                                  </Box>
 
-      </Box>
-    </TabPanel>
-  </TabPanels>
-</Tabs>
+                                  <TableContainer>
+                                    <Table variant="simple">
+                                      <Thead>
+                                        <Tr>
+                                          <Th>Group Number</Th>
+                                          <Th>Topic Name</Th>
+                                          <Th>Status</Th>
+                                        </Tr>
+                                      </Thead>
+                                      <Tbody>
+                                        {assesment?.appearingGroupDetails?.map(
+                                          (group, index) => {
+                                            return (
+                                              <>
+                                                <Tr>
+                                                  <Td>{index + 1} {group._id}</Td>
+                                                  <Td>
+                                                    {group?.topic?.name ? (
+                                                      <>{group?.topic?.name}</>
+                                                    ) : (
+                                                      <>Topic Not Entered</>
+                                                    )}
+                                                  </Td>
+                                                  <Td>
+                                                    <Flex align={"center"}>
+                                                      {
+                                                        group?.topic?.isApproved?<><Text fontWeight={"bold"} color={"green"}>Accepted By You</Text></>:
+                                                        
+                                                          group?.topic?.isRejected?<><Text fontWeight={"bold"} color={"red"}>Rejected By You</Text></>:<><CheckIcon
+                                                          mr={"1rem"}
+                                                          backgroundColor={
+                                                            "green.200"
+                                                          }
+                                                          onClick={()=>acceptTopic(group.groupID._id,assesment._id)}
+                                                          p={1}
+                                                          borderRadius={2}
+                                                          color={"green"}
+                                                          boxSize={6}
+                                                        />
+                                                        <CloseIcon
+                                                          onClick={()=>rejectTopic(group.groupID._id,assesment._id)}
+                                                          color={"red"}
+                                                          backgroundColor={
+                                                            "red.200"
+                                                          }
+                                                          p={1}
+                                                          borderRadius={2}
+                                                          boxSize={6}
+                                                        /></>
+                                                        
+                                                      }
+                                                      
+                                                    </Flex>
+                                                  </Td>
+                                                  <Td>
+                                                    <Button
+                                                      onClick={onOpenMark}
+                                                    >
+                                                      Allot Marks
+                                                    </Button>
+                                                  </Td>
+                                                </Tr>
+
+                                                <Modal
+                                                  isOpen={mark}
+                                                  size={"2xl"}
+                                                  onClose={onCloseMark}
+                                                >
+                                                  <ModalOverlay />
+                                                  <ModalContent>
+                                                    <ModalHeader>
+                                                      Group Members
+                                                    </ModalHeader>
+                                                    <ModalCloseButton />
+                                                    <ModalBody>
+                                                      <TableContainer>
+                                                        <Table size="sm">
+                                                          <Thead>
+                                                            <Tr>
+                                                              <Th>Name</Th>
+                                                              <Th>
+                                                                Obtained Marks
+                                                              </Th>
+                                                              <Th>
+                                                                Total Marks
+                                                              </Th>
+                                                            </Tr>
+                                                          </Thead>
+                                                          <Tbody>
+                                                            {/* <Tr>
+                                                              <Td>
+                                                                Here{
+                                                                  group?.groupID
+                                                                    ?.groupLeader
+                                                                    ?.name
+                                                                }
+                                                              </Td>
+                                                              <Td>
+                                                                <Input />
+                                                              </Td>
+                                                              <Td>100</Td>
+                                                            </Tr> */}
+
+                                                            {group?.groupID?.members?.map(
+                                            
+                                                              (member) => {
+                                                                return (
+                                                                  <Tr>
+                                                                    <Td>
+                                                                      {
+                                                                        member.name
+                                                                      }
+                                                                    </Td>
+                                                                    <Td>
+                                                                      <Input border={"1px"} />
+                                                                    </Td>
+                                                                    <Td>100</Td>
+                                                                  </Tr>
+                                                                );
+                                                              }
+                                                            )}
+                                                  
+                                                          </Tbody>
+                                                        </Table>
+                                                      </TableContainer>
+                                                    </ModalBody>
+
+                                                    <ModalFooter>
+                                                      <Button>Save</Button>
+                                                      <Button
+                                                        colorScheme="blue"
+                                                        mr={3}
+                                                        onClick={onCloseMark}
+                                                      >
+                                                        Close
+                                                      </Button>
+                                                    </ModalFooter>
+                                                  </ModalContent>
+                                                </Modal>
+                                              </>
+                                            );
+                                          }
+                                        )}
+                                      </Tbody>
+                                    </Table>
+                                  </TableContainer>
+                                </AccordionPanel>
+                              </AccordionItem>
+                        );
+                      })}
+                      </Accordion>
+                    </Box>
+                    </TabPanel>
+                  );
+                })}
+
+                {/* <TabPanel>
+                  <Flex justify={"center"}>
+                    <Flex justify={"center"} width={"40%"}>
+                      <Text>Image</Text>
+                    </Flex>
+                    <Flex flexDirection={"column"} width={"60%"}>
+                      <Text>Title</Text>
+                      <Text>Description</Text>
+                      <Text>Teacher Name</Text>
+                      <Flex>
+                        <Button
+                          onClick={onOpenAssesment}
+                          my={"1rem"}
+                          mr={"1rem"}
+                          colorScheme={"green"}
+                        >
+                          Create Assesment
+                        </Button>
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                  <Text>Previous/On Going Assessments</Text>
+                  <Box>
+                    <Accordion>
+                      <AccordionItem>
+                        <h2>
+                          <AccordionButton>
+                            <Box flex="1" textAlign="left">
+                              Assessment 1 Title
+                            </Box>
+                            <AccordionIcon />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                          <Box>
+                            <Text>Title</Text>
+                            <Text>Description</Text>
+                          </Box>
+
+                          <TableContainer>
+                            <Table variant="simple">
+                              <Thead>
+                                <Tr>
+                                  <Th>Group Number</Th>
+                                  <Th>Topic Name</Th>
+                                  <Th>Status</Th>
+                                </Tr>
+                              </Thead>
+                              <Tbody>
+                                <Tr>
+                                  <Td>1</Td>
+                                  <Td>
+                                    Sign Language Detection using Deep Learning
+                                  </Td>
+                                  <Td>
+                                    <Flex align={"center"}>
+                                      <CheckIcon
+                                        mr={"1rem"}
+                                        backgroundColor={"green.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        color={"green"}
+                                        boxSize={6}
+                                      />
+                                      <CloseIcon
+                                        color={"red"}
+                                        backgroundColor={"red.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        boxSize={6}
+                                      />
+                                    </Flex>
+                                  </Td>
+                                  <Td>
+                                    <Button onClick={onOpenMark}>
+                                      Allot Marks
+                                    </Button>
+                                  </Td>
+                                </Tr>
+                                <Tr>
+                                  <Td>1</Td>
+                                  <Td>
+                                    Sign Language Detection using Deep Learning
+                                  </Td>
+                                  <Td>
+                                    <Flex align={"center"}>
+                                      <CheckIcon
+                                        mr={"1rem"}
+                                        backgroundColor={"green.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        color={"green"}
+                                        boxSize={6}
+                                      />
+                                      <CloseIcon
+                                        color={"red"}
+                                        backgroundColor={"red.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        boxSize={6}
+                                      />
+                                    </Flex>
+                                  </Td>
+                                  <Td>
+                                    <Button onClick={onOpenMark}>
+                                      Allot Marks
+                                    </Button>
+                                  </Td>
+                                </Tr>
+                              </Tbody>
+                            </Table>
+                          </TableContainer>
+                        </AccordionPanel>
+                      </AccordionItem>
+                      <AccordionItem>
+                        <h2>
+                          <AccordionButton>
+                            <Box flex="1" textAlign="left">
+                              Assessment 1 Title
+                            </Box>
+                            <AccordionIcon />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                          <Box>
+                            <Text>Title</Text>
+                            <Text>Description</Text>
+                          </Box>
+
+                          <TableContainer>
+                            <Table variant="simple">
+                              <Thead>
+                                <Tr>
+                                  <Th>Group Number</Th>
+                                  <Th>Topic Name</Th>
+                                  <Th>Status</Th>
+                                </Tr>
+                              </Thead>
+                              <Tbody>
+                                <Tr>
+                                  <Td>1</Td>
+                                  <Td>
+                                    Sign Language Detection using Deep Learning
+                                  </Td>
+                                  <Td>
+                                    <Flex align={"center"}>
+                                      <CheckIcon
+                                        mr={"1rem"}
+                                        backgroundColor={"green.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        color={"green"}
+                                        boxSize={6}
+                                      />
+                                      <CloseIcon
+                                        color={"red"}
+                                        backgroundColor={"red.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        boxSize={6}
+                                      />
+                                    </Flex>
+                                  </Td>
+                                  <Td>
+                                    <Button onClick={onOpenMark}>
+                                      Allot Marks
+                                    </Button>
+                                  </Td>
+                                </Tr>
+                                <Tr>
+                                  <Td>1</Td>
+                                  <Td>
+                                    Sign Language Detection using Deep Learning
+                                  </Td>
+                                  <Td>
+                                    <Flex align={"center"}>
+                                      <CheckIcon
+                                        mr={"1rem"}
+                                        backgroundColor={"green.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        color={"green"}
+                                        boxSize={6}
+                                      />
+                                      <CloseIcon
+                                        color={"red"}
+                                        backgroundColor={"red.200"}
+                                        p={1}
+                                        borderRadius={2}
+                                        boxSize={6}
+                                      />
+                                    </Flex>
+                                  </Td>
+                                  <Td>
+                                    <Button onClick={onOpenMark}>
+                                      Allot Marks
+                                    </Button>
+                                  </Td>
+                                </Tr>
+                              </Tbody>
+                            </Table>
+                          </TableContainer>
+                        </AccordionPanel>
+                      </AccordionItem>
+
+                      <Modal isOpen={mark} size={"2xl"} onClose={onCloseMark}>
+                        <ModalOverlay />
+                        <ModalContent>
+                          <ModalHeader>Modal Title</ModalHeader>
+                          <ModalCloseButton />
+                          <ModalBody>
+                            <TableContainer>
+                              <Table size="sm">
+                                <Thead>
+                                  <Tr>
+                                    <Th>Name</Th>
+                                    <Th>Obtained Marks</Th>
+                                    <Th>Total Marks</Th>
+                                  </Tr>
+                                </Thead>
+                                <Tbody>
+                                  <Tr>
+                                    <Td>Vedant Gokhale</Td>
+                                    <Td>
+                                      <Input />
+                                    </Td>
+                                    <Td>100</Td>
+                                  </Tr>
+                                  <Tr>
+                                    <Td>Vedant Gokhale</Td>
+                                    <Td>
+                                      <Input />
+                                    </Td>
+                                    <Td>100</Td>
+                                  </Tr>
+                                  <Tr>
+                                    <Td>Vedant Gokhale</Td>
+                                    <Td>
+                                      <Input />
+                                    </Td>
+                                    <Td>100</Td>
+                                  </Tr>
+                                </Tbody>
+                              </Table>
+                            </TableContainer>
+                          </ModalBody>
+
+                          <ModalFooter>
+                            <Button>Save</Button>
+                            <Button
+                              colorScheme="blue"
+                              mr={3}
+                              onClick={onCloseMark}
+                            >
+                              Close
+                            </Button>
+                          </ModalFooter>
+                        </ModalContent>
+                      </Modal>
+                    </Accordion>
+                  </Box>
+                </TabPanel> */}
+              </TabPanels>
+            </Tabs>
           </ModalBody>
           <ModalFooter>
             <Button onClick={onCloseAllSubjects}>Close</Button>
@@ -333,60 +868,61 @@ const TeacherSubjectSection = () => {
         </ModalContent>
       </Modal>
 
-
-
-      <Modal isOpen={isOpenAssesment} onClose={onCloseAssesment}>
+      {/* <Modal isOpen={isOpenAssesment} onClose={onCloseAssesment}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Enter New Assessment Data</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <Stack spacing={4}>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<PhoneIcon color="gray.300" />}
+                />
+                <Input type="text" name="title"  onChange={(e)=>handleCreateAssesmentChange(e)} placeholder="Enter Title"  />
+              </InputGroup>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<PhoneIcon color="gray.300" />}
+                />
+                <Input type="text"  value={user?.MyClass._id} cursor={'d'} name="forSubject" disabled placeholder={`${user?.MyClass?.title}`} />
+              </InputGroup>
 
-          <Stack spacing={4}>
-  <InputGroup>
-    <InputLeftElement
-      pointerEvents='none'
-      children={<PhoneIcon color='gray.300' />}
-    />
-    <Input type='text' placeholder='Enter Title' />
-  </InputGroup>
-
-  <InputGroup>
-    <InputLeftElement
-      pointerEvents='none'
-      color='gray.300'
-      fontSize='1.2em'
-      children='$'
-    />
-    <Input placeholder='Enter Description' />
-    <InputRightElement children={<CheckIcon color='green.500' />} />
-  </InputGroup>
-  <InputGroup>
-    <InputLeftElement
-      pointerEvents='none'
-      color='gray.300'
-      fontSize='1.2em'
-      children='$'
-    />
-    <Input placeholder='Enter Total Marks' />
-    <InputRightElement children={<CheckIcon color='green.500' />} />
-  </InputGroup>
-</Stack>
-
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  color="gray.300"
+                  fontSize="1.2em"
+                  children="$"
+                />
+                <Input placeholder="Enter Description" name="description"  onChange={(e)=>handleCreateAssesmentChange(e)}/>
+                <InputRightElement children={<CheckIcon color="green.500" />} />
+              </InputGroup>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  color="gray.300"
+                  fontSize="1.2em"
+                  children="$"
+                />
+                <Input placeholder="Enter Total Marks" name='totalMarks' onChange={(e)=>handleCreateAssesmentChange(e)} />
+                <InputRightElement children={<CheckIcon color="green.500" />} />
+              </InputGroup>
+            </Stack>
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={()=>onSubmit()} >Create Assesment</Button>
-            <Button colorScheme='blue' mr={3} onClick={onCloseAssesment}>
+            <Button onClick={() => onSubmit()}>Create Assessment</Button>
+            <Button colorScheme="blue" ml={3} onClick={onCloseAssesment}>
               Close
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
-
-      
+      </Modal> */}
     </>
-  )
-}
+  );
+};
 
-export default TeacherSubjectSection
+export default TeacherSubjectSection;
