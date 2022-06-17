@@ -239,7 +239,7 @@ const setTopic = async(req,res)=>{
           // group = {...groupData,newTopicData}
           // console.log(newTopicData)
           group.topic.name = topic
-          group.topic.isAccepted = false
+          group.topic.isApproved = false
           group.topic.isRejected = false
         } 
         // allGroupDetails.push(group)

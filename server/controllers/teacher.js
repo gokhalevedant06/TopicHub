@@ -333,6 +333,44 @@ const addTeacherToClass = async(req,res)=>{
     }
   }
 
+  const acceptTopic = async(req,res)=>{
+    const {groupID,assesmentID} = req.body
+    // console.log(req.body)
+    try {
+      const assessmentData = await Assesment.findById(assesmentID);
+      assessmentData.appearingGroupDetails.map((group)=>{
+        if(group.groupID.valueOf()===groupID){
+          group.topic.isApproved = true
+        } 
+      })
+
+      const updateTopic = await Assesment.findByIdAndUpdate(assesmentID,{appearingGroupDetails:assessmentData.appearingGroupDetails})
+      if(updateTopic) res.status(200).send({ ok: true, message:"Topic Accepted"});
+      else res.status(200).send({ ok: false, message:"Failed To Accepted Topic"});
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const rejectTopic = async(req,res)=>{
+    const {groupID,assesmentID} = req.body
+    try {
+      const assessmentData = await Assesment.findById(assesmentID);
+      assessmentData.appearingGroupDetails.map((group)=>{
+        if(group.groupID.valueOf()===groupID){
+          group.topic.isRejected = true
+        } 
+      })
+
+      const updateTopic = await Assesment.findByIdAndUpdate(assesmentID,{appearingGroupDetails:assessmentData.appearingGroupDetails})
+      if(updateTopic) res.status(200).send({ ok: true, message:"Topic Rejected"});
+      else res.status(200).send({ ok: false, message:"Failed To Rekect Topic"});
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
 module.exports = {
   signup,
@@ -346,5 +384,7 @@ module.exports = {
   getAllTeacher,
   addTeacherToClass,
   getSubjectsInClass,
-  getTeachersInClass
+  getTeachersInClass,
+  acceptTopic,
+  rejectTopic
 };
