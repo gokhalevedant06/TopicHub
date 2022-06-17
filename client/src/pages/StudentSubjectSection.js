@@ -37,7 +37,7 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { PhoneIcon, CheckIcon, CloseIcon,RepeatIcon } from "@chakra-ui/icons";
 const StudentSubjectSection = () => {
   const {
     isOpen: mark,
@@ -49,8 +49,10 @@ const StudentSubjectSection = () => {
   );
   const [overlay, setOverlay] = useState(<OverlayOne />);
   const token = localStorage.getItem("token");
-
+  const [groupData,setGroupData] = useState()
   const [subjectData,setSubjectData] = useState()
+  const [topic,setTopicData] = useState()
+  const [groupAssessmentData,setGroupAssessmentData] = useState();
 
   const getSubjectDetails = async()=>{
     try {
@@ -68,11 +70,63 @@ const StudentSubjectSection = () => {
     }
   }
 
+  const getGroupDetails = async()=>{
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/student/groupDetails`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      setGroupData(response.data.groupData)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const setTopic = async(assessmentID)=>{
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/student/setTopic`,
+        headers: {
+          Authorization: token,
+        },
+        data:{
+          topic,
+          groupID:groupData?._id,
+          assessmentID
+        }
+      });
+      console.log(response)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getAssessmentOfCurrentGroup = async(assesmentID)=>{
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/student/getGroupAssessment/${groupData._id}/${assesmentID}`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log("FINAL",response)
+      setGroupAssessmentData(response.data.group)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   useEffect(() => {
     getSubjectDetails()
-    console.log("here",subjectData)
+    getGroupDetails()
   }, []);
-
+  console.log("sdgf",subjectData)
 
   return (
     <>
@@ -115,7 +169,7 @@ const StudentSubjectSection = () => {
                       return(
                         <AccordionItem>
                         <h2>
-                          <AccordionButton>
+                          <AccordionButton onClick={()=>getAssessmentOfCurrentGroup(assessment._id)}>
                             <Box flex="1" textAlign="left">
                              {assessment.title}
                             </Box>
@@ -141,25 +195,36 @@ const StudentSubjectSection = () => {
                               </Thead>
                               <Tbody>
                                 <Tr>
-                                  <Td>Group Name</Td>
+                                  <Td>{groupData?.name}</Td>
                                   <Td>
-                                   <Input></Input>
+                                   <Input placeholder={groupAssessmentData?.topic?.name} onChange={(e)=>setTopicData(e.target.value)}></Input>
                                   </Td>
                                   <Td>
                                     <Flex align={"center"}>
                                       <CheckIcon
+                                      onClick={()=>setTopic(assessment._id)}
                                         mr={"1rem"}
                                         backgroundColor={"green.200"}
                                         p={1}
                                         borderRadius={2}
                                         color={"green"}
                                         boxSize={6}
+                                        />
+                                      <RepeatIcon
+                                        mr={"1rem"}
+                                        backgroundColor={"gray"}
+                                        p={1}
+                                        borderRadius={2}
+                                        color={"white"}
+                                        boxSize={6}
                                       />
 
                                     </Flex>
                                   </Td>
                                   <Td>
-                                    Accepted
+                                    {
+                                      groupAssessmentData?.topic?.isApproved?<><Text fontWeight={"bold"} color={"green"}>Accepted</Text> </>:groupAssessmentData?.topic?.isRejected?<><Text fontWeight={"bold"} color={"red"}>Rejected</Text> </>:<>Pending</>
+                                    }
                                   </Td>
                                   <Td>
                                     <Input></Input>

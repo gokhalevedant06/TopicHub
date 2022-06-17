@@ -3,6 +3,8 @@ var jwt = require("jsonwebtoken");
 const Student = require("../models/studentSchema");
 const Class = require("../models/classSchema");
 const Group = require("../models/groupSchema");
+const Assesment = require("../models/assesmentSchema")
+var mongoose = require('mongoose');
 
 const signup = async (req, res) => {
   var { name, email, phone, password, cpassword } = req.body;
@@ -221,6 +223,52 @@ const getSubjectsInClass = async(req,res)=>{
   }
 }
 
+const setTopic = async(req,res)=>{
+  const {topic,groupID,assessmentID} = req.body;
+  console.log(req.body)
+  try {
+      const assessmentData = await Assesment.findById(assessmentID);
+      // const allGroupDetails = []
+      assessmentData.appearingGroupDetails.map((group)=>{
+        if(group.groupID.valueOf()===groupID){
+          // console.log(group)
+          const groupData = group
+          const topicData = group.topic
+          // console.log(group.topic)
+          const newTopicData = {...topicData,name:topic}
+          // group = {...groupData,newTopicData}
+          // console.log(newTopicData)
+          group.topic.name = topic
+          group.topic.isAccepted = false
+          group.topic.isRejected = false
+        } 
+        // allGroupDetails.push(group)
+      })
+      // console.log(allGroupDetails)
+      const updateTopic = await Assesment.findByIdAndUpdate(assessmentID,{appearingGroupDetails:assessmentData.appearingGroupDetails})
+      if(updateTopic) res.status(200).send({ ok: true, message:"Topic Updated"});
+      else res.status(200).send({ ok: false, message:"Failed To Update Topic"});
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+const getGroupAssessment = async(req,res)=>{
+  const {id,assessment} = req.params
+  try {
+    const assessmentData = await Assesment.findById(assessment);
+
+    assessmentData.appearingGroupDetails.map((group)=>{
+      if(group.groupID.valueOf()===id){
+        res.status(200).send({ ok: true, message:"Fetch Successful",group});
+      }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   signup,
   login,
@@ -230,5 +278,7 @@ module.exports = {
   createGroup,
   joinGroup,
   getGroupDetails,
-  getSubjectsInClass
+  getSubjectsInClass,
+  setTopic,
+  getGroupAssessment
 };
