@@ -169,6 +169,43 @@ const TeacherSubjectSection = () => {
     }
   }
 
+  const acceptTopic = async(groupID,assesmentID)=>{
+    console.log(groupID,assesmentID)
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/teacher/acceptTopic`,
+        data: {
+          groupID,assesmentID
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const rejectTopic = async(groupID,assesmentID)=>{
+    console.log(groupID,assesmentID)
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/teacher/rejectTopic`,
+        data: {
+          groupID,assesmentID
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getSubjectData();
     getTeachersInClass();
@@ -419,35 +456,43 @@ const TeacherSubjectSection = () => {
                                             return (
                                               <>
                                                 <Tr>
-                                                  <Td>{index + 1}</Td>
+                                                  <Td>{index + 1} {group._id}</Td>
                                                   <Td>
                                                     {group?.topic?.name ? (
-                                                      <>group?.topic?.name?</>
+                                                      <>{group?.topic?.name}</>
                                                     ) : (
                                                       <>Topic Not Entered</>
                                                     )}
                                                   </Td>
                                                   <Td>
                                                     <Flex align={"center"}>
-                                                      <CheckIcon
-                                                        mr={"1rem"}
-                                                        backgroundColor={
-                                                          "green.200"
-                                                        }
-                                                        p={1}
-                                                        borderRadius={2}
-                                                        color={"green"}
-                                                        boxSize={6}
-                                                      />
-                                                      <CloseIcon
-                                                        color={"red"}
-                                                        backgroundColor={
-                                                          "red.200"
-                                                        }
-                                                        p={1}
-                                                        borderRadius={2}
-                                                        boxSize={6}
-                                                      />
+                                                      {
+                                                        group?.topic?.isApproved?<><Text fontWeight={"bold"} color={"green"}>Accepted By You</Text></>:
+                                                        
+                                                          group?.topic?.isRejected?<><Text fontWeight={"bold"} color={"red"}>Rejected By You</Text></>:<><CheckIcon
+                                                          mr={"1rem"}
+                                                          backgroundColor={
+                                                            "green.200"
+                                                          }
+                                                          onClick={()=>acceptTopic(group.groupID._id,assesment._id)}
+                                                          p={1}
+                                                          borderRadius={2}
+                                                          color={"green"}
+                                                          boxSize={6}
+                                                        />
+                                                        <CloseIcon
+                                                          onClick={()=>rejectTopic(group.groupID._id,assesment._id)}
+                                                          color={"red"}
+                                                          backgroundColor={
+                                                            "red.200"
+                                                          }
+                                                          p={1}
+                                                          borderRadius={2}
+                                                          boxSize={6}
+                                                        /></>
+                                                        
+                                                      }
+                                                      
                                                     </Flex>
                                                   </Td>
                                                   <Td>

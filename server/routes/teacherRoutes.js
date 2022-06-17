@@ -11,7 +11,9 @@ const {
   getAllTeacher,
   addTeacherToClass,
   getSubjectsInClass,
-  getTeachersInClass
+  getTeachersInClass,
+  acceptTopic,
+  rejectTopic
 } = require("../controllers/teacher");
 const { isTeacher } = require("../middlewares/isTeacher");
 
@@ -27,6 +29,8 @@ router.get('/getSubjectsInClass',isTeacher,getSubjectsInClass)
 router.post('/createSubject',isTeacher,createSubject)
 router.post('/createAssesment',isTeacher,createAssesment)
 router.post('/addTeacherToClass',isTeacher,addTeacherToClass)
+router.post('/acceptTopic',isTeacher,acceptTopic)
+router.post('/rejectTopic',isTeacher,rejectTopic)
 // router.get("/jwtVerify", jwtVerify);
 
 
