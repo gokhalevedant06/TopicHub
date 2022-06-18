@@ -269,6 +269,16 @@ const getGroupAssessment = async(req,res)=>{
   }
 }
 
+const getClassData = async(req,res)=>{
+  const {joinedClassID} = req.user;
+  try {
+    const classData = await Class.findById(joinedClassID).populate('createdBy').populate('studentsJoined').populate('groups').populate('teachers')
+    res.status(200).send({ ok: true, message:"Fetch Successful",classData});
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   signup,
   login,
@@ -280,5 +290,6 @@ module.exports = {
   getGroupDetails,
   getSubjectsInClass,
   setTopic,
-  getGroupAssessment
+  getGroupAssessment,
+  getClassData
 };

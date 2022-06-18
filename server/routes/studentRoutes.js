@@ -11,7 +11,8 @@ const {
   getGroupDetails,
   getSubjectsInClass,
   setTopic,
-  getGroupAssessment
+  getGroupAssessment,
+  getClassData
 } = require("../controllers/student");
 
 const { isStudent } = require("../middlewares/isStudent");
@@ -29,4 +30,5 @@ router.get('/groupDetails',isStudent,getGroupDetails)
 router.get('/getSubjects',isStudent,getSubjectsInClass)
 router.post('/setTopic',setTopic)
 router.get('/getGroupAssessment/:id/:assessment',getGroupAssessment)
+router.get('/getClassData',isStudent,getClassData)
 module.exports = router;
