@@ -18,10 +18,11 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser,isLoggedIn } from "../Redux/userSlice";
-
+import { useSnackbar } from 'notistack';
 
 
 const Login = () => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [isTeacher,setTeacher] = useState(false);
   if(window.location.href[22]=='t' && isTeacher==false) setTeacher(true)
   const [show, setShow] = useState(false);
@@ -48,26 +49,26 @@ const Login = () => {
 
   const userLogin = async () => {
     const user = isTeacher?'teacher':'student'
+    let response;
     try {
-      const response = await axios({
+      response = await axios({
         method: "POST",
         url: `/${user}/login`,
         data:login
       });
       console.log("response",response);
+
       dispatch(loginUser({
         user:response.data.userLogin,
       }))
-      // if(user==='student'){
-      //   localStorage.setItem("studentToken", response.data.token)
-      // }else{
-      //   localStorage.setItem("teacherToken", response.data.token)
-      // }
+
         localStorage.setItem("token", response.data.token)
-      window.alert(response.data.message)
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+      // window.alert(response.data.message)
       navigate(`/${user}/profile`)
     } catch (error) {
-      window.alert("Try Again!")
+      enqueueSnackbar(response.data.message, { variant: 'error' });
+      // window.alert("Try Again!")
       console.log(error);
     }
   };

@@ -7,9 +7,12 @@ import axios from "axios";
 import { Link,useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { isLoggedIn } from "../Redux/userSlice";
+import { useSnackbar } from 'notistack';
+
 
 
 const Signup = () => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [isTeacher,setTeacher] = useState(false);
   if(window.location.href[22]=='t' && isTeacher==false) setTeacher(true)
   const [show, setShow] = useState(false)
@@ -36,17 +39,17 @@ const Signup = () => {
 
   const userSignup = async () => {
     const user = isTeacher?'teacher':'student'
+    let response;
     try {
-      const response = await axios({
+      response = await axios({
         method: "POST",
         url: `/${user}/signup`,
         data:signUp
       });
-      console.log(response);
-      window.alert(response.data)
+      enqueueSnackbar(`${user} Created!`, { variant: 'success' });
       navigate(`/${user}/login`)
     } catch (error) {
-      window.alert("Try Again!")
+      enqueueSnackbar("Something Went Wrong", { variant: 'error' });
       console.log(error);
     }
   };
