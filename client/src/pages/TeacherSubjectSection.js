@@ -35,11 +35,13 @@ import {
   Th,
   Td,
   TableContainer,
+  Image
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectUser } from "../Redux/userSlice";
 import { useSnackbar } from 'notistack';
+import SubjectImage from '../Assets/Images/Subject.svg'
 
 
 import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
@@ -80,21 +82,7 @@ const TeacherSubjectSection = () => {
     <ModalOverlay bg="rgba(92,103, 119, 0.8)" backdropFilter="blur(10px)" />
   );
   const [overlay, setOverlay] = useState(<OverlayOne />);
-  const onSubmit = async () => {
-    try {
-      const response = await axios({
-        method: "POST",
-        url: `/teacher/createAssesment`,
-        data: data,
-        headers: {
-          Authorization: token,
-        },
-      });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
 
   const getTeachersInClass = async()=>{
     try {
@@ -134,11 +122,10 @@ const TeacherSubjectSection = () => {
       if(response.data.ok){
         enqueueSnackbar(response.data.message, { variant: 'success' });
         onCloseAssesment()
-        onCloseAllSubjects()
+      setChange(!acceptRejectState)
       }else{
       enqueueSnackbar(response.data.message, { variant: 'error' });
       onCloseAssesment()
-      onCloseAllSubjects()
       }
       console.log(response);
     } catch (error) {
@@ -183,6 +170,8 @@ const TeacherSubjectSection = () => {
       if(response.data.ok){
         enqueueSnackbar(response.data.message, { variant: 'success' });
         createSubjectOnClose()
+      setChange(!acceptRejectState)
+
       }else{
       enqueueSnackbar(response.data.message, { variant: 'error' });
       createSubjectOnClose()
@@ -307,7 +296,7 @@ const TeacherSubjectSection = () => {
       </Flex>
 
       <Modal onClose={createSubjectOnClose} isOpen={createSubject} isCentered>
-        {/* {overlay} */}
+        {overlay}
         <ModalContent>
           <ModalHeader>Enter Subject Details</ModalHeader>
           <ModalCloseButton />
@@ -360,7 +349,7 @@ const TeacherSubjectSection = () => {
         size={"6xl"}
         isOpen={isOpenAllSubjects}
       >
-        {/* {overlay} */}
+        {overlay}
         <ModalContent>
           <ModalHeader>Subject Details</ModalHeader>
           <ModalCloseButton />
@@ -379,7 +368,7 @@ const TeacherSubjectSection = () => {
                     <TabPanel>
                       <Flex justify={"center"}>
                         <Flex justify={"center"} width={"40%"}>
-                          <Text>Image</Text>
+                         <Image src={SubjectImage} width={"80%"}></Image>
                         </Flex>
                         <Flex flexDirection={"column"} width={"60%"}>
                           <Text>Title : {subject.title}</Text>

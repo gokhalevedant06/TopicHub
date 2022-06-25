@@ -95,6 +95,7 @@ const TeacherClassSection = () => {
       });
       setAllTeachers(response?.data?.getTeachers)
       enqueueSnackbar(response.data.message, { variant: 'success' });
+      onCloseAddTeacher()
     } catch (error) {
       console.log(error);
       enqueueSnackbar("Something Went Wrong", { variant: 'error' });
