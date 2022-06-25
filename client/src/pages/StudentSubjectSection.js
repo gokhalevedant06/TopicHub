@@ -117,7 +117,7 @@ const StudentSubjectSection = () => {
     getSubjectDetails();
     getGroupDetails();
   }, [acceptRejectState]);
-  
+
   console.log("sdgf", subjectData);
 
   return (

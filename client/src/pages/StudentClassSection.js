@@ -20,64 +20,58 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../Redux/userSlice";
 import { AddIcon, HamburgerIcon, InfoIcon,ChevronDownIcon } from '@chakra-ui/icons'
-// import landing from '../Assets/Images/StudentClass.svg'
-// import{ }
 import StudentClassImage from '../Assets/Images/student_class.svg';
 
 const StudentClassSection = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state?.user);
+  const student = useSelector(selectUser);
   const { email, groupDetails, joinedClassID, name, phone, _id } = user;
   const { isOpen , onOpen, onClose } = useDisclosure();
   const token = localStorage.getItem("token");
   const [classData, setClassData] = useState();
   // const { isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
   // const { isOpen: isDeleteOpen , onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
-  const studentData = useSelector(selectUser);
+  // const studentData = useSelector(selectUser);
 
   const getClassData = async () => {
     try {
       const response = await axios({
         method: "GET",
-        url: `/student/getClass`,
+        url: `/student/getClassData`,
         headers: {
           Authorization: token,
         },
       });
-      setClassData(response.data.classDetails);
+      console.log(classData);
+      setClassData(response.data.classData);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
-    getClassData();
+    getClassData()
+    console.log(classData)
   }, []);
-  console.log(classData);
+  
   return (
     <>
-    {user.joinedClassID ?(
-    <Flex direction="column">
-      {/* <Flex direction="row" width="100%" height="130px" alignItems={'center'} >
-        <Text m={10} fontSize='2xl'>Hello, {name} <br/>
-        <Text  fontSize='xl'>{email}</Text></Text>
-        <Spacer />
-      </Flex> */}
-      
-
-      
+    {student.joinedClassID ?(
+    <Flex direction="column">  
       <Box borderRadius={60} zIndex={1} m={20} bg='rgba(0,0,0,0)'>
-        <Text ml={500} text={'center'}  fontWeight={"bold"} fontSize={"2.1rem"} >Class Details</Text >
-        <Flex mt={"2rem"} ml = {"10rem"}>
+        <Text ml={'35%'} text={'center'}  fontWeight={"bold"} fontSize={"2.1rem"} >Class Details</Text >
+        <Flex mt={"2rem"} ml = {"10rem"} direction={'row'}>
               <Box width={"500px"} >
-                <Image src={StudentClassImage} height={"200px"}></Image>
+                <Image src={StudentClassImage} height={"400px"}></Image>
               </Box>
               <Flex flexDirection={"column"}  width={"80%"}>
-            <Box mb={'1rem'} >
-              <Text fontSize={"1.3rem"} fontWeight={'medium'}>Title: </Text>
-              {/* {Data?.title} */}
-              <Text fontSize={"1rem"} fontWeight={'medium'}>Description: {classData?.description}</Text>
+            <Box mt={'4rem'} height={'200px'} ml={'5rem'}>
+            <Text fontSize={"1.3rem"} fontWeight={'medium'} >ID: {classData?._id} </Text>
+              <Text fontSize={"1.3rem"} fontWeight={'medium'} >Title: {classData?.title} </Text>
+              <Text fontSize={"1.3rem"} fontWeight={'medium'}>Description: {classData?.description}</Text>
             </Box>
-          <Box>
+          <Box ml={'3rem'}>
       <Button m={"1rem"} w={"200px"}  colorScheme={"purple"} onClick={()=>navigate('/student/subjectSection')} width = {'80%'} ><Text fontSize='xl' align='center' >My Subjects</Text></Button>
       <Button m={"1rem"} w={"200px"}  colorScheme={"yellow"} onClick={()=>navigate('/student/groupSection')} width = {'80%'} ><Text fontSize='xl' align='center' >My Group</Text></Button>
       </Box>
