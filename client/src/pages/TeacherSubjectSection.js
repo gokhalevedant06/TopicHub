@@ -39,9 +39,12 @@ import {
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectUser } from "../Redux/userSlice";
+import { useSnackbar } from 'notistack';
+
 
 import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 const TeacherSubjectSection = () => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const user = useSelector(selectUser)
  const [createAssesment,setCreateAssesment] = useState()
  const [data, setData] = useState();
@@ -65,6 +68,8 @@ const TeacherSubjectSection = () => {
     onOpen: onOpenAssesment,
     onClose: onCloseAssesment,
   } = useDisclosure();
+
+  const [acceptRejectState,setChange] = useState(false);
 
   const {
     isOpen: mark,
@@ -126,8 +131,18 @@ const TeacherSubjectSection = () => {
           Authorization: token,
         },
       });
+      if(response.data.ok){
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+        onCloseAssesment()
+        onCloseAllSubjects()
+      }else{
+      enqueueSnackbar(response.data.message, { variant: 'error' });
+      onCloseAssesment()
+      onCloseAllSubjects()
+      }
       console.log(response);
     } catch (error) {
+      enqueueSnackbar("Something Went Wrong", { variant: 'error' });
       console.log(error);
     }
   }
@@ -154,8 +169,9 @@ const TeacherSubjectSection = () => {
   }
 
   const createSubjectCall = async()=>{
+    let response;
     try {
-      const response = await axios({
+      response = await axios({
         method: "POST",
         url: `/teacher/createSubject`,
         data: createSubjectData,
@@ -163,8 +179,17 @@ const TeacherSubjectSection = () => {
           Authorization: token,
         },
       });
+
+      if(response.data.ok){
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+        createSubjectOnClose()
+      }else{
+      enqueueSnackbar(response.data.message, { variant: 'error' });
+      createSubjectOnClose()
+      }
       console.log(response);
     } catch (error) {
+      enqueueSnackbar("Something Went Wrong", { variant: 'error' });
       console.log(error);
     }
   }
@@ -182,6 +207,14 @@ const TeacherSubjectSection = () => {
           Authorization: token,
         },
       });
+      enqueueSnackbar("Topic Accepted", {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left'
+        },
+        variant:"success"
+      })
+      setChange(!acceptRejectState)
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -200,6 +233,14 @@ const TeacherSubjectSection = () => {
           Authorization: token,
         },
       });
+      enqueueSnackbar("Topic Rejected", {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left'
+        },
+        variant:"warning"
+      })
+      setChange(!acceptRejectState)
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -209,7 +250,7 @@ const TeacherSubjectSection = () => {
   useEffect(() => {
     getSubjectData();
     getTeachersInClass();
-  }, []);
+  }, [acceptRejectState]);
 
   return (
     <>
@@ -266,7 +307,7 @@ const TeacherSubjectSection = () => {
       </Flex>
 
       <Modal onClose={createSubjectOnClose} isOpen={createSubject} isCentered>
-        {overlay}
+        {/* {overlay} */}
         <ModalContent>
           <ModalHeader>Enter Subject Details</ModalHeader>
           <ModalCloseButton />
@@ -288,7 +329,7 @@ const TeacherSubjectSection = () => {
                   children="$"
                 />
                 <Input name="description"  onChange={(e)=>handleCreateSubjectChange(e)} placeholder="Enter Description" />
-                <InputRightElement children={<CheckIcon color="green.500" />} />
+                <InputRightElement children={<CheckIcon id="checkicon" color="green.500" />} />
               </InputGroup>
               <Select name="subjectTeacher" onChange={(e)=>handleCreateSubjectChange(e)} placeholder="Select Subject Teacher">
                 {
@@ -319,7 +360,7 @@ const TeacherSubjectSection = () => {
         size={"6xl"}
         isOpen={isOpenAllSubjects}
       >
-        {overlay}
+        {/* {overlay} */}
         <ModalContent>
           <ModalHeader>Subject Details</ModalHeader>
           <ModalCloseButton />
@@ -390,7 +431,7 @@ const TeacherSubjectSection = () => {
                   children="$"
                 />
                 <Input placeholder="Enter Description" name="description"  onChange={(e)=>handleCreateAssesmentChange(e)}/>
-                <InputRightElement children={<CheckIcon color="green.500" />} />
+                <InputRightElement children={<CheckIcon id="checkicon" color="green.500" />} />
               </InputGroup>
               <InputGroup>
                 <InputLeftElement
@@ -400,7 +441,7 @@ const TeacherSubjectSection = () => {
                   children="$"
                 />
                 <Input placeholder="Enter Total Marks" name='totalMarks' onChange={(e)=>handleCreateAssesmentChange(e)} />
-                <InputRightElement children={<CheckIcon color="green.500" />} />
+                <InputRightElement children={<CheckIcon id="checkicon" color="green.500" />} />
               </InputGroup>
             </Stack>
           </ModalBody>
@@ -467,9 +508,11 @@ const TeacherSubjectSection = () => {
                                                   <Td>
                                                     <Flex align={"center"}>
                                                       {
-                                                        group?.topic?.isApproved?<><Text fontWeight={"bold"} color={"green"}>Accepted By You</Text></>:
+                                                        group?.topic?.name?<>{
+                                                          group?.topic?.isApproved?<><Text fontWeight={"bold"} color={"green"}>Accepted By You</Text></>:
                                                         
                                                           group?.topic?.isRejected?<><Text fontWeight={"bold"} color={"red"}>Rejected By You</Text></>:<><CheckIcon
+                                                          id="checkicon"
                                                           mr={"1rem"}
                                                           backgroundColor={
                                                             "green.200"
@@ -481,6 +524,7 @@ const TeacherSubjectSection = () => {
                                                           boxSize={6}
                                                         />
                                                         <CloseIcon
+                                                        id="checkicon"
                                                           onClick={()=>rejectTopic(group.groupID._id,assesment._id)}
                                                           color={"red"}
                                                           backgroundColor={
@@ -491,8 +535,10 @@ const TeacherSubjectSection = () => {
                                                           boxSize={6}
                                                         /></>
                                                         
-                                                      }
                                                       
+                                                        }</>:<><Text fontWeight={"bold"} color={"grey"}>Pending</Text></>
+                                                        
+                                          }
                                                     </Flex>
                                                   </Td>
                                                   <Td>
@@ -555,7 +601,7 @@ const TeacherSubjectSection = () => {
                                                                       }
                                                                     </Td>
                                                                     <Td>
-                                                                      <Input border={"1px"} />
+                                                                      <Input border={"1px"} borderColor={"whiteAlpha.300"} />
                                                                     </Td>
                                                                     <Td>100</Td>
                                                                   </Tr>
@@ -572,7 +618,7 @@ const TeacherSubjectSection = () => {
                                                       <Button>Save</Button>
                                                       <Button
                                                         colorScheme="blue"
-                                                        mr={3}
+                                                        ml={3}
                                                         onClick={onCloseMark}
                                                       >
                                                         Close

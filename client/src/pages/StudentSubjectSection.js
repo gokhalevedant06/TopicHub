@@ -202,6 +202,7 @@ const StudentSubjectSection = () => {
                                   <Td>
                                     <Flex align={"center"}>
                                       <CheckIcon
+                                        id="checkicon"
                                       onClick={()=>setTopic(assessment._id)}
                                         mr={"1rem"}
                                         backgroundColor={"green.200"}
