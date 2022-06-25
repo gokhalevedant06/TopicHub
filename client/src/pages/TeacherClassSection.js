@@ -32,8 +32,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import TeacherProfileImage from "../Assets/Images/TeacherProfile.svg";
 import TeacherSubjectSection from "./TeacherSubjectSection";
+import { useSnackbar } from 'notistack';
+
 
 const TeacherClassSection = () => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { user } = useSelector((state) => state?.user);
   const [classData, setClassData] = useState();
   const [studentData, setClassStudentData] = useState();
@@ -91,9 +94,11 @@ const TeacherClassSection = () => {
         }
       });
       setAllTeachers(response?.data?.getTeachers)
-      alert(response.data.message)
+      enqueueSnackbar(response.data.message, { variant: 'success' });
+      onCloseAddTeacher()
     } catch (error) {
       console.log(error);
+      enqueueSnackbar("Something Went Wrong", { variant: 'error' });
     }
   }
 
@@ -202,6 +207,7 @@ const TeacherClassSection = () => {
                                       )}
                                       <Td>
                                         <CloseIcon
+                                        id="checkicon"
                                           color={"red"}
                                           backgroundColor={"red.200"}
                                           p={1}
@@ -259,6 +265,7 @@ const TeacherClassSection = () => {
                                     <Td>{teacher.email}</Td>
                                     <Td>
                                       <CloseIcon
+                                      id="checkicon"
                                         color={"red"}
                                         backgroundColor={"red.200"}
                                         p={1}
@@ -320,6 +327,7 @@ const TeacherClassSection = () => {
                                     </Td>
                                     <Td>
                                       <CloseIcon
+                                      id="checkicon"
                                         color={"red"}
                                         backgroundColor={"red.200"}
                                         p={1}
@@ -370,6 +378,7 @@ const TeacherClassSection = () => {
                                           <Td>{member?.phone}</Td>
                                           <Td>
                                             <CloseIcon
+                                            id="checkicon"
                                               color={"red"}
                                               backgroundColor={"red.200"}
                                               p={1}
