@@ -17,6 +17,7 @@ import {
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { ArrowRightIcon } from "@chakra-ui/icons";
+import {GiHamburgerMenu} from 'react-icons/gi';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../Redux/userSlice";
 import { logout } from "../Redux/userSlice";
@@ -38,9 +39,11 @@ const Sidebar = () => {
     <>
       {user ? (
         <>
-          <Box position="absolute" top={"45vh"} left={"5"}>
-            <ArrowRightIcon
-              background={"gray.300"}
+          <Box position="absolute" top={"8vh"} left={"8"}>
+            <GiHamburgerMenu
+              size={'1.5rem'} 
+              background={"gray.400"}
+              // background = {'#5128c9'}
               borderRadius="5px"
               height={"35px"}
               width={"50px"}

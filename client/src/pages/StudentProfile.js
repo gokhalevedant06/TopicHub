@@ -11,32 +11,18 @@ const StudentProfile = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const studentData = useSelector(selectUser);
-  const [classData, setClassData] = useState();
-  const getClassData = async () => {
-    try {
-      const response = await axios({
-        method: "GET",
-        url: `/student/getClass`,
-        headers: {
-          Authorization: token,
-        },
-      });
-      setClassData(response.data.classDetails);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
   return (
     <>
     <Flex direction={'column'}>
     <Box borderRadius={60} zIndex={1} m={20} bg='rgba(0,0,0,0)'>
-        <Text ml={500} text={'center'}  fontWeight={"bold"} fontSize={"2.1rem"} >My Profile</Text >
-        <Flex mt={"2rem"} ml = {"10rem"} mr = {'2rem'} mb = {'2rem'}>
+    <Text ml={'35%'} text={'center'}  fontWeight={"bold"} fontSize={"2.1rem"} >My Profile</Text >
+    <Flex mt={"2rem"} ml = {"10rem"} direction={'row'}>
               <Box width={"500px"} mr = {'2rem'}>
-                <Image src={dp} height={"200px"}></Image>
+                <Image src={dp} height={"400px"}></Image>
               </Box>
           <Flex flexDirection={"column"}  width={"80%"}>
-      <Box width={"300px"} margin="10px" ml = {'2rem'}>
+          <Box mt={'4rem'} height={'200px'} ml={'5rem'}>
         <Text padding={"2px"} fontSize={"1.3rem"} fontWeight={'medium'}> Name: {studentData.name}</Text>
         <Text padding={"2px"} fontSize={"1.3rem"} fontWeight={'medium'}>Email: {studentData.email} </Text>  
         <Text padding={"2px"} fontSize={"1.3rem"} fontWeight={'medium'}>Phone No: {studentData.phone} </Text>

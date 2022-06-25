@@ -154,7 +154,7 @@ const StudentSubjectSection = () => {
                 </Flex>
                 <Flex flexDirection={"column"} width={"60%"}>
                   <Text>Title : {subject.title}</Text>
-                  <Text>Descriptio : {subject.description}n</Text>
+                  <Text>Description : {subject.description}n</Text>
                   <Text>Teacher Name : {subject.subjectTeacher.name}</Text>
                   <Flex>
                   </Flex>
