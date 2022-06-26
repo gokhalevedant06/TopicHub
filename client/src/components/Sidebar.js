@@ -41,6 +41,7 @@ const Sidebar = () => {
         <>
           <Box position="absolute" top={"8vh"} left={"8"}>
             <GiHamburgerMenu
+            id="checkicon"
               size={'1.5rem'} 
               background={"gray.400"}
               // background = {'#5128c9'}

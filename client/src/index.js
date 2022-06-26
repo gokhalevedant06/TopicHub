@@ -13,7 +13,7 @@ const root = createRoot(rootElement);
 
 root.render(
   <BrowserRouter>
-    <SnackbarProvider maxSnack={1}
+    <SnackbarProvider maxSnack={2}
     
     anchorOrigin={{
       vertical: 'top',

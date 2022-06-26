@@ -3,6 +3,8 @@ import { Box, Flex, Input,Textarea, Image, Button  } from '@chakra-ui/react'
 import Class from '../Assets/Images/Class.svg'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useSnackbar } from 'notistack';
+
 const CreateClass = () => {
   const [data, setData] = useState();  // to get data from input tags
   const token = localStorage.getItem("token");
@@ -14,11 +16,13 @@ const CreateClass = () => {
     console.log(data)
   }; 
   const navigate = useNavigate();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
 
   const onSubmit = async()=>{
+    let response;
     try {
-      const response = await axios({
+       response = await axios({
         method: "POST",
         url: `/teacher/createClass`,
         data:data,
@@ -27,8 +31,10 @@ const CreateClass = () => {
         }
       });
       console.log(response)
+      enqueueSnackbar(response.data.message, { variant: 'success' });
       navigate(`/teacher/profile`)
     } catch (error) {
+      enqueueSnackbar("Failed To Create Class", { variant: 'error' });
       console.log(error)
     }
   }

@@ -142,7 +142,7 @@ const TeacherClassSection = () => {
 
   return (
     <>
-      {user.MyClass ? (
+      {classData ? (
         <>
           <Flex justify={"center"}>
             <Box>
@@ -151,13 +151,13 @@ const TeacherClassSection = () => {
           </Flex>
           <Box mt={'2rem'}>
             <Flex ml={"auto"} mr={'auto'}  wrap={"wrap"} justify={"start"} height={"250px"} w={"80%"}>
-              <Box width={"500px"}>
+              <Box width={"400px"}>
                 <Image src={TeacherProfileImage} width={'350px'}></Image>
               </Box>
-              <Box>
-                <Text fontSize={"1.3rem"} fontWeight={'medium'} >Class ID: {classData?._id} </Text>
+              <Box maxWidth={"720px"}>
                 <Text fontSize={"1.3rem"} fontWeight={'medium'} >Title: {classData?.title}</Text>
-                <Text fontSize={"1.3rem"} fontWeight={'medium'} >Description: {classData?.description} </Text>
+                <Text fontSize={"1.2rem"} fontWeight={'medium'} >Description: {classData?.description} </Text>
+                <Text fontSize={"1.1rem"} fontWeight={'medium'} >Class ID: {classData?._id} </Text>
               </Box>
             </Flex>
           </Box>
