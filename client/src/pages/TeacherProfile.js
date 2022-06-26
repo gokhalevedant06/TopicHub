@@ -112,7 +112,7 @@ const TeacherProfile = () => {
         </Flex>
       </Flex>
       <Box width={"70%"} marginLeft="auto" marginRight={"auto"}>
-        {teacherData.MyClass ? (
+        {classData ? (
           <>
             <Text textAlign={"center"} fontWeight={"bold"} fontSize={"2.1rem"}>Class Details</Text>
    
