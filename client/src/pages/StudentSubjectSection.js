@@ -103,7 +103,13 @@ const StudentSubjectSection = () => {
           assessmentID,
         },
       });
+
+      if(response.data.ok){
+        enqueueSnackbar(response.data.message, { variant: 'success' });
       setChange(!acceptRejectState)
+      }else{
+      enqueueSnackbar(response.data.message, { variant: 'error' });
+      }
       console.log(response);
     } catch (error) {
       console.log(error);
