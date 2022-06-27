@@ -30,9 +30,6 @@ const StudentClassSection = () => {
   const { isOpen , onOpen, onClose } = useDisclosure();
   const token = localStorage.getItem("token");
   const [classData, setClassData] = useState();
-  // const { isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
-  // const { isOpen: isDeleteOpen , onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
-  // const studentData = useSelector(selectUser);
 
   const getClassData = async () => {
     try {
