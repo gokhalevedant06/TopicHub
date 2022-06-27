@@ -29,10 +29,17 @@ import {
   TableCaption
 } from "@chakra-ui/react";
 import axios from "axios";
+import { useSnackbar } from 'notistack';
 import { Link } from "react-router-dom";
 import groupJoin from "../Assets/Images/joinGroup.svg";
 import collaboration from '../Assets/Images/collaboration.svg'
+import { useNavigate } from "react-router-dom";
+import JoinClass from "./JoinClass";
 const StudentGroupSection = () => {
+  const navigate = useNavigate()
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [acceptRejectState,setChange] = useState(false);
+
   const { isOpen, onOpen, onClose } = useDisclosure(); 
   const {
     isOpen: isOpenJoinGroup,
@@ -48,10 +55,27 @@ const StudentGroupSection = () => {
   const [createGroupData, setCreateGroupData] = useState()
   const [joinGroupData, setJoinGroupData] = useState()
   const [groupData,setGroupData] = useState()
+  const [classData, setClassData] = useState();
+
   // const { hasCopied, onCopy } = useClipboard();
   const { user } = useSelector((state) => state?.user);
   console.log("USER",user)
   const token = localStorage.getItem("token");
+
+  const getClassData = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/student/getClassData`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      setClassData(response.data.classData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const createGroupHandler = (e)=>{
     // setCreateGroupData({...createGroupData,[e.target.name]:e.target.value})
@@ -76,8 +100,17 @@ const StudentGroupSection = () => {
         },
         data:createGroupData
       });
-      console.log(response)
+
+      console.log("Create GROUP",response)
+      if(response.data.ok){
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+      setChange(!acceptRejectState)
+      onCloseCreateGroup()
+      }else{
+      enqueueSnackbar(response.data.message, { variant: 'error' });
+      }
     } catch (error) {
+      enqueueSnackbar("Failed to create group", { variant: 'error' });
       console.log(error);
     }
   }
@@ -91,7 +124,18 @@ const StudentGroupSection = () => {
         },
         data:joinGroupData
       });
+
+
       console.log(response)
+
+      if(response.data.ok){
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+      setChange(!acceptRejectState)
+      onCloseJoinGroup()
+      }else{
+      enqueueSnackbar(response.data.message, { variant: 'error' });
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -112,77 +156,80 @@ const StudentGroupSection = () => {
     }
   }
 
+ 
+
   useEffect(() => {
     getGroupDetails()
-    console.log("here",groupData)
-  }, []);
-
+    getClassData()
+  }, [acceptRejectState]);
+    console.log("GroupClass",classData)
   return (
     <>
     {
-      groupData?._id
-      ?<>
-      
-      <Flex align={"center"} flexDirection={"column"}>
-        <Text mt={"4rem"} fontSize={"2.1rem"} fontWeight={'bold'} >Group Section</Text>
-        <Flex mt={'5rem'} ml={'4rem'}  width={'80%'}>
-        <Box width={"40%"}>
-          <Image  w={'90%'} src={collaboration}></Image>
-        </Box>
-        <Box width={"60%"}>
-         <Text fontSize={"1.3rem"} fontWeight={'medium'}>
-          Group Name : {groupData?.name}
-         </Text>
-         <Text fontSize={"1.3rem"} fontWeight={'medium'}>
-          Group ID : {groupData?._id}
-         </Text>
-         <Text fontSize={"1.3rem"} fontWeight={'medium'}>
-          Number of Members : {groupData?.members.length}
-         </Text>
-         <Text fontSize={"1.3rem"} fontWeight={'medium'}>Group Leader : {groupData?.groupLeader.name}</Text>
-        </Box>
-        
-        </Flex>
 
-     
-
-      
-
-      </Flex>
-        <Text textAlign={"center"} mt={"4rem"} fontSize={"2.1rem"} fontWeight={'bold'}>Group Member Details</Text>
-      <Box width={'80%'} marginLeft={'auto'} marginRight={'auto'} marginBottom={'5rem'} border={'1px'} p={'1rem'} rounded={'xl'} mt={'2rem'} >
-      <TableContainer>
-                      <Table variant="simple">
-                        <Thead>
-                          <Tr>
-                            <Th>ID</Th>
-                            <Th>Name</Th>
-                            <Th>Phone</Th>
-                          </Tr>
-                        </Thead>
-                        <Tbody>
-
-                        {
-                groupData?.members.map((member)=>{
-                  return (
-                    <Tr>
-                      <Td>{member?._id}</Td>
-                      <Td>{member?.name}</Td>
-                      <Td>{member?.phone}</Td>
-                      <Td>
-                       
-                      </Td>
-                    </Tr>
-                  );
-                })
-              }
-                        </Tbody>
-                      </Table>
-                    </TableContainer>
-
-      </Box>
-      
-      </>:<><Flex direction={"column"} justify={"center"} align={"center"}>
+        classData ? <>{groupData?._id
+          ?<>
+          
+          <Flex align={"center"} flexDirection={"column"}>
+            <Text mt={"4rem"} fontSize={"2.1rem"} fontWeight={'bold'} >Group Section</Text>
+            <Flex mt={'5rem'} ml={'4rem'}  width={'80%'}>
+            <Box width={"40%"}>
+              <Image  w={'90%'} src={collaboration}></Image>
+            </Box>
+            <Box width={"60%"}>
+             <Text fontSize={"1.3rem"} fontWeight={'medium'}>
+              Group Name : {groupData?.name}
+             </Text>
+             <Text fontSize={"1.3rem"} fontWeight={'medium'}>
+              Group ID : {groupData?._id}
+             </Text>
+             <Text fontSize={"1.3rem"} fontWeight={'medium'}>
+              Number of Members : {groupData?.members.length}
+             </Text>
+             <Text fontSize={"1.3rem"} fontWeight={'medium'}>Group Leader : {groupData?.groupLeader.name}</Text>
+            </Box>
+            
+            </Flex>
+    
+         
+    
+          
+    
+          </Flex>
+            <Text textAlign={"center"} mt={"4rem"} fontSize={"2.1rem"} fontWeight={'bold'}>Group Member Details</Text>
+          <Box width={'80%'} marginLeft={'auto'} marginRight={'auto'} marginBottom={'5rem'} border={'1px'} p={'1rem'} rounded={'xl'} mt={'2rem'} >
+          <TableContainer>
+                          <Table variant="simple">
+                            <Thead>
+                              <Tr>
+                                <Th>ID</Th>
+                                <Th>Name</Th>
+                                <Th>Phone</Th>
+                              </Tr>
+                            </Thead>
+                            <Tbody>
+    
+                            {
+                    groupData?.members.map((member)=>{
+                      return (
+                        <Tr>
+                          <Td>{member?._id}</Td>
+                          <Td>{member?.name}</Td>
+                          <Td>{member?.phone}</Td>
+                          <Td>
+                           
+                          </Td>
+                        </Tr>
+                      );
+                    })
+                  }
+                            </Tbody>
+                          </Table>
+                        </TableContainer>
+    
+          </Box>
+          
+          </>:<><Flex direction={"column"} justify={"center"} align={"center"}>
       <Image my={"3rem"} src={groupJoin} w={"37%"}></Image>
       <Text my={"2rem"} fontSize="1.5rem">
         You haven't joined any groups yet. Join or Create a group and
@@ -268,25 +315,15 @@ const StudentGroupSection = () => {
       </Flex>
     </Flex>
 
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>dfhhf</ModalBody>
-
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Close
-          </Button>
-          <Button variant="ghost">Secondary Action</Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal></>
+    </>}</>:<>
+          <JoinClass/>
+      </>
     }
     
     </>
   );
 };
+
+
 
 export default StudentGroupSection;

@@ -1,22 +1,10 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Flex,
   Box,
-  Button,
-  Modal,
   ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Input,
-  Stack,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Select,
   Tabs,
   TabList,
   TabPanels,
@@ -35,10 +23,20 @@ import {
   Th,
   Td,
   TableContainer,
+  Image,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { PhoneIcon, CheckIcon, CloseIcon,RepeatIcon } from "@chakra-ui/icons";
+import { useSnackbar } from 'notistack';
+
+import { PhoneIcon, CheckIcon, CloseIcon, RepeatIcon } from "@chakra-ui/icons";
+import SubjectImage from '../Assets/Images/Subject.svg'
+import { useNavigate } from 'react-router-dom'
+import StudentGroupSection from "./StudentGroupSection";
+
 const StudentSubjectSection = () => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const [acceptRejectState,setChange] = useState(false);
   const {
     isOpen: mark,
     onOpen: onOpenMark,
@@ -49,12 +47,12 @@ const StudentSubjectSection = () => {
   );
   const [overlay, setOverlay] = useState(<OverlayOne />);
   const token = localStorage.getItem("token");
-  const [groupData,setGroupData] = useState()
-  const [subjectData,setSubjectData] = useState()
-  const [topic,setTopicData] = useState()
-  const [groupAssessmentData,setGroupAssessmentData] = useState();
+  const [groupData, setGroupData] = useState();
+  const [subjectData, setSubjectData] = useState();
+  const [topic, setTopicData] = useState();
+  const [groupAssessmentData, setGroupAssessmentData] = useState();
 
-  const getSubjectDetails = async()=>{
+  const getSubjectDetails = async () => {
     try {
       const response = await axios({
         method: "GET",
@@ -63,14 +61,20 @@ const StudentSubjectSection = () => {
           Authorization: token,
         },
       });
-      console.log(response?.data?.subjectData.subjects)
-      setSubjectData(response?.data?.subjectData.subjects)
+      console.log(response?.data?.subjectData.subjects);
+      setSubjectData(response?.data?.subjectData.subjects);
     } catch (error) {
       console.log(error);
     }
+  };
+
+
+  const joinClassFirst = ()=>{
+    enqueueSnackbar("Please Join Class First", { variant: 'warning' })
+    navigate('/student/classSection')
   }
 
-  const getGroupDetails = async()=>{
+  const getGroupDetails = async () => {
     try {
       const response = await axios({
         method: "GET",
@@ -79,13 +83,13 @@ const StudentSubjectSection = () => {
           Authorization: token,
         },
       });
-      setGroupData(response.data.groupData)
+      setGroupData(response.data.groupData);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const setTopic = async(assessmentID)=>{
+  const setTopic = async (assessmentID) => {
     try {
       const response = await axios({
         method: "POST",
@@ -93,19 +97,26 @@ const StudentSubjectSection = () => {
         headers: {
           Authorization: token,
         },
-        data:{
+        data: {
           topic,
-          groupID:groupData?._id,
-          assessmentID
-        }
+          groupID: groupData?._id,
+          assessmentID,
+        },
       });
-      console.log(response)
+
+      if(response.data.ok){
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+      setChange(!acceptRejectState)
+      }else{
+      enqueueSnackbar(response.data.message, { variant: 'error' });
+      }
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const getAssessmentOfCurrentGroup = async(assesmentID)=>{
+  const getAssessmentOfCurrentGroup = async (assesmentID) => {
     try {
       const response = await axios({
         method: "GET",
@@ -114,25 +125,28 @@ const StudentSubjectSection = () => {
           Authorization: token,
         },
       });
-      console.log("FINAL",response)
-      setGroupAssessmentData(response.data.group)
+      console.log("FINAL", response);
+      setGroupAssessmentData(response.data.group);
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   useEffect(() => {
-    getSubjectDetails()
-    getGroupDetails()
-  }, []);
-  console.log("sdgf",subjectData)
+    getSubjectDetails();
+    getGroupDetails();
+  }, [acceptRejectState]);
+
+  console.log("sdgf", subjectData);
+  const navigate = useNavigate();
+
 
   return (
     <>
-    <Flex justify={"center"}>
 
-      <Box width={"80%"} mt={'5rem'} >
+    {
+      groupData?<>{ subjectData?<><Flex justify={"center"}>
+      <Box width={"80%"} mt={"5rem"}>
         <Tabs isFitted variant="enclosed">
           <TabList mb="1em">
             <Tab>Subject 1</Tab>
@@ -141,121 +155,145 @@ const StudentSubjectSection = () => {
             <Tab>Subject 4</Tab>
           </TabList>
           <TabPanels>
-
-            {
-              subjectData?.map((subject)=>{
-                console.log(subject)
-                return(
-                  
-                  <TabPanel>
-              <Flex justify={"center"}>
-                <Flex justify={"center"} width={"40%"}>
-                  <Text>Image</Text>
-                </Flex>
-                <Flex flexDirection={"column"} width={"60%"}>
-                  <Text>Title : {subject.title}</Text>
-                  <Text>Description : {subject.description}n</Text>
-                  <Text>Teacher Name : {subject.subjectTeacher.name}</Text>
-                  <Flex>
+            {subjectData?.map((subject) => {
+              console.log(subject);
+              return (
+                <TabPanel>
+                  <Flex justify={"center"}>
+                    <Flex justify={"center"} width={"40%"}>
+                      <Image src={SubjectImage} width={"80%"}></Image>
+                    </Flex>
+                    <Flex flexDirection={"column"} width={"60%"}>
+                      <Text>Title : {subject.title}</Text>
+                      <Text>Description : {subject.description}n</Text>
+                      <Text>
+                        Teacher Name : {subject.subjectTeacher.name}
+                      </Text>
+                      <Flex></Flex>
+                    </Flex>
                   </Flex>
-                </Flex>
-              </Flex>
-              <Text>Previous/On Going Assessments</Text>
-              <Box>
-                <Accordion>
+                  <Text>Previous/On Going Assessments</Text>
+                  <Box>
+                    <Accordion>
+                      {subject?.assesments?.map((assessment) => {
+                        return (
+                          <AccordionItem>
+                            <h2>
+                              <AccordionButton
+                                onClick={() =>
+                                  getAssessmentOfCurrentGroup(assessment._id)
+                                }
+                              >
+                                <Box flex="1" textAlign="left">
+                                  {assessment.title}
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={4}>
+                              <Box>
+                                <Text>Title : {assessment.title}</Text>
+                                <Text>
+                                  Description : {assessment.description}
+                                </Text>
+                              </Box>
 
-                  {
-                    subject?.assesments?.map((assessment)=>{
-                      return(
-                        <AccordionItem>
-                        <h2>
-                          <AccordionButton onClick={()=>getAssessmentOfCurrentGroup(assessment._id)}>
-                            <Box flex="1" textAlign="left">
-                             {assessment.title}
-                            </Box>
-                            <AccordionIcon />
-                          </AccordionButton>
-                        </h2>
-                        <AccordionPanel pb={4}>
-                          <Box>
-                            <Text>Title : {assessment.title}</Text>
-                            <Text>Description : {assessment.description}</Text>
-                          </Box>
-    
-                          <TableContainer>
-                            <Table variant="simple">
-                              <Thead>
-                                <Tr>
-                                  <Th>Group Name</Th>
-                                  <Th>Topic</Th>
-                                  <Th>Set/Reset</Th>
-                                  <Th>Status</Th>
-                                  <Th>Submission Link</Th>
-                                </Tr>
-                              </Thead>
-                              <Tbody>
-                                <Tr>
-                                  <Td>{groupData?.name}</Td>
-                                  <Td>
-                                   <Input placeholder={groupAssessmentData?.topic?.name} onChange={(e)=>setTopicData(e.target.value)}></Input>
-                                  </Td>
-                                  <Td>
-                                    <Flex align={"center"}>
-                                      <CheckIcon
-                                      onClick={()=>setTopic(assessment._id)}
-                                        mr={"1rem"}
-                                        backgroundColor={"green.200"}
-                                        p={1}
-                                        borderRadius={2}
-                                        color={"green"}
-                                        boxSize={6}
-                                        />
-                                      <RepeatIcon
-                                        mr={"1rem"}
-                                        backgroundColor={"gray"}
-                                        p={1}
-                                        borderRadius={2}
-                                        color={"white"}
-                                        boxSize={6}
-                                      />
-
-                                    </Flex>
-                                  </Td>
-                                  <Td>
-                                    {
-                                      groupAssessmentData?.topic?.isApproved?<><Text fontWeight={"bold"} color={"green"}>Accepted</Text> </>:groupAssessmentData?.topic?.isRejected?<><Text fontWeight={"bold"} color={"red"}>Rejected</Text> </>:<>Pending</>
-                                    }
-                                  </Td>
-                                  <Td>
-                                    <Input></Input>
-                                  </Td>
-                                </Tr>
-                    
-                              </Tbody>
-                            </Table>
-                          </TableContainer>
-                        </AccordionPanel>
-                      </AccordionItem>           
-                      )
-                    })
-                  }
-        
-                </Accordion>
-              </Box>
-            </TabPanel>
-                  
-                )
-              })
-            }
-            
+                              <TableContainer>
+                                <Table variant="simple">
+                                  <Thead>
+                                    <Tr>
+                                      <Th>Group Name</Th>
+                                      <Th>Topic</Th>
+                                      <Th>Set/Reset</Th>
+                                      <Th>Status</Th>
+                                      <Th>Submission Link</Th>
+                                    </Tr>
+                                  </Thead>
+                                  <Tbody>
+                                    <Tr>
+                                      <Td>{groupData?.name}</Td>
+                                      <Td>
+                                        <Input
+                                          placeholder={
+                                            groupAssessmentData?.topic?.name
+                                          }
+                                          onChange={(e) =>
+                                            setTopicData(e.target.value)
+                                          }
+                                        ></Input>
+                                      </Td>
+                                      <Td>
+                                        <Flex align={"center"}>
+                                          <CheckIcon
+                                            id="checkicon"
+                                            onClick={() =>
+                                              setTopic(assessment._id)
+                                            }
+                                            mr={"1rem"}
+                                            backgroundColor={"green.200"}
+                                            p={1}
+                                            borderRadius={2}
+                                            color={"green"}
+                                            boxSize={6}
+                                          />
+                                          <RepeatIcon
+                                            mr={"1rem"}
+                                            backgroundColor={"gray"}
+                                            p={1}
+                                            borderRadius={2}
+                                            color={"white"}
+                                            boxSize={6}
+                                          />
+                                        </Flex>
+                                      </Td>
+                                      <Td>
+                                        {groupAssessmentData?.topic
+                                          ?.isApproved ? (
+                                          <>
+                                            <Text
+                                              fontWeight={"bold"}
+                                              color={"green"}
+                                            >
+                                              Accepted
+                                            </Text>{" "}
+                                          </>
+                                        ) : groupAssessmentData?.topic
+                                            ?.isRejected ? (
+                                          <>
+                                            <Text
+                                              fontWeight={"bold"}
+                                              color={"red"}
+                                            >
+                                              Rejected
+                                            </Text>{" "}
+                                          </>
+                                        ) : (
+                                          <>Pending</>
+                                        )}
+                                      </Td>
+                                      <Td>
+                                        <Input></Input>
+                                      </Td>
+                                    </Tr>
+                                  </Tbody>
+                                </Table>
+                              </TableContainer>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        );
+                      })}
+                    </Accordion>
+                  </Box>
+                </TabPanel>
+              );
+            })}
           </TabPanels>
         </Tabs>
       </Box>
-    </Flex>
-
-
-  
-
+    </Flex></>:<>Join Class First</>}</>:<><StudentGroupSection/></>
+     
+  }
+      
     </>
   );
 };

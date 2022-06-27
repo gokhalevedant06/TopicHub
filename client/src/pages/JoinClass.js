@@ -4,8 +4,12 @@ import Class from '../Assets/Images/Class.svg'
 import axios from 'axios'
 import joinClass from '../Assets/Images/joinClass.jpg'
 import { useState } from 'react'
+import {useSnackbar} from 'notistack'
+import { useNavigate } from 'react-router-dom'
 
 const JoinClass = () => {
+  const navigate = useNavigate()
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [data, setData] = useState();
     const token = localStorage.getItem("token");
     const handleChange = (e) => {
@@ -27,7 +31,14 @@ const JoinClass = () => {
           }
         });
         console.log(response)
+        if(response.data.ok){
+          enqueueSnackbar(response.data.message, { variant: 'success' });
+          navigate('/student/classSection')
+        }else{
+        enqueueSnackbar(response.data.message, { variant: 'error' });
+        }
       } catch (error) {
+        enqueueSnackbar("Failed To Join Class", { variant: 'error' });
         console.log(error)
       }
     }

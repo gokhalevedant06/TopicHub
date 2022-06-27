@@ -41,6 +41,7 @@ const Sidebar = () => {
         <>
           <Box position="absolute" top={"8vh"} left={"8"}>
             <GiHamburgerMenu
+            id="checkicon"
               size={'1.5rem'} 
               background={"gray.400"}
               // background = {'#5128c9'}
@@ -100,7 +101,7 @@ const Sidebar = () => {
                       ) : (
                         <>
                           <Button onClick={()=>navigate('/student/profile')} marginY={"0.5rem"}>My Profile</Button>
-                          <Button onClick={()=>navigate('/student/classSection')} marginY={"0.5rem"}>My Class</Button>
+                          <Button onClick={()=>navigate('/student/classSection')} marginY={"0.5rem"}>Class Section</Button>
                           <Button onClick={()=>navigate('/student/groupSection')} marginY={"0.5rem"}>Group Section</Button>
                           <Button onClick={()=>navigate('/student/subjectSection')} marginY={"0.5rem"}>Subjects Section</Button>
                           <Button marginY={"0.5rem"} onClick={handleLogout}>

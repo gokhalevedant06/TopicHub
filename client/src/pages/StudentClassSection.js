@@ -54,7 +54,7 @@ const StudentClassSection = () => {
   
   return (
     <>
-    {student.joinedClassID ?(
+    {classData ?(
     <Flex direction="column">  
       <Box borderRadius={60} zIndex={1} m={20} bg='rgba(0,0,0,0)'>
         <Text ml={'35%'} text={'center'}  fontWeight={"bold"} fontSize={"2.1rem"} >Class Details</Text >

@@ -112,7 +112,7 @@ const TeacherProfile = () => {
         </Flex>
       </Flex>
       <Box width={"70%"} marginLeft="auto" marginRight={"auto"}>
-        {teacherData.MyClass ? (
+        {classData ? (
           <>
             <Text textAlign={"center"} fontWeight={"bold"} fontSize={"2.1rem"}>Class Details</Text>
    
@@ -171,6 +171,7 @@ const TeacherProfile = () => {
                                       )}
                                       <Td>
                                         <CloseIcon
+                                        id="checkicon"
                                           color={"red"}
                                           backgroundColor={"red.200"}
                                           p={1}
@@ -283,6 +284,7 @@ const TeacherProfile = () => {
                                     </Td>
                                     <Td>
                                       <CloseIcon
+                                      id="checkicon"
                                         color={"red"}
                                         backgroundColor={"red.200"}
                                         p={1}
@@ -336,6 +338,7 @@ const TeacherProfile = () => {
                                           <Td>{member?.phone}</Td>
                                           <Td>
                                             <CloseIcon
+                                            id="checkicon"
                                               color={"red"}
                                               backgroundColor={"red.200"}
                                               p={1}
@@ -401,6 +404,7 @@ const TeacherProfile = () => {
                                     <Td>{teacher.email}</Td>
                                     <Td>
                                       <CloseIcon
+                                      id="checkicon"
                                         color={"red"}
                                         backgroundColor={"red.200"}
                                         p={1}

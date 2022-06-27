@@ -145,6 +145,9 @@ const createSubject = async (req, res) => {
       }
     }
   } catch (error) {
+    res
+    .status(200)
+    .send({ ok: false, message: "Failed To create subject" });
     console.log(error);
   }
 };
@@ -241,6 +244,7 @@ const createAssesment = async (req, res) => {
     } else
       res.status(200).send({ ok: false, message: "Error creating Assesment" });
   } catch (error) {
+    res.status(200).send({ ok: false, message: "Error creating Assesment" });
     console.log(error);
   }
 };

@@ -32,8 +32,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import TeacherProfileImage from "../Assets/Images/TeacherProfile.svg";
 import TeacherSubjectSection from "./TeacherSubjectSection";
+import { useSnackbar } from 'notistack';
+
 
 const TeacherClassSection = () => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { user } = useSelector((state) => state?.user);
   const [classData, setClassData] = useState();
   const [studentData, setClassStudentData] = useState();
@@ -91,9 +94,11 @@ const TeacherClassSection = () => {
         }
       });
       setAllTeachers(response?.data?.getTeachers)
-      alert(response.data.message)
+      enqueueSnackbar(response.data.message, { variant: 'success' });
+      onCloseAddTeacher()
     } catch (error) {
       console.log(error);
+      enqueueSnackbar("Something Went Wrong", { variant: 'error' });
     }
   }
 
@@ -137,7 +142,7 @@ const TeacherClassSection = () => {
 
   return (
     <>
-      {user.MyClass ? (
+      {classData ? (
         <>
           <Flex justify={"center"}>
             <Box>
@@ -146,13 +151,13 @@ const TeacherClassSection = () => {
           </Flex>
           <Box mt={'2rem'}>
             <Flex ml={"auto"} mr={'auto'}  wrap={"wrap"} justify={"start"} height={"250px"} w={"80%"}>
-              <Box width={"500px"}>
+              <Box width={"400px"}>
                 <Image src={TeacherProfileImage} width={'350px'}></Image>
               </Box>
-              <Box>
-                <Text fontSize={"1.3rem"} fontWeight={'medium'} >Class ID: {classData?._id} </Text>
+              <Box maxWidth={"720px"}>
                 <Text fontSize={"1.3rem"} fontWeight={'medium'} >Title: {classData?.title}</Text>
-                <Text fontSize={"1.3rem"} fontWeight={'medium'} >Description: {classData?.description} </Text>
+                <Text fontSize={"1.2rem"} fontWeight={'medium'} >Description: {classData?.description} </Text>
+                <Text fontSize={"1.1rem"} fontWeight={'medium'} >Class ID: {classData?._id} </Text>
               </Box>
             </Flex>
           </Box>
@@ -202,6 +207,7 @@ const TeacherClassSection = () => {
                                       )}
                                       <Td>
                                         <CloseIcon
+                                        id="checkicon"
                                           color={"red"}
                                           backgroundColor={"red.200"}
                                           p={1}
@@ -259,6 +265,7 @@ const TeacherClassSection = () => {
                                     <Td>{teacher.email}</Td>
                                     <Td>
                                       <CloseIcon
+                                      id="checkicon"
                                         color={"red"}
                                         backgroundColor={"red.200"}
                                         p={1}
@@ -320,6 +327,7 @@ const TeacherClassSection = () => {
                                     </Td>
                                     <Td>
                                       <CloseIcon
+                                      id="checkicon"
                                         color={"red"}
                                         backgroundColor={"red.200"}
                                         p={1}
@@ -370,6 +378,7 @@ const TeacherClassSection = () => {
                                           <Td>{member?.phone}</Td>
                                           <Td>
                                             <CloseIcon
+                                            id="checkicon"
                                               color={"red"}
                                               backgroundColor={"red.200"}
                                               p={1}
