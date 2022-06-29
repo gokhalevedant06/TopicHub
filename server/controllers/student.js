@@ -272,7 +272,12 @@ const getGroupAssessment = async(req,res)=>{
 const getClassData = async(req,res)=>{
   const {joinedClassID} = req.user;
   try {
-    const classData = await Class.findById(joinedClassID).populate('createdBy').populate('studentsJoined').populate('groups').populate('teachers')
+    const classData = await Class.findById(joinedClassID).populate('createdBy').populate('studentsJoined').populate('teachers').populate({
+      path:'groups',
+      populate:{
+        path:'members groupLeader'
+      }
+    })
     res.status(200).send({ ok: true, message:"Fetch Successful",classData});
   } catch (error) {
     console.log(error)

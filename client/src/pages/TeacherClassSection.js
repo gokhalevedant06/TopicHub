@@ -26,6 +26,7 @@ import {
   InputGroup,
   Select
 } from "@chakra-ui/react";
+import {BsClipboardCheck} from 'react-icons/bs'
 import {PhoneIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons'
 import NoData from "../Assets/Images/NoData.svg";
 import { Link } from "react-router-dom";
@@ -155,9 +156,27 @@ const TeacherClassSection = () => {
                 <Image src={TeacherProfileImage} width={'350px'}></Image>
               </Box>
               <Box maxWidth={"720px"}>
-                <Text fontSize={"1.3rem"} fontWeight={'medium'} >Title: {classData?.title}</Text>
-                <Text fontSize={"1.2rem"} fontWeight={'medium'} >Description: {classData?.description} </Text>
-                <Text fontSize={"1.1rem"} fontWeight={'medium'} >Class ID: {classData?._id} </Text>
+                <Flex align={"center"}>
+                <Text fontSize={"1.3rem"} mr={"0.4rem"} fontWeight={'medium'} >Title: </Text>
+                  <Text fontSize={"1.3rem"}>{classData?.title}</Text>
+                </Flex>
+
+                <Flex align={"center"}>
+                <Text fontSize={"1.3rem"} mr={"0.4rem"} fontWeight={'medium'} >Description: </Text>
+                  <Text fontSize={"1.3rem"}>{classData?.description}</Text>
+                </Flex>
+
+                <Flex align={"center"}>
+                <Flex justify={"center"} align={"center"}>
+                <Text fontSize={"1.3rem"} mr={'0.4rem'} fontWeight={'medium'}  >Class ID:  </Text>
+                <Text fontSize={"1.3rem"} mr={'0.5rem'}>{classData?._id}</Text>
+                <BsClipboardCheck color="grey" size={"1.2rem"} onClick={()=>{
+                  navigator.clipboard.writeText(`${classData?._id}`)
+                  enqueueSnackbar(`${classData?._id} Copied To Clipboard`, { variant: 'warning' });
+                }} title={"CLICK HERE TO COPY TO CLIPBOARD"} id={"checkicon"} />
+                </Flex>
+                </Flex>
+                
               </Box>
             </Flex>
           </Box>
@@ -283,7 +302,8 @@ const TeacherClassSection = () => {
                     </TableContainer>
                   </ModalBody>
                   <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onCloseGroup}>
+                    <Button colorScheme="blue" mr={3} onClick={onCloseAllTeachers}
+                    >
                       Close
                     </Button>
                   </ModalFooter>

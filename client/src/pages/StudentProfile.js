@@ -118,11 +118,12 @@ const StudentProfile = () => {
                             </Thead>
                             <Tbody>
                               {classData?.groups.map((group) => {
+                                console.log(group,"asdsdb")
                                 return (
                                   <Tr>
                                     <Td>{group._id}</Td>
                                     <Td>{group.name}</Td>
-                                    <Td>{group?.groupLeader}</Td>
+                                    <Td>{group?.groupLeader?.name}</Td>
                                     <Td>
                                       <Button
                                         size={"sm"}
