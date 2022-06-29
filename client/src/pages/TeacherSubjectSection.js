@@ -493,11 +493,11 @@ const TeacherSubjectSection = () => {
                                       <Tbody>
                                         {assesment?.appearingGroupDetails?.map(
                                           (group, index) => {
-                                            console.log("gp",group)
+                                            // console.log("gp",group)
                                             return (
                                               <>
                                                 <Tr>
-                                                  <Td> {group.groupID.name}</Td>
+                                                  <Td> {group._id}</Td>
                                                   <Td>
                                                     {group?.topic?.name ? (
                                                       <>{group?.topic?.name}</>
