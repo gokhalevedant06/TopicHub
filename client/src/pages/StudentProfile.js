@@ -54,11 +54,18 @@ const StudentProfile = () => {
     }
   };
 
+  const [membersData,setMembers] = useState()
+
+  const setGroupMembers=async(groupID)=>{
+      const gp = classData.groups.find(g=>g._id ==groupID)
+      console.log(gp,"GSHFHF")
+      setMembers(gp.members);
+      onOpenMembers()
+  }
+
   useEffect(() => {
     getClassData()
   }, []);
-  
-  // console.log("cdcdcd",classData);
   
   return (
     <>
@@ -127,8 +134,8 @@ const StudentProfile = () => {
                                     <Td>
                                       <Button
                                         size={"sm"}
-                                        onClick={onOpenMembers}
                                         colorScheme={"teal"}
+                                        onClick={()=>setGroupMembers(group._id)}
                                       >
                                         Show Members
                                       </Button>
@@ -168,10 +175,7 @@ const StudentProfile = () => {
                               </Tr>
                             </Thead>
                             <Tbody>
-                              {classData?.groups.map((grp) => {
-                                return (
-                                  <>
-                                    {grp?.members?.map((member) => { 
+                            {membersData?.map((member) => { 
                                       return (
                                         <Tr>
                                           <Td>{member?._id}</Td>
@@ -180,9 +184,6 @@ const StudentProfile = () => {
                                         </Tr>
                                       );
                                     })}
-                                  </>
-                                );
-                              })}
                             </Tbody>
                           </Table>
                         </TableContainer>
@@ -221,6 +222,7 @@ const StudentProfile = () => {
                             </Thead>
                             <Tbody>
                               {classData?.studentsJoined?.map((student) => {
+                                console.log("here",student)
                                 return (
                                   <>
                                     <Tr key={student._id}>
