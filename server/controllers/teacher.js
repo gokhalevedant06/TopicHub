@@ -111,11 +111,14 @@ const createSubject = async (req, res) => {
   const { MyClass } = req.user;
   console.log(req.body)
   try {
-    const newSubject = new Subject({ title, description, subjectTeacher });
+    const getClass = await Class.findById(MyClass);
+    if(getClass.subjects.length>=4) res.status(200).send({ ok: false, message: "Subject Limit Reached" });
+    else{
+
+      const newSubject = new Subject({ title, description, subjectTeacher });
     if (newSubject) {
       const saveSubject = await newSubject.save();
       if (saveSubject) {
-        const getClass = await Class.findById(MyClass);
         var subjects = [];
         if (getClass.subjects) {
           subjects = getClass.subjects;
@@ -143,6 +146,7 @@ const createSubject = async (req, res) => {
             .send({ ok: false, message: "Failed To create subject" });
         }
       }
+    }
     }
   } catch (error) {
     res
