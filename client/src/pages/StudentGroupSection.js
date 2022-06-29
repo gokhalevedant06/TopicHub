@@ -35,6 +35,8 @@ import groupJoin from "../Assets/Images/joinGroup.svg";
 import collaboration from '../Assets/Images/collaboration.svg'
 import { useNavigate } from "react-router-dom";
 import JoinClass from "./JoinClass";
+import {BsClipboardCheck} from 'react-icons/bs'
+
 const StudentGroupSection = () => {
   const navigate = useNavigate()
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -180,9 +182,16 @@ const StudentGroupSection = () => {
              <Text fontSize={"1.3rem"} fontWeight={'medium'}>
               Group Name : {groupData?.name}
              </Text>
-             <Text fontSize={"1.3rem"} fontWeight={'medium'}>
+             <Flex align={"center"}>
+
+             <Text fontSize={"1.3rem"} mr={"0.2rem"} fontWeight={'medium'}>
               Group ID : {groupData?._id}
              </Text>
+             <BsClipboardCheck color="grey" size={"1.2rem"} onClick={()=>{
+                  navigator.clipboard.writeText(`${groupData?._id}`)
+                  enqueueSnackbar(`${groupData?._id} Copied To Clipboard`, { variant: 'warning' });
+                }} title={"CLICK HERE TO COPY TO CLIPBOARD"} id={"checkicon"} />
+             </Flex>
              <Text fontSize={"1.3rem"} fontWeight={'medium'}>
               Number of Members : {groupData?.members.length}
              </Text>
