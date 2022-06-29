@@ -177,7 +177,7 @@ const joinGroup = async (req,res)=>{
   try {
     const getGroup = await Group.findById(groupID)
 
-  if(getGroup.members>=2) res.status(200).send({ ok: false, message: "Group Cannot Contain More than 5 Members" });
+  if(getGroup.members.length>=2) res.status(200).send({ ok: false, message: "Group Cannot Contain More than 5 Members" });
   else{
 
     var members = [];
