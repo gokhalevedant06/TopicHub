@@ -475,7 +475,7 @@ const TeacherSubjectSection = () => {
                                     <Table variant="simple">
                                       <Thead>
                                         <Tr>
-                                          <Th>Group Number</Th>
+                                          <Th>Group Name</Th>
                                           <Th>Topic Name</Th>
                                           <Th>Status</Th>
                                         </Tr>
@@ -483,10 +483,11 @@ const TeacherSubjectSection = () => {
                                       <Tbody>
                                         {assesment?.appearingGroupDetails?.map(
                                           (group, index) => {
+                                            console.log("gp",group)
                                             return (
                                               <>
                                                 <Tr>
-                                                  <Td>{index + 1} {group._id}</Td>
+                                                  <Td> {group.groupID.name}</Td>
                                                   <Td>
                                                     {group?.topic?.name ? (
                                                       <>{group?.topic?.name}</>
