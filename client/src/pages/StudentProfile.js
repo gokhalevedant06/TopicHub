@@ -54,11 +54,18 @@ const StudentProfile = () => {
     }
   };
 
+  const [membersData,setMembers] = useState()
+
+  const setGroupMembers=async(groupID)=>{
+      const gp = classData.groups.find(g=>g._id ==groupID)
+      console.log(gp,"GSHFHF")
+      setMembers(gp.members);
+      onOpenMembers()
+  }
+
   useEffect(() => {
     getClassData()
-    console.log(classData);
   }, []);
-  
   
   return (
     <>
@@ -78,7 +85,7 @@ const StudentProfile = () => {
       <Box>
       </Box>
     <Box width={"70%"} marginLeft="auto" marginRight={"auto"}>
-    {student.joinedClassID ?(
+    {classData ?(
     <Flex justify = {"center"} flexDirection="column">  
       <Text textAlign={"center"} fontSize={"2.1rem"} fontWeight={'bold'}>Class Details</Text >
       <Box borderRadius={60} ml = {'2rem'} zIndex={1}  bg='rgba(0,0,0,0)'>
@@ -127,8 +134,8 @@ const StudentProfile = () => {
                                     <Td>
                                       <Button
                                         size={"sm"}
-                                        onClick={onOpenMembers}
                                         colorScheme={"teal"}
+                                        onClick={()=>setGroupMembers(group._id)}
                                       >
                                         Show Members
                                       </Button>
@@ -168,10 +175,7 @@ const StudentProfile = () => {
                               </Tr>
                             </Thead>
                             <Tbody>
-                              {classData?.groups.map((grp) => {
-                                return (
-                                  <>
-                                    {grp?.members?.map((member) => { 
+                            {membersData?.map((member) => { 
                                       return (
                                         <Tr>
                                           <Td>{member?._id}</Td>
@@ -180,9 +184,6 @@ const StudentProfile = () => {
                                         </Tr>
                                       );
                                     })}
-                                  </>
-                                );
-                              })}
                             </Tbody>
                           </Table>
                         </TableContainer>
@@ -221,6 +222,7 @@ const StudentProfile = () => {
                             </Thead>
                             <Tbody>
                               {classData?.studentsJoined?.map((student) => {
+                                console.log("here",student)
                                 return (
                                   <>
                                     <Tr key={student._id}>
@@ -267,13 +269,13 @@ const StudentProfile = () => {
     ):(
       <>
           <Flex direction={"column"} justify={"center"} align={"center"}>
-            <Image my={"3rem"} src={NoData} w={"25%"}></Image>
-            <Text my={"2rem"} fontSize="1.5rem">
+            <Image my={"1rem"} src={NoData} w={"25%"}></Image>
+            <Text my={"1rem"} fontSize="1.5rem">
               You haven't joined any classes yet. Join a class and start Learning!
             </Text>
             <Link to="/student/joinClass">
               <Button
-                m={"2rem"}
+                m={"1rem"}
                 height={"3rem"}
                 fontSize={"1.2rem"}
                 fontWeight={"bold"}

@@ -33,7 +33,7 @@ const JoinClass = () => {
         console.log(response)
         if(response.data.ok){
           enqueueSnackbar(response.data.message, { variant: 'success' });
-          navigate('/student/classSection')
+          navigate('/student/profile')
         }else{
         enqueueSnackbar(response.data.message, { variant: 'error' });
         }

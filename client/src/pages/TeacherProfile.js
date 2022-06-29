@@ -40,6 +40,8 @@ const TeacherProfile = () => {
   const [studentData, setClassStudentData] = useState();
   const teacherData = useSelector(selectUser);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [membersData,setMembers] = useState()
+
   const {
     isOpen: group,
     onOpen: onOpenGroup,
@@ -90,12 +92,18 @@ const TeacherProfile = () => {
     }
   };
 
+  const setGroupMembers=async(groupID)=>{
+    const gp = classData.groups.find(g=>g._id ==groupID)
+    console.log(gp,"GSHFHF")
+    setMembers(gp.members);
+    onOpenMembers()
+}
+
   useEffect(() => {
     getClassData();
     getClassStudentData();
   }, []);
 
-  console.log(classData);
   return (
     <>
       <Flex justify={"center"} flexDirection={"column"}>
@@ -276,8 +284,8 @@ const TeacherProfile = () => {
                                     <Td>
                                       <Button
                                         size={"sm"}
-                                        onClick={onOpenMembers}
                                         colorScheme={"teal"}
+                                        onClick={()=>setGroupMembers(group._id)}
                                       >
                                         Show Members
                                       </Button>
@@ -327,10 +335,7 @@ const TeacherProfile = () => {
                               </Tr>
                             </Thead>
                             <Tbody>
-                              {classData?.groups.map((grp) => {
-                                return (
-                                  <>
-                                    {grp?.members?.map((member) => {
+                            {membersData?.map((member) => {
                                       return (
                                         <Tr>
                                           <Td>{member?._id}</Td>
@@ -349,9 +354,6 @@ const TeacherProfile = () => {
                                         </Tr>
                                       );
                                     })}
-                                  </>
-                                );
-                              })}
                             </Tbody>
                           </Table>
                         </TableContainer>

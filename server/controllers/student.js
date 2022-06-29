@@ -176,17 +176,24 @@ const joinGroup = async (req,res)=>{
   console.log(groupID)
   try {
     const getGroup = await Group.findById(groupID)
-    var members = [];
-        if (getGroup.members) {
-          members = getGroup.members;
-        }
-        members.push({ _id});
-    const updateGroupDetails = await Group.findByIdAndUpdate(groupID,{members})
-    const getStudent = await Student.findByIdAndUpdate(_id,{groupDetails:{groupID,isLeader:false}})
 
-  if(updateGroupDetails && getStudent) res.status(200).send({ ok: true, message: "Group Joined" });
-  else res.status(200).send({ ok: false, message: "Failed to join Group" });
+  if(getGroup.members.length>=5) res.status(200).send({ ok: false, message: "Group Cannot Contain More than 5 Members" });
+  else{
+
+    var members = [];
+    if (getGroup.members) {
+      members = getGroup.members;
+    }
+    members.push({ _id});
+const updateGroupDetails = await Group.findByIdAndUpdate(groupID,{members})
+const getStudent = await Student.findByIdAndUpdate(_id,{groupDetails:{groupID,isLeader:false}})
+
+if(updateGroupDetails && getStudent) res.status(200).send({ ok: true, message: "Group Joined" });
+else res.status(200).send({ ok: false, message: "Failed to join Group" });
+  }
+    
   } catch (error) {
+    res.status(200).send({ ok: false, message: "Failed to join Group" });
     console.log(error)
   }
 }
@@ -272,10 +279,18 @@ const getGroupAssessment = async(req,res)=>{
 const getClassData = async(req,res)=>{
   const {joinedClassID} = req.user;
   try {
-    const classData = await Class.findById(joinedClassID).populate('createdBy').populate('studentsJoined').populate('teachers').populate({
+    const classData = await Class.findById(joinedClassID).populate('createdBy').populate('teachers').populate({
       path:'groups',
       populate:{
         path:'members groupLeader'
+      }
+    }).populate({
+      path:"studentsJoined",
+      populate:{
+        path:"groupDetails",
+        populate:{
+          path:"groupID"
+        }
       }
     })
     res.status(200).send({ ok: true, message:"Fetch Successful",classData});

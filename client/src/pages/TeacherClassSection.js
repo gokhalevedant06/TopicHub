@@ -24,25 +24,24 @@ import {
   Input,
   Stack,
   InputGroup,
-  Select
+  Select,
 } from "@chakra-ui/react";
-import {BsClipboardCheck} from 'react-icons/bs'
-import {PhoneIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons'
+import { BsClipboardCheck } from "react-icons/bs";
+import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import NoData from "../Assets/Images/NoData.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import TeacherProfileImage from "../Assets/Images/TeacherProfile.svg";
 import TeacherSubjectSection from "./TeacherSubjectSection";
-import { useSnackbar } from 'notistack';
-
+import { useSnackbar } from "notistack";
 
 const TeacherClassSection = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { user } = useSelector((state) => state?.user);
   const [classData, setClassData] = useState();
   const [studentData, setClassStudentData] = useState();
-  const [teacherID,setTeacherID] = useState();
-  const [allTeachersData,setAllTeachers] = useState();
+  const [teacherID, setTeacherID] = useState();
+  const [allTeachersData, setAllTeachers] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: allTeachers,
@@ -63,7 +62,7 @@ const TeacherClassSection = () => {
     isOpen: isOpenAddTeacher,
     onOpen: onOpenAddTeacher,
     onClose: onCloseAddTeacher,
-    } = useDisclosure();
+  } = useDisclosure();
   const token = localStorage.getItem("token");
 
   const getClassData = async () => {
@@ -75,13 +74,13 @@ const TeacherClassSection = () => {
           Authorization: token,
         },
       });
-      setClassData(response.data.classDetails)
+      setClassData(response.data.classDetails);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const addTeacher = async()=>{
+  const addTeacher = async () => {
     try {
       const response = await axios({
         method: "POST",
@@ -89,21 +88,21 @@ const TeacherClassSection = () => {
         headers: {
           Authorization: token,
         },
-        data:{
+        data: {
           teacherID,
-          classID:classData?._id
-        }
+          classID: classData?._id,
+        },
       });
-      setAllTeachers(response?.data?.getTeachers)
-      enqueueSnackbar(response.data.message, { variant: 'success' });
-      onCloseAddTeacher()
+      setAllTeachers(response?.data?.getTeachers);
+      enqueueSnackbar(response.data.message, { variant: "success" });
+      onCloseAddTeacher();
     } catch (error) {
       console.log(error);
-      enqueueSnackbar("Something Went Wrong", { variant: 'error' });
+      enqueueSnackbar("Something Went Wrong", { variant: "error" });
     }
-  }
+  };
 
-  const getAllTeachers = async()=>{
+  const getAllTeachers = async () => {
     try {
       const response = await axios({
         method: "GET",
@@ -112,11 +111,11 @@ const TeacherClassSection = () => {
           Authorization: token,
         },
       });
-      setAllTeachers(response.data.getTeachers)
+      setAllTeachers(response.data.getTeachers);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const getClassStudentData = async () => {
     try {
@@ -133,13 +132,24 @@ const TeacherClassSection = () => {
     }
   };
 
+  const [membersData,setMembers] = useState()
+
+  const setGroupMembers=async(groupID)=>{
+      const gp = classData.groups.find(g=>g._id ==groupID)
+      console.log(gp,"GSHFHF")
+      setMembers(gp.members);
+      onOpenMembers()
+  }
+
+  
+
   useEffect(() => {
     getClassData();
     getClassStudentData();
     getAllTeachers();
   }, []);
 
- 
+  console.log("HERE", classData);
 
   return (
     <>
@@ -147,42 +157,77 @@ const TeacherClassSection = () => {
         <>
           <Flex justify={"center"}>
             <Box>
-              <Text mt={"4rem"} fontSize={"2.1rem"} fontWeight={'bold'} >Class Details</Text>
+              <Text mt={"4rem"} fontSize={"2.1rem"} fontWeight={"bold"}>
+                Class Details
+              </Text>
             </Box>
           </Flex>
-          <Box mt={'2rem'}>
-            <Flex ml={"auto"} mr={'auto'}  wrap={"wrap"} justify={"start"} height={"250px"} w={"80%"}>
+          <Box mt={"2rem"}>
+            <Flex
+              ml={"auto"}
+              mr={"auto"}
+              wrap={"wrap"}
+              justify={"start"}
+              height={"250px"}
+              w={"80%"}
+            >
               <Box width={"400px"}>
-                <Image src={TeacherProfileImage} width={'350px'}></Image>
+                <Image src={TeacherProfileImage} width={"350px"}></Image>
               </Box>
               <Box maxWidth={"720px"}>
                 <Flex align={"center"}>
-                <Text fontSize={"1.3rem"} mr={"0.4rem"} fontWeight={'medium'} >Title: </Text>
+                  <Text fontSize={"1.3rem"} mr={"0.4rem"} fontWeight={"medium"}>
+                    Title:{" "}
+                  </Text>
                   <Text fontSize={"1.3rem"}>{classData?.title}</Text>
                 </Flex>
 
                 <Flex align={"center"}>
-                <Text fontSize={"1.3rem"} mr={"0.4rem"} fontWeight={'medium'} >Description: </Text>
+                  <Text fontSize={"1.3rem"} mr={"0.4rem"} fontWeight={"medium"}>
+                    Description:{" "}
+                  </Text>
                   <Text fontSize={"1.3rem"}>{classData?.description}</Text>
                 </Flex>
 
                 <Flex align={"center"}>
-                <Flex justify={"center"} align={"center"}>
-                <Text fontSize={"1.3rem"} mr={'0.4rem'} fontWeight={'medium'}  >Class ID:  </Text>
-                <Text fontSize={"1.3rem"} mr={'0.5rem'}>{classData?._id}</Text>
-                <BsClipboardCheck color="grey" size={"1.2rem"} onClick={()=>{
-                  navigator.clipboard.writeText(`${classData?._id}`)
-                  enqueueSnackbar(`${classData?._id} Copied To Clipboard`, { variant: 'warning' });
-                }} title={"CLICK HERE TO COPY TO CLIPBOARD"} id={"checkicon"} />
+                  <Flex justify={"center"} align={"center"}>
+                    <Text
+                      fontSize={"1.3rem"}
+                      mr={"0.4rem"}
+                      fontWeight={"medium"}
+                    >
+                      Class ID:{" "}
+                    </Text>
+                    <Text fontSize={"1.3rem"} mr={"0.5rem"}>
+                      {classData?._id}
+                    </Text>
+                    <BsClipboardCheck
+                      color="grey"
+                      size={"1.2rem"}
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${classData?._id}`);
+                        enqueueSnackbar(
+                          `${classData?._id} Copied To Clipboard`,
+                          { variant: "warning" }
+                        );
+                      }}
+                      title={"CLICK HERE TO COPY TO CLIPBOARD"}
+                      id={"checkicon"}
+                    />
+                  </Flex>
                 </Flex>
-                </Flex>
-                
               </Box>
             </Flex>
           </Box>
           <Flex justify={"center"} wrap={"wrap"}>
             <Box mt={"5rem"}>
-              <Button m={"1rem"} w={"200px"} height={'3.5rem'} colorScheme={'purple'} onClick={onOpen}>
+              <Button
+                m={"1rem"}
+                w={"200px"}
+                height={"3.5rem"}
+                colorScheme={"purple"}
+                onClick={onOpen}
+              >
                 View Joined Students
               </Button>
               <Modal size={"4xl"} isOpen={isOpen} onClose={onClose}>
@@ -203,42 +248,38 @@ const TeacherClassSection = () => {
                           </Tr>
                         </Thead>
                         <Tbody>
-                        {studentData?.map((student) => {
-                                return (
-                                  <>
-                                    <Tr key={student._id}>
-                                      <Td>{student._id}</Td>
-                                      <Td>{student.name}</Td>
-                                      <Td>{student.phone}</Td>
-                                      {student?.groupDetails?.groupID?.name ? (
-                                        <>
-                                          <Td>
-                                            {
-                                              student?.groupDetails?.groupID
-                                                ?.name
-                                            }
-                                          </Td>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Td textColor={"red"}>Not Joined</Td>
-                                        </>
-                                      )}
+                          {studentData?.map((student) => {
+                            return (
+                              <>
+                                <Tr key={student._id}>
+                                  <Td>{student._id}</Td>
+                                  <Td>{student.name}</Td>
+                                  <Td>{student.phone}</Td>
+                                  {student?.groupDetails?.groupID?.name ? (
+                                    <>
                                       <Td>
-                                        <CloseIcon
-                                        id="checkicon"
-                                          color={"red"}
-                                          backgroundColor={"red.200"}
-                                          p={1}
-                                          borderRadius={2}
-                                          boxSize={6}
-                                        />
+                                        {student?.groupDetails?.groupID?.name}
                                       </Td>
-                                    </Tr>
-                                  </>
-                                );
-                              })}
-            
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Td textColor={"red"}>Not Joined</Td>
+                                    </>
+                                  )}
+                                  <Td>
+                                    <CloseIcon
+                                      id="checkicon"
+                                      color={"red"}
+                                      backgroundColor={"red.200"}
+                                      p={1}
+                                      borderRadius={2}
+                                      boxSize={6}
+                                    />
+                                  </Td>
+                                </Tr>
+                              </>
+                            );
+                          })}
                         </Tbody>
                       </Table>
                     </TableContainer>
@@ -250,7 +291,13 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button onClick={onOpenAllTeachers} height={'3.5rem'} colorScheme={'yellow'} m={"1rem"} w={"200px"}>
+              <Button
+                onClick={onOpenAllTeachers}
+                height={"3.5rem"}
+                colorScheme={"yellow"}
+                m={"1rem"}
+                w={"200px"}
+              >
                 Show All Teachers
               </Button>
               <Modal
@@ -275,41 +322,48 @@ const TeacherClassSection = () => {
                           </Tr>
                         </Thead>
                         <Tbody>
-                        {classData?.teachers.map((teacher) => {
-                                return (
-                                  <Tr>
-                                    <Td>{teacher._id}</Td>
-                                    <Td>{teacher.name}</Td>
-                                    <Td>{teacher.phone}</Td>
-                                    <Td>{teacher.email}</Td>
-                                    <Td>
-                                      <CloseIcon
-                                      id="checkicon"
-                                        color={"red"}
-                                        backgroundColor={"red.200"}
-                                        p={1}
-                                        borderRadius={2}
-                                        boxSize={6}
-                                      />
-                                    </Td>
-                                  </Tr>
-                                );
-                              })}
-                        
-                
+                          {classData?.teachers.map((teacher) => {
+                            return (
+                              <Tr>
+                                <Td>{teacher._id}</Td>
+                                <Td>{teacher.name}</Td>
+                                <Td>{teacher.phone}</Td>
+                                <Td>{teacher.email}</Td>
+                                <Td>
+                                  <CloseIcon
+                                    id="checkicon"
+                                    color={"red"}
+                                    backgroundColor={"red.200"}
+                                    p={1}
+                                    borderRadius={2}
+                                    boxSize={6}
+                                  />
+                                </Td>
+                              </Tr>
+                            );
+                          })}
                         </Tbody>
                       </Table>
                     </TableContainer>
                   </ModalBody>
                   <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onCloseAllTeachers}
+                    <Button
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={onCloseAllTeachers}
                     >
                       Close
                     </Button>
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button m={"1rem"} colorScheme={'red'} height={'3.5rem'} w={"200px"} onClick={onOpenGroup}>
+              <Button
+                m={"1rem"}
+                colorScheme={"red"}
+                height={"3.5rem"}
+                w={"200px"}
+                onClick={onOpenGroup}
+              >
                 View All Groups
               </Button>
               <Modal size={"4xl"} isOpen={group} onClose={onCloseGroup}>
@@ -330,35 +384,41 @@ const TeacherClassSection = () => {
                           </Tr>
                         </Thead>
                         <Tbody>
-                        {classData?.groups.map((group) => {
-                                return (
-                                  <Tr>
-                                    <Td>{group._id}</Td>
-                                    <Td>{group.name}</Td>
-                                    <Td>{group?.groupLeader?.name}</Td>
-                                    <Td>
-                                      <Button
-                                        size={"sm"}
-                                        onClick={onOpenMembers}
-                                        colorScheme={"teal"}
-                                      >
-                                        Show Members
-                                      </Button>
-                                    </Td>
-                                    <Td>
-                                      <CloseIcon
-                                      id="checkicon"
-                                        color={"red"}
-                                        backgroundColor={"red.200"}
-                                        p={1}
-                                        borderRadius={2}
-                                        boxSize={6}
-                                      />
-                                    </Td>
-                                  </Tr>
-                                );
-                              })}
-                         
+                          {classData?.groups.map((group) => {
+                            return (
+                              <Tr>
+                                <Td>{group._id}</Td>
+                                <Td>{group.name}</Td>
+                                <Td>{group?.groupLeader?.name}</Td>
+                                <Td>
+                                  <Button
+                                    size={"sm"}
+                                    onClick={()=>{
+                                      console.log("HEGWGWRG")
+                                      // setMembers(group.members)
+                                      setGroupMembers(group._id)
+                                    }
+                                  }
+                                    colorScheme={"teal"}
+                                    
+                                  >
+                                    Show Members
+                                  </Button>
+                                </Td>
+                                <Td>
+                                  <CloseIcon
+                                    id="checkicon"
+                                    color={"red"}
+                                    backgroundColor={"red.200"}
+                                    p={1}
+                                    borderRadius={2}
+                                    boxSize={6}
+                                  />
+                                </Td>
+                                
+                              </Tr>
+                            );
+                          })}
                         </Tbody>
                       </Table>
                     </TableContainer>
@@ -370,99 +430,119 @@ const TeacherClassSection = () => {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Modal isOpen={member} size={"3xl"} onClose={onCloseMembers}>
+
+              <Modal
+                                  isOpen={member}
+                                  size={"3xl"}
+                                  onClose={onCloseMembers}
+                                >
+                                  <ModalOverlay />
+                                  <ModalContent>
+                                    <ModalHeader>
+                                      List of Group Members
+                                    </ModalHeader>
+                                    <ModalCloseButton />
+                                    <ModalBody>
+                                      <TableContainer>
+                                        <Table variant="simple">
+                                          <Thead>
+                                            <Tr>
+                                              <Th>ID</Th>
+                                              <Th>Name</Th>
+                                              <Th>Phone</Th>
+                                              <Th> Remove</Th>
+                                            </Tr>
+                                          </Thead>
+                                          <Tbody>
+                                            {membersData?.map((member) => {
+                                                console.log("member",member)
+                                              return (
+                                                <Tr>
+                                                  <Td>{member?._id}</Td>
+                                                  <Td>{member?.name}</Td>
+                                                  <Td>{member?.phone}</Td>
+                                                  <Td>
+                                                    <CloseIcon
+                                                      id="checkicon"
+                                                      color={"red"}
+                                                      backgroundColor={
+                                                        "red.200"
+                                                      }
+                                                      p={1}
+                                                      borderRadius={2}
+                                                      boxSize={6}
+                                                    />
+                                                  </Td>
+                                                </Tr>
+                                              );
+                                            })}
+                                          </Tbody>
+                                        </Table>
+                                      </TableContainer>
+                                    </ModalBody>
+
+                                    <ModalFooter>
+                                      <Button
+                                        colorScheme="blue"
+                                        mr={3}
+                                        onClick={onCloseMembers}
+                                      >
+                                        Close
+                                      </Button>
+                                    </ModalFooter>
+                                  </ModalContent>
+                                </Modal>
+
+              <Button
+                m={"1rem"}
+                colorScheme={"green"}
+                height={"3.5rem"}
+                w={"200px"}
+                onClick={onOpenAddTeacher}
+              >
+                Add Teacher
+              </Button>
+              <Modal isOpen={isOpenAddTeacher} onClose={onCloseAddTeacher}>
                 <ModalOverlay />
                 <ModalContent>
-                  <ModalHeader>List of Group Members</ModalHeader>
+                  <ModalHeader>Select Teacher</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
-                  <TableContainer>
-                      <Table variant="simple">
-                        <Thead>
-                          <Tr>
-                            <Th>ID</Th>
-                            <Th>Name</Th>
-                            <Th>Phone</Th>
-                            <Th> Remove</Th>
-                          </Tr>
-                        </Thead>
-                        <Tbody>
-                        {classData?.groups.map((grp) => {
-                                return (
-                                  <>
-                                    {grp?.members?.map((member) => {
-                                      return (
-                                        <Tr>
-                                          <Td>{member?._id}</Td>
-                                          <Td>{member?.name}</Td>
-                                          <Td>{member?.phone}</Td>
-                                          <Td>
-                                            <CloseIcon
-                                            id="checkicon"
-                                              color={"red"}
-                                              backgroundColor={"red.200"}
-                                              p={1}
-                                              borderRadius={2}
-                                              boxSize={6}
-                                            />
-                                          </Td>
-                                        </Tr>
-                                      );
-                                    })}
-                                  </>
-                                );
-                              })}
-                        </Tbody>
-                      </Table>
-                    </TableContainer>
+                    <Stack spacing={4}>
+                      <Select
+                        onChange={(e) => setTeacherID(e.target.value)}
+                        placeholder="Select Subject Teacher"
+                      >
+                        {allTeachersData?.map((teacher) => {
+                          return (
+                            <option value={`${teacher._id}`}>
+                              ID: {teacher._id}{" "}
+                              <Text fontWeight={"extrabold"}>
+                                ( {teacher.name} )
+                              </Text>
+                            </option>
+                          );
+                        })}
+                      </Select>
+                    </Stack>
                   </ModalBody>
 
                   <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onCloseMembers}>
+                    <Button colorScheme={"green"} onClick={() => addTeacher()}>
+                      Add Teacher To Class
+                    </Button>
+                    <Button
+                      colorScheme="blue"
+                      ml={3}
+                      onClick={onCloseAddTeacher}
+                    >
                       Close
                     </Button>
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              <Button m={"1rem"} colorScheme={'green'} height={'3.5rem'} w={"200px"} onClick={onOpenAddTeacher}>
-                Add Teacher
-              </Button>
-              <Modal isOpen={isOpenAddTeacher} onClose={onCloseAddTeacher}>
-              <ModalOverlay />
-              <ModalContent>
-                  <ModalHeader>Select Teacher</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-        
-                  <Stack spacing={4}>
-                  <Select onChange={(e)=>setTeacherID(e.target.value)} placeholder='Select Subject Teacher'>
-
-                    {
-                      allTeachersData?.map((teacher)=>{
-                        return(
-                          <option value={`${teacher._id}`} >
-                            ID: {teacher._id} <Text fontWeight={'extrabold'}>( {teacher.name} )</Text>
-                          </option>
-                          
-                        )
-                      })
-                    }
-                    </Select>
-              </Stack>
-    
-              </ModalBody>
-    
-              <ModalFooter>
-                <Button colorScheme={'green'} onClick={()=>addTeacher()} >Add Teacher To Class</Button>
-                <Button colorScheme='blue' ml={3} onClick={onCloseAddTeacher}>
-                  Close
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-      </Modal>
-
             </Box>
-                      <TeacherSubjectSection/>
+            <TeacherSubjectSection />
           </Flex>
         </>
       ) : (
@@ -470,7 +550,8 @@ const TeacherClassSection = () => {
           <Flex direction={"column"} justify={"center"} align={"center"}>
             <Image my={"3rem"} src={NoData} w={"25%"}></Image>
             <Text my={"2rem"} fontSize="1.5rem">
-              You haven't made any classes yet. Make a class and start teaching !
+              You haven't made any classes yet. Make a class and start teaching
+              !
             </Text>
             <Link to="/teacher/createClass">
               <Button
