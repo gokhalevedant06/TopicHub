@@ -56,9 +56,9 @@ const StudentProfile = () => {
 
   useEffect(() => {
     getClassData()
-    console.log(classData);
   }, []);
   
+  // console.log("cdcdcd",classData);
   
   return (
     <>
@@ -78,7 +78,7 @@ const StudentProfile = () => {
       <Box>
       </Box>
     <Box width={"70%"} marginLeft="auto" marginRight={"auto"}>
-    {student.joinedClassID ?(
+    {classData ?(
     <Flex justify = {"center"} flexDirection="column">  
       <Text textAlign={"center"} fontSize={"2.1rem"} fontWeight={'bold'}>Class Details</Text >
       <Box borderRadius={60} ml = {'2rem'} zIndex={1}  bg='rgba(0,0,0,0)'>
@@ -267,13 +267,13 @@ const StudentProfile = () => {
     ):(
       <>
           <Flex direction={"column"} justify={"center"} align={"center"}>
-            <Image my={"3rem"} src={NoData} w={"25%"}></Image>
-            <Text my={"2rem"} fontSize="1.5rem">
+            <Image my={"1rem"} src={NoData} w={"25%"}></Image>
+            <Text my={"1rem"} fontSize="1.5rem">
               You haven't joined any classes yet. Join a class and start Learning!
             </Text>
             <Link to="/student/joinClass">
               <Button
-                m={"2rem"}
+                m={"1rem"}
                 height={"3rem"}
                 fontSize={"1.2rem"}
                 fontWeight={"bold"}

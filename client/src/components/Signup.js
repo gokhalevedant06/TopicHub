@@ -56,9 +56,9 @@ const Signup = () => {
 
 
   return (
-    <Flex background={pageBackground} direction="column" height="100vh" alignItems='center' justifyContent='center'>
-      <Flex width="70vh" direction="column" background={formBackground} p={10} rounded={6}>
-        <Heading mb={6}>Sign Up</Heading>
+    <Flex  direction="column" height="100vh" alignItems='center' justifyContent='center'>
+      <Flex width="70vh" direction="column"  boxShadow={"0 8px 16px 0 rgba(0,0,0,0.2)"}  p={10} rounded={6}>
+        <Heading textAlign={"center"} mb={6}>Sign Up</Heading>
 
         <Flex alignItems='center'>
           <InfoIcon />

@@ -32,7 +32,8 @@ const Landing = () => {
                 height={"3rem"}
                 fontSize={"1.2rem"}
                 fontWeight={"bold"}
-                colorScheme={"red"}
+                backgroundColor={"red.600"}
+                color={"white"}
               >
                 Login as Student
               </Button>
@@ -43,7 +44,8 @@ const Landing = () => {
                 height={"3rem"}
                 fontSize={"1.2rem"}
                 fontWeight={"bold"}
-                colorScheme={"red"}
+                backgroundColor={"red.600"}
+                color={"white"}
               >
                 Login as Teacher
               </Button>

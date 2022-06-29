@@ -75,7 +75,6 @@ const Login = () => {
 
   return (
     <Flex
-      background={pageBackground}
       direction="column"
       height="100vh"
       alignItems="center"
@@ -84,14 +83,16 @@ const Login = () => {
       <Flex
         width="70vh"
         direction="column"
-        background={formBackground}
+        boxShadow={"0 8px 16px 0 rgba(0,0,0,0.2)"}
         p={10}
         rounded={6}
+        height={"400px"}
+        justify={"center"}
       >
-        <Heading mb={6}> LOGIN</Heading>
+        <Heading textAlign={"center"} mb={"2rem"}> LOGIN</Heading>
 
         {/* Email Input */}
-        <Flex alignItems="center">
+        <Flex  alignItems="center">
           <EmailIcon />
           <Input
             ml={5}
@@ -101,10 +102,11 @@ const Login = () => {
             type="email"
             name='email'
             onChange={(e)=>handleChange(e)}
+            
           />
         </Flex>
 
-        <Flex alignItems="center">
+        <Flex  alignItems="center">
           <UnlockIcon />
           <InputGroup size="md">
             {/* Password Input */}
@@ -125,11 +127,9 @@ const Login = () => {
           </InputGroup>
         </Flex>
 
-        <Checkbox defaultChecked mb={5}>
-          Remember my credentials.
-        </Checkbox>
+       
 
-        <Button onClick={userLogin} mb={6} colorScheme="teal">
+        <Button onClick={userLogin}  mb={6} colorScheme="teal">
           Sign in
         </Button>
 
