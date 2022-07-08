@@ -1,9 +1,25 @@
 # TopicHub
 A full stack collaboration tool to handle assessments between Students and Teachers.
 
+<hr>
 
 ![image](https://user-images.githubusercontent.com/79954118/177931109-d05f5402-a1fa-49b1-8fda-e4d9e4eba2f7.png)
 
+<hr>
+<div align="center">
+    <a href="https://github.com/gokhalevedant06/TopicHub/fork" target="blank">
+<img src="https://img.shields.io/github/forks/gokhalevedant06/TopicHub?style=flat-square" alt="TopicHub forks"/>
+</a>
+<a href="https://github.com/gokhalevedant06/TopicHub/stargazers" target="blank">
+<img src="https://img.shields.io/github/stars/gokhalevedant06/TopicHub?style=flat-square" alt="TopicHub stars"/>
+</a>
+<a href="https://github.com/gokhalevedant06/TopicHub/issues" target="blank">
+<img src="https://img.shields.io/github/issues/gokhalevedant06/TopicHub?style=flat-square" alt="TopicHub issues"/>
+</a>
+<a href="https://github.com/gokhalevedant06/TopicHub/pulls" target="blank">
+<img src="https://img.shields.io/github/issues-pr/gokhalevedant06/TopicHub?style=flat-square" alt="TopicHub pull-requests"/>
+</a>
+</div>
 
 ## Usage 🚀
 1. Login as a student or teacher
