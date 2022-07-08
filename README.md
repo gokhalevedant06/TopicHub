@@ -1,5 +1,7 @@
 # TopicHub
 A full stack collaboration tool to handle assessments between Students and Teachers.
+![image](https://user-images.githubusercontent.com/69599306/177930994-d1decc52-bb46-47da-81a3-1dfdc215dd39.png)
+
 
 ## Usage 🚀
 1. Login as a student or teacher
