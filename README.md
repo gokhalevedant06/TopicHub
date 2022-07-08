@@ -47,6 +47,50 @@
 6. Choose a topic for an assessment as a student
 7. Approve or Reject the topic as the teacher.
 
+## Installation Steps 🛠️
+Make sure you have NodeJS and node package manager installed on your machine, or install it from <a href="https://nodejs.org/en/">here</a>
+
+1. Clone the repository
+   
+```bash
+git clone https://github.com/gokhalevedant06/Certificate-Generator.git
+```
+For Frontend :
+1. Change working directory
+   
+   ```bash
+   cd client
+   ```
+2. Installing dependencies
+   
+   ```bash
+   npm i
+   ```
+3. Run the app 
+   
+   ```bash 
+   npm start
+   ```
+
+
+For Backend :
+1. Change working directory
+   
+   ```bash
+   cd server
+   ```
+2. Installing dependencies
+   
+   ```bash
+   npm i
+   ```
+3. Run the app 
+   
+   ```bash 
+   npm run nodemon
+   ```
+</br>
+
 ## Technologies Used 💻
 1. [ReactJS](https://reactjs.org/)
 2. [NodeJS](https://nodejs.org/en/) 
