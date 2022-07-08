@@ -4,7 +4,13 @@ A full stack collaboration tool to handle assessments between Students and Teach
 <hr>
 
 ![image](https://user-images.githubusercontent.com/79954118/177931109-d05f5402-a1fa-49b1-8fda-e4d9e4eba2f7.png)
-
+<p align="center">
+    <a href="" target="blank">View Demo</a>
+    ·
+    <a href="https://github.com/gokhalevedant06/TopicHub/issues/new">Report Bug</a>
+    ·
+    <a href="https://github.com/gokhalevedant06/TopicHub/issues/new">Request Feature</a>
+</p>
 <hr>
 <div align="center">
     <a href="https://github.com/gokhalevedant06/TopicHub/fork" target="blank">
