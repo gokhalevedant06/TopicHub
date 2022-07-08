@@ -55,7 +55,7 @@ Make sure you have NodeJS and node package manager installed on your machine, or
 1. Clone the repository
    
 ```bash
-git clone https://github.com/gokhalevedant06/Certificate-Generator.git
+git clone https://github.com/gokhalevedant06/TopicHub.git
 ```
 For Frontend :
 1. Change working directory
