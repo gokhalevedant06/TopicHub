@@ -1,5 +1,16 @@
-# TopicHub
-A full stack collaboration tool to handle assessments between Students and Teachers.
+
+
+
+<!-- title -->
+<div align="center">
+<h1> TopicHub </h1>
+</div>
+
+<!-- description -->
+<div>
+<p align="center">A full stack collaboration tool to handle assessments between Students and Teachers
+</p>
+</div>
 
 <hr>
 
