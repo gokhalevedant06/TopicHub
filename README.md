@@ -7,7 +7,7 @@ A full stack collaboration tool to handle assessments between Students and Teach
 3. Create/Join a group as a student
 4. Appoint other teachers to your class as a subject teacher
 5. Start an assessment with a description and total marks as a teacher
-6. Choose a topic for an assessment as the group leader (student)
+6. Choose a topic for an assessment as a student
 7. Approve or Reject the topic as the teacher.
 
 ## Technologies Used 💻
