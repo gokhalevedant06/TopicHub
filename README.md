@@ -48,6 +48,7 @@
 7. Approve or Reject the topic as the teacher.
 
 <hr>
+
 ## Installation Steps 🛠️
 Make sure you have NodeJS and node package manager installed on your machine, or install it from <a href="https://nodejs.org/en/">here</a>
 
