@@ -14,7 +14,7 @@ import { useSnackbar } from 'notistack';
 const Signup = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [isTeacher,setTeacher] = useState(false);
-  if(window.location.href[22]=='t' && isTeacher==false) setTeacher(true)
+  if(window.location.href[32]=='t' && isTeacher==false) setTeacher(true)
   console.log(window.location.href,"URL")
   console.log(window.location.href[33],"URL")
   const [show, setShow] = useState(false)
