@@ -57,7 +57,7 @@ const Signup = () => {
 
   return (
     <Flex  direction="column" height="100vh" alignItems='center' justifyContent='center'>
-      <Flex width="70vh" direction="column"  boxShadow={"0 8px 16px 0 rgba(0,0,0,0.2)"}  p={10} rounded={6}>
+      <Flex width="70vh" direction="column" backgroundColor={'whiteAlpha.100'}  boxShadow={"0 8px 16px 0 rgba(0,0,0,0.4)"}  p={10} rounded={6}>
         <Heading textAlign={"center"} mb={6}>Sign Up</Heading>
 
         <Flex alignItems='center'>

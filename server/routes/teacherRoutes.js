@@ -31,7 +31,6 @@ router.post('/createAssesment',isTeacher,createAssesment)
 router.post('/addTeacherToClass',isTeacher,addTeacherToClass)
 router.post('/acceptTopic',isTeacher,acceptTopic)
 router.post('/rejectTopic',isTeacher,rejectTopic)
-// router.get("/jwtVerify", jwtVerify);
 
 
 module.exports = router;

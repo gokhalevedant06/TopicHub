@@ -85,9 +85,10 @@ const Login = () => {
       <Flex
         width="70vh"
         direction="column"
-        boxShadow={"0 8px 16px 0 rgba(0,0,0,0.2)"}
+        boxShadow={"0 8px 16px 0 rgba(0,0,0,0.4)"}
         p={10}
         rounded={6}
+        backgroundColor={'whiteAlpha.100'}
         height={"400px"}
         justify={"center"}
       >
