@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 //Database URI from .env
 
 // const MONGODB_URI = process.env.DATABASE;
-const MONGODB_URI = process.env.DATABASE1;
+const MONGODB_URI = process.env.DB;
 
 // For connection with mongodb 
 mongoose.connect(MONGODB_URI,{
