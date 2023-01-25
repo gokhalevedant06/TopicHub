@@ -24,6 +24,14 @@ import {
   Td,
   TableContainer,
   Image,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useSnackbar } from 'notistack';
@@ -51,6 +59,11 @@ const StudentSubjectSection = () => {
   const [subjectData, setSubjectData] = useState();
   const [topic, setTopicData] = useState();
   const [groupAssessmentData, setGroupAssessmentData] = useState();
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [messages,setMessages] = useState([
+    "Hello","Hello","Hello","Hello","Hello","Hello","Hello","Hello","Hello","Hello","Hello","Hello","Hello","Hello","Hello",
+  ]);
+  const btnRef = React.useRef()
 
   const getSubjectDetails = async () => {
     try {
@@ -88,6 +101,20 @@ const StudentSubjectSection = () => {
       console.log(error);
     }
   };
+
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
   const setTopic = async (assessmentID) => {
     try {
@@ -137,7 +164,7 @@ const StudentSubjectSection = () => {
     getGroupDetails();
   }, [acceptRejectState]);
 
-  console.log("sdgf", subjectData);
+  // console.log("sdgf", subjectData);
   const navigate = useNavigate();
 
 
@@ -156,7 +183,7 @@ const StudentSubjectSection = () => {
           </TabList>
           <TabPanels>
             {subjectData?.map((subject) => {
-              console.log(subject);
+              // console.log(subject);
               return (
                 <TabPanel>
                   <Flex justify={"center"}>
@@ -169,7 +196,57 @@ const StudentSubjectSection = () => {
                       <Text>
                         Teacher Name : {subject.subjectTeacher.name}
                       </Text>
-                      <Flex></Flex>
+                      <Flex>
+                      <Button
+                          colorScheme="blue"
+                          mt={3}
+                          height={8}
+                          onClick={onOpen}
+                          ref={btnRef}
+                        >
+                          Chat Section
+                        </Button>
+
+                        <Drawer
+                        isOpen={isOpen}
+                        placement='top'
+                        onClose={onClose}
+                        finalFocusRef={btnRef}
+                        size={"full"}
+                      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Chat Section</DrawerHeader>
+
+          <DrawerBody>
+
+            <Box>
+                {
+                  messages?.map((message)=>{
+                    return(
+                      <>
+                      <Box m={4} p={2} backgroundColor={"blackAlpha.300"} minWidth={"fit-content"} minH={"30px"} borderRadius={"md"} align={"right"} >
+                      <Text fontSize={"12px"} >Vedant Gokhale</Text>
+                      <Text  fontWeight={"bold"}  fontSize={"xl"}>{message}</Text>
+                      <Text fontSize={"12px"} >{formatDate(Date.now())}</Text>
+                      </Box>
+                      </>
+                    )
+                  })
+                }
+            </Box>
+
+          </DrawerBody>
+
+          <DrawerFooter>
+          <Input placeholder='Type here...' />
+
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+
+                      </Flex>
                     </Flex>
                   </Flex>
                   <Text>Previous/On Going Assessments</Text>

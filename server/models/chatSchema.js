@@ -12,9 +12,15 @@ const chatSchema = new mongoose.Schema(
         sender: {
           type: Schema.Types.ObjectId,
         },
+        name: {
+          type: String,
+        },
         text: {
           type: String,
         },
+        time:{
+          type: Date
+        }
       },
     ],
   },
