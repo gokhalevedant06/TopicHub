@@ -8,7 +8,7 @@ import dp from '../Assets/Images/dp.svg';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../Redux/userSlice';
 import StudentClassImage from '../Assets/Images/student_class.svg';
-import axios from "axios";
+import axios from "../axios";
 import { Link } from "react-router-dom";
 import {
   Table,

@@ -27,7 +27,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../axios";
 import { CloseIcon } from "@chakra-ui/icons";
 import { useSelector } from "react-redux";
 import { selectUser } from "../Redux/userSlice";

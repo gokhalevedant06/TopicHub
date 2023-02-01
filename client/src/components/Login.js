@@ -15,7 +15,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { EmailIcon, UnlockIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
-import axios from "axios";
+import axios from "../axios";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser,isLoggedIn } from "../Redux/userSlice";
 import { useSnackbar } from 'notistack';
@@ -55,7 +55,7 @@ const Login = () => {
     try {
       response = await axios({
         method: "POST",
-        url: `/${user}/login`,
+        url: `http://localhost:5000/${user}/login`,
         data:login
       });
       console.log("response",response);

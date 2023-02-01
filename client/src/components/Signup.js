@@ -3,7 +3,7 @@ import {
   Box, Flex, Heading, Input, Button, useColorModeValue,
    InputGroup,  InputRightElement} from '@chakra-ui/react'
 import { EmailIcon, UnlockIcon, InfoIcon, PhoneIcon,ViewIcon,ViewOffIcon} from '@chakra-ui/icons'
-import axios from "axios";
+import axios from "../axios";
 import { Link,useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { isLoggedIn } from "../Redux/userSlice";

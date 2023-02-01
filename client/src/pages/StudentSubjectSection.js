@@ -33,7 +33,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios from "../axios";
 import { useSnackbar } from 'notistack';
 
 import { PhoneIcon, CheckIcon, CloseIcon, RepeatIcon } from "@chakra-ui/icons";

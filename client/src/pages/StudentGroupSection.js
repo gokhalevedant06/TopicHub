@@ -28,7 +28,7 @@ import {
   TableContainer,
   TableCaption
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios from "../axios";
 import { useSnackbar } from 'notistack';
 import { Link } from "react-router-dom";
 import groupJoin from "../Assets/Images/joinGroup.svg";

@@ -30,7 +30,7 @@ import { BsClipboardCheck } from "react-icons/bs";
 import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import NoData from "../Assets/Images/NoData.svg";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../axios";
 import TeacherProfileImage from "../Assets/Images/TeacherProfile.svg";
 import TeacherSubjectSection from "./TeacherSubjectSection";
 import { useSnackbar } from "notistack";

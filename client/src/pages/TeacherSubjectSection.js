@@ -37,7 +37,7 @@ import {
   TableContainer,
   Image
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios from "../axios";
 import { useSelector } from "react-redux";
 import { selectUser } from "../Redux/userSlice";
 import { useSnackbar } from 'notistack';
