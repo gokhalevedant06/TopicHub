@@ -2,6 +2,14 @@ const mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 const chatSchema = new mongoose.Schema(
   {
+    teacherID:{
+      type: Schema.Types.ObjectId,
+      required:true,
+    },
+    groupID:{
+      type: Schema.Types.ObjectId,
+      required:true,
+    },
     members: [
       {
         type: Schema.Types.ObjectId,
@@ -31,4 +39,4 @@ const chatSchema = new mongoose.Schema(
 
 const Chat = mongoose.model("CHAT", chatSchema);
 
-module.exports = Subject;
+module.exports = Chat;
