@@ -379,6 +379,23 @@ const addTeacherToClass = async(req,res)=>{
     }
   }
 
+  const getAllGroups = async(req,res)=>{
+    const {classroomId} = req.params;
+    try {
+      const data = await Class.findById(classroomId).populate({
+        path:"groups"
+      });
+      if(!data){
+        res.status(400).send({ok:false,"message":"Failed To Fetch Groups"});
+      }else{
+        res.status(200).send({ ok: false, message:"Failed To Rekect Topic",data:data.groups});
+      }
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
 
 module.exports = {
   signup,
@@ -394,5 +411,6 @@ module.exports = {
   getSubjectsInClass,
   getTeachersInClass,
   acceptTopic,
-  rejectTopic
+  rejectTopic,
+  getAllGroups
 };

@@ -17,6 +17,7 @@ import CreateClass from "./pages/CreateClass";
 import TeacherSubjectSection from './pages/TeacherSubjectSection'
 import JoinClass from "./pages/JoinClass";
 import JoinGroup from "./pages/JoinGroup";
+import Discussion from "./pages/Discussion";
 // import createAssessment from './pages/createAssessment';
 import {Box} from '@chakra-ui/react'
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path="/teacher/profile" element={<TeacherProfile />} />
             <Route path="/teacher/classSection" element={<TeacherClassSection />} />
             <Route path="/teacher/createClass" element={<CreateClass />} />
+            <Route path="/teacher/discussion" element={<Discussion />} />
             {/* <Route path = "/teacher/createAssessment" element={<createAssessment/>} /> */}
           </>
         ) : (
@@ -47,6 +49,7 @@ function App() {
             <Route path="/teacher/Login" element={<Login />} />
             <Route path="/student/Signup" element={<Signup />} />
             <Route path="/student/Login" element={<Login />} />
+            
           </>
         )}
       </Routes>

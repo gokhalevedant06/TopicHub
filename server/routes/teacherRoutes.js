@@ -13,7 +13,8 @@ const {
   getSubjectsInClass,
   getTeachersInClass,
   acceptTopic,
-  rejectTopic
+  rejectTopic,
+  getAllGroups
 } = require("../controllers/teacher");
 const { isTeacher } = require("../middlewares/isTeacher");
 
@@ -31,6 +32,7 @@ router.post('/createAssesment',isTeacher,createAssesment)
 router.post('/addTeacherToClass',isTeacher,addTeacherToClass)
 router.post('/acceptTopic',isTeacher,acceptTopic)
 router.post('/rejectTopic',isTeacher,rejectTopic)
+router.get('/getGroups/:classroomId',isTeacher,getAllGroups)
 
 
 module.exports = router;
