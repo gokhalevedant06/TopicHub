@@ -4,6 +4,7 @@ const Teacher = require("../models/teacherSchema");
 const Class = require("../models/classSchema");
 const Subject = require("../models/subjectSchema");
 const Assesment = require("../models/assesmentSchema");
+const Group = require("../models/groupSchema");
 
 const signup = async (req, res) => {
   var { name, email, phone, password, cpassword } = req.body;
@@ -372,7 +373,7 @@ const addTeacherToClass = async(req,res)=>{
 
       const updateTopic = await Assesment.findByIdAndUpdate(assesmentID,{appearingGroupDetails:assessmentData.appearingGroupDetails})
       if(updateTopic) res.status(200).send({ ok: true, message:"Topic Rejected"});
-      else res.status(200).send({ ok: false, message:"Failed To Rekect Topic"});
+      else res.status(400).send({ ok: false, message:"Failed To Reject Topic"});
       
     } catch (error) {
       console.log(error)
@@ -380,15 +381,37 @@ const addTeacherToClass = async(req,res)=>{
   }
 
   const getAllGroups = async(req,res)=>{
-    const {classroomId} = req.params;
+    const {classroomId,teacherId} = req.params;
+    
     try {
-      const data = await Class.findById(classroomId).populate({
+      // if class teacher
+      const classData = await Class.findById(classroomId).populate({
         path:"groups"
       });
+      const data = classData.groups
+      // if subject teacher
+      const classrooms = await Class.find();
+      for await (const classroom of classrooms) {
+        for await (const teacher of classroom.teachers) {
+          if(teacher.toString()===teacherId){
+            for await (const group of classroom.groups) {
+              const groupData = await Group.findById(group);
+              data.push(groupData)
+            }
+          }
+        }
+      }
+
+      const groups =  data.filter((value, index, self) =>
+          index === self.findIndex((t) => (
+          t._id.toString() === value._id.toString()
+      ))
+    )
+      console.log(groups)
       if(!data){
         res.status(400).send({ok:false,"message":"Failed To Fetch Groups"});
       }else{
-        res.status(200).send({ ok: false, message:"Failed To Rekect Topic",data:data.groups});
+        res.status(200).send({ ok: true, message:"Fetched",data:groups});
       }
     } catch (error) {
       console.log(error);

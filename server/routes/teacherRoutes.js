@@ -32,7 +32,7 @@ router.post('/createAssesment',isTeacher,createAssesment)
 router.post('/addTeacherToClass',isTeacher,addTeacherToClass)
 router.post('/acceptTopic',isTeacher,acceptTopic)
 router.post('/rejectTopic',isTeacher,rejectTopic)
-router.get('/getGroups/:classroomId',isTeacher,getAllGroups)
+router.get('/getGroups/:classroomId/:teacherId',isTeacher,getAllGroups)
 
 
 module.exports = router;

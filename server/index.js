@@ -46,6 +46,7 @@ io.on("connection", (socket) => {
 
   socket.on("getChats", async (data) => {
     const { teacherID, groupID } = data;
+    console.log("BOTH IDS",teacherID,groupID)
     const chat = await Chat.findOne({ $and: [{ teacherID }, { groupID }] });
 
     console.log(teacherID);

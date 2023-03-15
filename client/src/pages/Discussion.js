@@ -22,12 +22,21 @@ const Discussion = () => {
   useEffect(async() => {
     const response = await axios({
         method: "GET",
-        url: `/teacher/getGroups/${user.MyClass._id}`,
+        url: `/teacher/getGroups/${user.MyClass._id}/${user._id}`,
         headers: {
           Authorization: token,
         },
       });
+      console.log(response)
       setGroups(response.data.data);
+
+      socket.on("chats", (data) => {
+        console.log("CHATS", data);
+        setMessages(data.messages);
+      
+      });
+
+  
   }, [])
   
 
@@ -43,6 +52,10 @@ const Discussion = () => {
                         <Text cursor={"pointer"} onClick={()=>{
                             setActive(group._id)
                             onOpen();
+                            socket.emit("getChats", {
+                              teacherID: user._id,
+                              groupID: group._id,
+                            });
                         }} p={2} m={2} zIndex={1} >{group.name}</Text>
                     )
                 })
@@ -86,7 +99,7 @@ const Discussion = () => {
                                                     fontWeight={"bold"}
                                                     fontSize={"xl"}
                                                   >
-                                                    {message}
+                                                    {message?.text}
                                                   </Text>
                                                   <Text fontSize={"12px"}>
                                                     {new Date(message?.time).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})}
@@ -103,24 +116,25 @@ const Discussion = () => {
                                           <Input
                                             onChange={(e) => {
                                               setMessage(e.target.value);
+                                              console.log(message,active)
                                             }}
                                             placeholder={"Start Typing ..."}
                                             value={message}
                                           />
                                           <Button
                                             onClick={(e) => {
-                                            //   if (socket.connected) {
-                                            //     socket.emit("message", {
-                                            //       value: message,
-                                            //       teacherID:
-                                            //       currentSubTeacher,
-                                            //       groupID: groupData._id,
-                                            //       userID: user._id,
-                                            //       userName: user.name,
-                                            //     });
-                                            //   } else {
-                                            //     console.log("NOT CONNECTED");
-                                            //   }
+                                              if (socket.connected) {
+                                                socket.emit("message", {
+                                                  value: message,
+                                                  teacherID:
+                                                  user._id,
+                                                  groupID: active,
+                                                  userID: user._id,
+                                                  userName: user.name,
+                                                });
+                                              } else {
+                                                console.log("NOT CONNECTED");
+                                              }
                                               setMessage("");
                                             }}
                                             mx={2}
