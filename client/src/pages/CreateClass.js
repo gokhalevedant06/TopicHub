@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Box, Flex, Input,Textarea, Image, Button  } from '@chakra-ui/react'
 import Class from '../Assets/Images/Class.svg'
-import axios from 'axios'
+import axios from '../axios'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack';
 
