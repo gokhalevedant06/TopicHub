@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import XLSX from 'sheetjs-style';
 import {
   Image,
   Flex,
@@ -80,6 +81,7 @@ const TeacherClassSection = () => {
     }
   };
 
+
   const addTeacher = async () => {
     try {
       const response = await axios({
@@ -151,10 +153,45 @@ const TeacherClassSection = () => {
 
   console.log("HERE", classData);
 
+  const  handleExportToExcel = () =>  {
+    let data = [];
+
+      classData?.groups.forEach((group) => {
+      group.members.forEach((member) => {
+      data.push({
+      groupName: group.name,
+      groupLeaderName: group?.groupLeader?.name,
+      memberName: member.name,
+      memberPhone: member.phone,
+      memberEmail: member.email,
+    });
+  });
+}); 
+
+
+        
+        console.log(data);
+        console.log(classData)
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    const headerStyle = { font: { bold: true } };
+    const headerRange = XLSX.utils.decode_range(worksheet["!ref"]);
+    for (let i = headerRange.s.c; i <= headerRange.e.c; i++) {
+    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: i });
+    worksheet[cellAddress].s = headerStyle;
+}
+    
+//    
+    
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, "FF-105.xlsx");
+    } 
   return (
     <>
+
       {classData ? (
         <>
+        {/* <Excel/> */}
           <Flex justify={"center"}>
             <Box>
               <Text mt={"4rem"} fontSize={"2.1rem"} fontWeight={"bold"}>
@@ -323,6 +360,7 @@ const TeacherClassSection = () => {
                         </Thead>
                         <Tbody>
                           {classData?.teachers.map((teacher) => {
+                            
                             return (
                               <Tr>
                                 <Td>{teacher._id}</Td>
@@ -362,8 +400,9 @@ const TeacherClassSection = () => {
                 colorScheme={"red"}
                 height={"3.5rem"}
                 w={"200px"}
-                onClick={onOpenGroup}
-              >
+                onClick={()=>{
+                  onOpenGroup()
+                }}>
                 View All Groups
               </Button>
               <Modal size={"4xl"} isOpen={group} onClose={onCloseGroup}>
@@ -424,6 +463,9 @@ const TeacherClassSection = () => {
                     </TableContainer>
                   </ModalBody>
                   <ModalFooter>
+                  <Button colorScheme="green" mr={3} onClick={handleExportToExcel}>
+                      Generate FF-105
+                    </Button>
                     <Button colorScheme="blue" mr={3} onClick={onCloseGroup}>
                       Close
                     </Button>
