@@ -213,7 +213,7 @@ const StudentSubjectSection = () => {
                                   Description : {subject.description}n
                                 </Text>
                                 <Text>
-                                  Teacher Name : {subject.subjectTeacher.name}
+                                  Teacher Name : {subject?.subjectTeacher?.name}
                                 </Text>
                                 <Flex>
                                   <Button
@@ -300,7 +300,7 @@ const StudentSubjectSection = () => {
                                                   currentSubTeacher,
                                                   groupID: groupData._id,
                                                   userID: user._id,
-                                                  userName: user.name,
+                                                  userName: user?.name,
                                                 });
                                               } else {
                                                 console.log("NOT CONNECTED");
