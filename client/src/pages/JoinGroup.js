@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Flex, Input,Textarea, Image, Button  } from '@chakra-ui/react'
 import jgmodal from '../Assets/Images/jgModal.svg'
-import axios from 'axios'
+import axios from '../axios'
 import { useState } from 'react'
 
 const JoinGroup = () => {
