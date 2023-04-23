@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Flex, Input,Textarea, Image, Button  } from '@chakra-ui/react'
 import Class from '../Assets/Images/Class.svg'
-import axios from 'axios'
+import axios from '../axios'
 import joinClass from '../Assets/Images/joinClass.jpg'
 import { useState } from 'react'
 import {useSnackbar} from 'notistack'
