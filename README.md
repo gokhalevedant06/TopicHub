@@ -8,7 +8,7 @@
 
 <!-- description -->
 <div>
-<p align="center">A full stack collaboration tool to handle assessments between Students and Teachers
+<p align="center">A full stack web collaboration tool to handle assessments between Students and Teachers
 </p>
 </div>
 
