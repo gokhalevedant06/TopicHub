@@ -8,20 +8,27 @@ var mongoose = require('mongoose');
 
 const signup = async (req, res) => {
   var { name, email, phone, password, cpassword } = req.body;
-  if (!name || !email || !password || !cpassword || !phone)
-    res.status(422).send("Enter all fields");
+  if (!name || !email || !password || !cpassword || !phone){
+
+    res.status(400).send({message:"Enter all fields"});
+    return;
+  }
+    
   try {
     const studentExists = await Student.findOne({ email: email });
-    if (studentExists) {
-      res.status(422).send("User with this email already exists");
+    const phoneExists = await Student.findOne({phone});
+    if (studentExists || phoneExists) {
+      res.status(400).send({message:"User with this email already exists"});
+      return;
     } else if (password !== cpassword) {
-      res.status(422).send("Passwords do not match");
+      res.status(400).send({message:"Passwords do not match"});
+      return;
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
       password = hashedPassword;
       const student = new Student({ name, email, password, phone });
       const saveStudent = await student.save();
-      if (saveStudent) res.status(200).send("Student created successfully");
+      if (saveStudent) res.status(200).send({message:"Student created successfully"});
     }
   } catch (error) {
     console.log("Error", error);

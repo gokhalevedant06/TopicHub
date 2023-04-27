@@ -12,7 +12,8 @@ const signup = async (req, res) => {
     res.status(422).send("Enter all fields");
   try {
     const teacherExists = await Teacher.findOne({ email: email });
-    if (teacherExists) {
+    const phoneExists = await Teacher.findOne({phone});
+    if (teacherExists || phoneExists) {
       res.status(422).send("User with this email already exists");
     } else if (password !== cpassword) {
       res.status(422).send("Passwords do not match");
