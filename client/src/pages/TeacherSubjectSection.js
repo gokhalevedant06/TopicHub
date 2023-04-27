@@ -439,14 +439,14 @@ const TeacherSubjectSection = () => {
                   fontSize="1.2em"
                   children="$"
                 />
-                <Input placeholder="Enter Total Marks" name='totalMarks' onChange={(e)=>handleCreateAssesmentChange(e)} />
+                <Input placeholder="Enter Total Marks" name='totalMarks' type="number" onChange={(e)=>handleCreateAssesmentChange(e)} />
                 <InputRightElement children={<CheckIcon id="checkicon" color="green.500" />} />
               </InputGroup>
             </Stack>
           </ModalBody>
                         
           <ModalFooter>
-            <Button onClick={() => createAssessmentCall()}>Create Assessment</Button>
+            <Button colorScheme="green" onClick={() => createAssessmentCall()}>Create Assessment</Button>
             <Button colorScheme="blue" ml={3} onClick={onCloseAssesment}>
               Close
             </Button>

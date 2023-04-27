@@ -43,7 +43,7 @@ const Login = () => {
       ...login,
       [e.target.name]: e.target.value,
     });
-    console.log(login)
+    // console.log(login)
   };
 
   const dispatch = useDispatch();
